@@ -96,6 +96,26 @@ TaskBuilder()
     .download()
 ```
 
+Send and receive Protobuf messages:
+
+```swift
+
+TaskBuilder()
+    .endpoint(.POST, "https://host.com")
+    // Create and configure request message in place
+    .body { (message: inout Google_Protobuf_SourceContext) in
+        message.fileName = "file.name"
+    }
+    // Expecting Google_Protobuf_Empty message response
+    .proto{ (message: Google_Protobuf_Empty, response) in
+        print("Done!")
+    }
+    .error { (error, response) in
+        print("Error occured: \(error)")
+    }
+    .perform()
+```
+
 ## Author
 
 Natan Zalkin, natan.zalkin@me.com

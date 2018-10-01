@@ -246,7 +246,9 @@ class ServiceTaskTests: QuickSpec {
                     TaskBuilder()
                         .url("test.test")
                         .method(.PATCH)
-                        .body(proto: message)
+                        .body { (message: inout Google_Protobuf_SourceContext) in
+                            message.fileName = "Test"
+                        }
                         .proto{ (message: Google_Protobuf_SourceContext, response) in
                             if message.fileName == "Test" {
                                 done()
