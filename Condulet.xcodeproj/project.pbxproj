@@ -1,0 +1,714 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		7E314CF221625EC80007DAFE /* URLSerializationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E314CF121625EC80007DAFE /* URLSerializationTests.swift */; };
+		7EBE411F215E6F71006C882C /* Condulet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EBE4115215E6F71006C882C /* Condulet.framework */; };
+		7EBE4124215E6F71006C882C /* ServiceTaskTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBE4123215E6F71006C882C /* ServiceTaskTests.swift */; };
+		7EBE4126215E6F71006C882C /* Condulet.h in Headers */ = {isa = PBXBuildFile; fileRef = 7EBE4118215E6F71006C882C /* Condulet.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7EBE4130215E6F7A006C882C /* ServiceTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBE412F215E6F7A006C882C /* ServiceTask.swift */; };
+		7EBE4136215E715D006C882C /* TaskBuilder+Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBE4135215E715D006C882C /* TaskBuilder+Request.swift */; };
+		7EBE414A215F1A64006C882C /* TaskBuilder+Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBE4149215F1A64006C882C /* TaskBuilder+Response.swift */; };
+		7ED7A56E215FFCFA007657ED /* ProtobufContentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7A56D215FFCFA007657ED /* ProtobufContentHandler.swift */; };
+		7ED7A57221600D1A007657ED /* JSONContentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7A57121600D1A007657ED /* JSONContentHandler.swift */; };
+		7ED7A57421601180007657ED /* ServiceTaskContentHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7A57321601180007657ED /* ServiceTaskContentHandling.swift */; };
+		7ED7A57A2160185D007657ED /* URLEncodedContentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7A5792160185D007657ED /* URLEncodedContentHandler.swift */; };
+		7ED7A57C21601AC1007657ED /* URLSerialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7A57B21601AC1007657ED /* URLSerialization.swift */; };
+		7ED7A58121608F8B007657ED /* TextContentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7A58021608F8B007657ED /* TextContentHandler.swift */; };
+		7EE281EA2161E60D00019EE5 /* TaskBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE281E92161E60D00019EE5 /* TaskBuilder.swift */; };
+		7EE281F42161FE2A00019EE5 /* ConduletError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE281F32161FE2A00019EE5 /* ConduletError.swift */; };
+		7EECC27A2160AAE1008845F4 /* ServiceTaskErrorHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EECC2792160AAE1008845F4 /* ServiceTaskErrorHandling.swift */; };
+		7EECC2822160C596008845F4 /* ServiceTask+Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EECC2812160C596008845F4 /* ServiceTask+Enums.swift */; };
+		7EECC28B21610809008845F4 /* TaskBuilder+Protobuf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EECC28A21610809008845F4 /* TaskBuilder+Protobuf.swift */; };
+		7EECC2932161326E008845F4 /* DecodableContentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EECC2922161326E008845F4 /* DecodableContentHandler.swift */; };
+		8411B2471340A40A98CF6509 /* Pods_All_Targets_ConduletTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D3BE0FE0480671010AE049E /* Pods_All_Targets_ConduletTests.framework */; };
+		EFAA4B81BB537ADE88CEDD14 /* Pods_All_Targets_Condulet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78096D16BF7DAFB2AC3FF2BD /* Pods_All_Targets_Condulet.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		7EBE4120215E6F71006C882C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7EBE410C215E6F71006C882C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7EBE4114215E6F71006C882C;
+			remoteInfo = Condulet;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		39033723B2AD69B2F87FBE19 /* Pods-All Targets-Condulet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-All Targets-Condulet.debug.xcconfig"; path = "Pods/Target Support Files/Pods-All Targets-Condulet/Pods-All Targets-Condulet.debug.xcconfig"; sourceTree = "<group>"; };
+		6D3BE0FE0480671010AE049E /* Pods_All_Targets_ConduletTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_All_Targets_ConduletTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		78096D16BF7DAFB2AC3FF2BD /* Pods_All_Targets_Condulet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_All_Targets_Condulet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7E314CF0216255E60007DAFE /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = SOURCE_ROOT; };
+		7E314CF121625EC80007DAFE /* URLSerializationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSerializationTests.swift; sourceTree = "<group>"; };
+		7EBE4115215E6F71006C882C /* Condulet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Condulet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7EBE4118215E6F71006C882C /* Condulet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Condulet.h; sourceTree = "<group>"; };
+		7EBE4119215E6F71006C882C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7EBE411E215E6F71006C882C /* ConduletTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ConduletTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		7EBE4123215E6F71006C882C /* ServiceTaskTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTaskTests.swift; sourceTree = "<group>"; };
+		7EBE4125215E6F71006C882C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7EBE412F215E6F7A006C882C /* ServiceTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServiceTask.swift; sourceTree = "<group>"; };
+		7EBE4135215E715D006C882C /* TaskBuilder+Request.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TaskBuilder+Request.swift"; sourceTree = "<group>"; };
+		7EBE4149215F1A64006C882C /* TaskBuilder+Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TaskBuilder+Response.swift"; sourceTree = "<group>"; };
+		7ED7A565215FDE6C007657ED /* Condulet.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Condulet.podspec; sourceTree = SOURCE_ROOT; };
+		7ED7A56C215FECEE007657ED /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
+		7ED7A56D215FFCFA007657ED /* ProtobufContentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProtobufContentHandler.swift; sourceTree = "<group>"; };
+		7ED7A57121600D1A007657ED /* JSONContentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONContentHandler.swift; sourceTree = "<group>"; };
+		7ED7A57321601180007657ED /* ServiceTaskContentHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTaskContentHandling.swift; sourceTree = "<group>"; };
+		7ED7A5792160185D007657ED /* URLEncodedContentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLEncodedContentHandler.swift; sourceTree = "<group>"; };
+		7ED7A57B21601AC1007657ED /* URLSerialization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSerialization.swift; sourceTree = "<group>"; };
+		7ED7A58021608F8B007657ED /* TextContentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextContentHandler.swift; sourceTree = "<group>"; };
+		7EE281E92161E60D00019EE5 /* TaskBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskBuilder.swift; sourceTree = "<group>"; };
+		7EE281F32161FE2A00019EE5 /* ConduletError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConduletError.swift; sourceTree = "<group>"; };
+		7EECC2792160AAE1008845F4 /* ServiceTaskErrorHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTaskErrorHandling.swift; sourceTree = "<group>"; };
+		7EECC2812160C596008845F4 /* ServiceTask+Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ServiceTask+Enums.swift"; sourceTree = "<group>"; };
+		7EECC28A21610809008845F4 /* TaskBuilder+Protobuf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TaskBuilder+Protobuf.swift"; sourceTree = "<group>"; };
+		7EECC2922161326E008845F4 /* DecodableContentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodableContentHandler.swift; sourceTree = "<group>"; };
+		AF99ECF42507D8C62FCE8973 /* Pods-All Targets-ConduletTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-All Targets-ConduletTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-All Targets-ConduletTests/Pods-All Targets-ConduletTests.debug.xcconfig"; sourceTree = "<group>"; };
+		EF88038FFB1E59F95B6E1397 /* Pods-All Targets-ConduletTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-All Targets-ConduletTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-All Targets-ConduletTests/Pods-All Targets-ConduletTests.release.xcconfig"; sourceTree = "<group>"; };
+		F8E74FC8BC6E7CB77542D987 /* Pods-All Targets-Condulet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-All Targets-Condulet.release.xcconfig"; path = "Pods/Target Support Files/Pods-All Targets-Condulet/Pods-All Targets-Condulet.release.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		7EBE4112215E6F71006C882C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EFAA4B81BB537ADE88CEDD14 /* Pods_All_Targets_Condulet.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7EBE411B215E6F71006C882C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7EBE411F215E6F71006C882C /* Condulet.framework in Frameworks */,
+				8411B2471340A40A98CF6509 /* Pods_All_Targets_ConduletTests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		7EBE410B215E6F71006C882C = {
+			isa = PBXGroup;
+			children = (
+				7EBE4117215E6F71006C882C /* Condulet */,
+				7EBE4122215E6F71006C882C /* ConduletTests */,
+				7EBE4116215E6F71006C882C /* Products */,
+				DE17114DBC74199C9DD768F5 /* Pods */,
+				ECC77A42B8995F7F68D1ECD1 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		7EBE4116215E6F71006C882C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7EBE4115215E6F71006C882C /* Condulet.framework */,
+				7EBE411E215E6F71006C882C /* ConduletTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7EBE4117215E6F71006C882C /* Condulet */ = {
+			isa = PBXGroup;
+			children = (
+				7ED7A567215FDEE4007657ED /* Core */,
+				7ED7A568215FDF2F007657ED /* Protobuf */,
+				7EBE4118215E6F71006C882C /* Condulet.h */,
+				7EBE4119215E6F71006C882C /* Info.plist */,
+				7ED7A565215FDE6C007657ED /* Condulet.podspec */,
+				7E314CF0216255E60007DAFE /* LICENSE */,
+				7ED7A56C215FECEE007657ED /* README.md */,
+			);
+			path = Condulet;
+			sourceTree = "<group>";
+		};
+		7EBE4122215E6F71006C882C /* ConduletTests */ = {
+			isa = PBXGroup;
+			children = (
+				7EBE4123215E6F71006C882C /* ServiceTaskTests.swift */,
+				7E314CF121625EC80007DAFE /* URLSerializationTests.swift */,
+				7EBE4125215E6F71006C882C /* Info.plist */,
+			);
+			path = ConduletTests;
+			sourceTree = "<group>";
+		};
+		7ED7A567215FDEE4007657ED /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				7EECC27D2160BEAA008845F4 /* Common */,
+				7EECC29621614B7A008845F4 /* Handlers */,
+				7EE281EB2161FAD800019EE5 /* ServiceTask */,
+				7EE281EC2161FAE300019EE5 /* TaskBuilder */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		7ED7A568215FDF2F007657ED /* Protobuf */ = {
+			isa = PBXGroup;
+			children = (
+				7EE281F02161FB2600019EE5 /* Handlers */,
+				7EE281F22161FB4600019EE5 /* TaskBuilder */,
+			);
+			path = Protobuf;
+			sourceTree = "<group>";
+		};
+		7EE281EB2161FAD800019EE5 /* ServiceTask */ = {
+			isa = PBXGroup;
+			children = (
+				7ED7A57321601180007657ED /* ServiceTaskContentHandling.swift */,
+				7EECC2792160AAE1008845F4 /* ServiceTaskErrorHandling.swift */,
+				7EBE412F215E6F7A006C882C /* ServiceTask.swift */,
+				7EECC2812160C596008845F4 /* ServiceTask+Enums.swift */,
+			);
+			name = ServiceTask;
+			sourceTree = "<group>";
+		};
+		7EE281EC2161FAE300019EE5 /* TaskBuilder */ = {
+			isa = PBXGroup;
+			children = (
+				7EE281E92161E60D00019EE5 /* TaskBuilder.swift */,
+				7EBE4135215E715D006C882C /* TaskBuilder+Request.swift */,
+				7EBE4149215F1A64006C882C /* TaskBuilder+Response.swift */,
+			);
+			name = TaskBuilder;
+			sourceTree = "<group>";
+		};
+		7EE281F02161FB2600019EE5 /* Handlers */ = {
+			isa = PBXGroup;
+			children = (
+				7ED7A56D215FFCFA007657ED /* ProtobufContentHandler.swift */,
+			);
+			name = Handlers;
+			sourceTree = "<group>";
+		};
+		7EE281F22161FB4600019EE5 /* TaskBuilder */ = {
+			isa = PBXGroup;
+			children = (
+				7EECC28A21610809008845F4 /* TaskBuilder+Protobuf.swift */,
+			);
+			name = TaskBuilder;
+			sourceTree = "<group>";
+		};
+		7EECC27D2160BEAA008845F4 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				7EE281F32161FE2A00019EE5 /* ConduletError.swift */,
+				7ED7A57B21601AC1007657ED /* URLSerialization.swift */,
+			);
+			name = Common;
+			sourceTree = "<group>";
+		};
+		7EECC29621614B7A008845F4 /* Handlers */ = {
+			isa = PBXGroup;
+			children = (
+				7ED7A58021608F8B007657ED /* TextContentHandler.swift */,
+				7ED7A57121600D1A007657ED /* JSONContentHandler.swift */,
+				7ED7A5792160185D007657ED /* URLEncodedContentHandler.swift */,
+				7EECC2922161326E008845F4 /* DecodableContentHandler.swift */,
+			);
+			name = Handlers;
+			sourceTree = "<group>";
+		};
+		DE17114DBC74199C9DD768F5 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				39033723B2AD69B2F87FBE19 /* Pods-All Targets-Condulet.debug.xcconfig */,
+				F8E74FC8BC6E7CB77542D987 /* Pods-All Targets-Condulet.release.xcconfig */,
+				AF99ECF42507D8C62FCE8973 /* Pods-All Targets-ConduletTests.debug.xcconfig */,
+				EF88038FFB1E59F95B6E1397 /* Pods-All Targets-ConduletTests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		ECC77A42B8995F7F68D1ECD1 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				78096D16BF7DAFB2AC3FF2BD /* Pods_All_Targets_Condulet.framework */,
+				6D3BE0FE0480671010AE049E /* Pods_All_Targets_ConduletTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		7EBE4110215E6F71006C882C /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7EBE4126215E6F71006C882C /* Condulet.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		7EBE4114215E6F71006C882C /* Condulet */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7EBE4129215E6F71006C882C /* Build configuration list for PBXNativeTarget "Condulet" */;
+			buildPhases = (
+				5A2842151AA8C0E7B1675308 /* [CP] Check Pods Manifest.lock */,
+				7EBE4110215E6F71006C882C /* Headers */,
+				7EBE4111215E6F71006C882C /* Sources */,
+				7EBE4112215E6F71006C882C /* Frameworks */,
+				7EBE4113215E6F71006C882C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Condulet;
+			productName = Condulet;
+			productReference = 7EBE4115215E6F71006C882C /* Condulet.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		7EBE411D215E6F71006C882C /* ConduletTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7EBE412C215E6F71006C882C /* Build configuration list for PBXNativeTarget "ConduletTests" */;
+			buildPhases = (
+				F6F8410606BCAD020EE1A82C /* [CP] Check Pods Manifest.lock */,
+				7EBE411A215E6F71006C882C /* Sources */,
+				7EBE411B215E6F71006C882C /* Frameworks */,
+				7EBE411C215E6F71006C882C /* Resources */,
+				DE7A6DF0E39C4111902CC5CF /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7EBE4121215E6F71006C882C /* PBXTargetDependency */,
+			);
+			name = ConduletTests;
+			productName = ConduletTests;
+			productReference = 7EBE411E215E6F71006C882C /* ConduletTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		7EBE410C215E6F71006C882C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1000;
+				LastUpgradeCheck = 1000;
+				ORGANIZATIONNAME = "Natan Zalkin";
+				TargetAttributes = {
+					7EBE4114215E6F71006C882C = {
+						CreatedOnToolsVersion = 10.0;
+						LastSwiftMigration = 1000;
+					};
+					7EBE411D215E6F71006C882C = {
+						CreatedOnToolsVersion = 10.0;
+					};
+				};
+			};
+			buildConfigurationList = 7EBE410F215E6F71006C882C /* Build configuration list for PBXProject "Condulet" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 7EBE410B215E6F71006C882C;
+			productRefGroup = 7EBE4116215E6F71006C882C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				7EBE4114215E6F71006C882C /* Condulet */,
+				7EBE411D215E6F71006C882C /* ConduletTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		7EBE4113215E6F71006C882C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7EBE411C215E6F71006C882C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		5A2842151AA8C0E7B1675308 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-All Targets-Condulet-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		DE7A6DF0E39C4111902CC5CF /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-All Targets-ConduletTests/Pods-All Targets-ConduletTests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Mockingjay/Mockingjay.framework",
+				"${BUILT_PRODUCTS_DIR}/Nimble/Nimble.framework",
+				"${BUILT_PRODUCTS_DIR}/Quick/Quick.framework",
+				"${BUILT_PRODUCTS_DIR}/URITemplate/URITemplate.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftProtobuf/SwiftProtobuf.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Mockingjay.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Nimble.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Quick.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/URITemplate.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftProtobuf.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-All Targets-ConduletTests/Pods-All Targets-ConduletTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F6F8410606BCAD020EE1A82C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-All Targets-ConduletTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7EBE4111215E6F71006C882C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7ED7A57A2160185D007657ED /* URLEncodedContentHandler.swift in Sources */,
+				7EECC2822160C596008845F4 /* ServiceTask+Enums.swift in Sources */,
+				7EECC27A2160AAE1008845F4 /* ServiceTaskErrorHandling.swift in Sources */,
+				7ED7A56E215FFCFA007657ED /* ProtobufContentHandler.swift in Sources */,
+				7EBE414A215F1A64006C882C /* TaskBuilder+Response.swift in Sources */,
+				7ED7A57C21601AC1007657ED /* URLSerialization.swift in Sources */,
+				7EBE4136215E715D006C882C /* TaskBuilder+Request.swift in Sources */,
+				7EECC2932161326E008845F4 /* DecodableContentHandler.swift in Sources */,
+				7ED7A58121608F8B007657ED /* TextContentHandler.swift in Sources */,
+				7EBE4130215E6F7A006C882C /* ServiceTask.swift in Sources */,
+				7EE281EA2161E60D00019EE5 /* TaskBuilder.swift in Sources */,
+				7ED7A57221600D1A007657ED /* JSONContentHandler.swift in Sources */,
+				7ED7A57421601180007657ED /* ServiceTaskContentHandling.swift in Sources */,
+				7EECC28B21610809008845F4 /* TaskBuilder+Protobuf.swift in Sources */,
+				7EE281F42161FE2A00019EE5 /* ConduletError.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7EBE411A215E6F71006C882C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7E314CF221625EC80007DAFE /* URLSerializationTests.swift in Sources */,
+				7EBE4124215E6F71006C882C /* ServiceTaskTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		7EBE4121215E6F71006C882C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7EBE4114215E6F71006C882C /* Condulet */;
+			targetProxy = 7EBE4120215E6F71006C882C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		7EBE4127215E6F71006C882C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		7EBE4128215E6F71006C882C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		7EBE412A215E6F71006C882C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 39033723B2AD69B2F87FBE19 /* Pods-All Targets-Condulet.debug.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = Condulet/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.kozlek.Condulet;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		7EBE412B215E6F71006C882C /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F8E74FC8BC6E7CB77542D987 /* Pods-All Targets-Condulet.release.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = Condulet/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.kozlek.Condulet;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		7EBE412D215E6F71006C882C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = AF99ECF42507D8C62FCE8973 /* Pods-All Targets-ConduletTests.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = ConduletTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.kozlek.ConduletTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		7EBE412E215E6F71006C882C /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = EF88038FFB1E59F95B6E1397 /* Pods-All Targets-ConduletTests.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = ConduletTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.kozlek.ConduletTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		7EBE410F215E6F71006C882C /* Build configuration list for PBXProject "Condulet" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7EBE4127215E6F71006C882C /* Debug */,
+				7EBE4128215E6F71006C882C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7EBE4129215E6F71006C882C /* Build configuration list for PBXNativeTarget "Condulet" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7EBE412A215E6F71006C882C /* Debug */,
+				7EBE412B215E6F71006C882C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7EBE412C215E6F71006C882C /* Build configuration list for PBXNativeTarget "ConduletTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7EBE412D215E6F71006C882C /* Debug */,
+				7EBE412E215E6F71006C882C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 7EBE410C215E6F71006C882C /* Project object */;
+}
