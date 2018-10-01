@@ -308,8 +308,8 @@ class ServiceTaskTests: QuickSpec {
                     TaskBuilder()
                         .url("test.test")
                         .method(.POST)
-                        .body(encodable: test)
-                        .decodable { (object: Test, response) in
+                        .body(codable: test)
+                        .codable { (object: Test, response) in
                             if object.data == "Test" {
                                 done()
                             }

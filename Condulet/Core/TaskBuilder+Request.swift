@@ -195,9 +195,9 @@ public extension TaskBuilder {
     
     /// Set HTTP request body
     @discardableResult
-    public func body<T: Encodable>(encodable: T) -> Self {
+    public func body<T: Encodable>(codable: T) -> Self {
         task.contentType = "application/json"
-        task.body = try? TaskBuilder.jsonEncoder.encode(encodable)
+        task.body = try? TaskBuilder.jsonEncoder.encode(codable)
         return self
     }
     

@@ -119,7 +119,7 @@ public extension TaskBuilder {
     
     /// Handle json response with serialized Decodable object of type
     @discardableResult
-    public func decodable<T: Decodable>(_ handler: @escaping (T, URLResponse) -> Void) -> Self {
+    public func codable<T: Decodable>(_ handler: @escaping (T, URLResponse) -> Void) -> Self {
         task.responseHandler = DecodableContentHandler { [unowned queue = responseQueue] (object: T, response) in
             queue.addOperation {
                 handler(object, response)

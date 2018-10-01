@@ -66,9 +66,9 @@ TaskBuilder()
     // Add path to resource
     .path("/path/to/resource")
     // Serialize our Codable struct and set body
-    .body(encodable: NameRequest("some"))
+    .body(codable: NameRequest("some"))
     // Expect response with the object of 'NameResponse' type
-    .decodable { (object: NameResponse, response) in
+    .codable { (object: NameResponse, response) in
         print("Name valid: \(object.isValid)")
     }
     // Otherwise will fail with error
