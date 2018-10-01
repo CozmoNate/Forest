@@ -1,6 +1,6 @@
 # Condulet
 
-Condulet is a simple wrapper built on top of URLSession and URLSessionTask. When you need to simply send request, receive data, parse value and return to completion block - this framework is for you. Condulet also flexible and extensible. You can add your custom response handlers and data parsers. Condulet provide most of the features you'll need in your day-by-day work, without stressing you with overcomplicated abstractions. Thats the main purpose of it - help to make your job done.
+Condulet is a simple wrapper built on top of URLSession and URLSessionTask. When you need to simply send request, receive data, parse value and return to completion block - this framework is for you. Condulet also flexible and extensible. You can add your custom response handlers and data parsers. Condulet provide most of the features you'll need in your day-by-day work, without stressing you with overcomplicated abstractions. That the main purpose of it - help to make your job done.
 
 ## Installation
 
