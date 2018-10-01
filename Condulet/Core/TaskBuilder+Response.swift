@@ -69,8 +69,13 @@ public extension TaskBuilder {
         task.responseHandler = ContentHandler { [unowned queue = responseQueue] (content, response) in
             switch content {
             case let .file(url):
+                let temp = FileManager.default.temporaryDirectory
+                    .appendingPathComponent(UUID().uuidString)
+                    .appendingPathExtension("tmp")
+                try FileManager.default.moveItem(at: url, to: temp)
                 queue.addOperation {
-                    handler(url, response)
+                    handler(temp, response)
+                    try? FileManager.default.removeItem(at: temp)
                 }
             default:
                 throw ConduletError.invalidResponse

@@ -162,6 +162,44 @@ class ServiceTaskTests: QuickSpec {
                 }
             }
             
+            it("can download file") {
+                
+                let original = Data(count: 20)
+                
+                self.stub(http(.get, uri: "test.download"), http(200, download: .content(original)))
+                
+                waitUntil { (done) in
+                    
+                    TaskBuilder()
+                        .url("test.download")
+                        .method(.GET)
+                        .file { (url, response) in
+                            
+                            let attributes = try! FileManager.default.attributesOfItem(atPath: url.path)
+                            
+                            if attributes[FileAttributeKey.size] as! Int == 20 {
+                                
+                                let data = try! Data(contentsOf: url)
+                                
+                                if data == original {
+                                    done()
+                                }
+                                else {
+                                    fail("Not the same data!")
+                                }
+                            }
+                            else {
+                                fail("File size was wrong!")
+                            }
+                        }
+                        .error { (error, response) in
+                            fail("\(error)")
+                        }
+                        .download()
+                }
+                
+            }
+            
             it("can send and receive protobuf messages") {
                 
                 func testProto(_ method: HTTPMethod, uri: String, message: Google_Protobuf_SourceContext) -> (_ request: URLRequest) -> Bool {
