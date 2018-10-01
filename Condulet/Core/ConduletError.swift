@@ -29,6 +29,8 @@ public enum ConduletError: Error {
     case invalidContent
     /// Task response handler have decoding issues
     case decodingFailure
+    /// Internal logic error occured
+    case internalError
     /// Status code error
     case statusCode(Int)
 }

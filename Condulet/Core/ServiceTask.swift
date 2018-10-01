@@ -28,7 +28,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     
     // MARK: - CustomStringConvertible
     
-    public var description: String {
+    open var description: String {
         
         let description = "<\(String(describing: type(of: self))) #\(hashValue)>"
         
@@ -115,13 +115,10 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
         self.errorHandler = errorHandler
     }
     
-    deinit {
-        print("Disposed: \(self)")
-    }
     // MARK: - Builder
     
     /// Produces a request built from ServiceTask parameters. When have invalid parameters an error will be thrown. Override in subclass to change default implementation
-    public func makeRequest() throws -> URLRequest {
+    open func makeRequest() throws -> URLRequest {
         
         guard let url = endpoint.url else {
             throw ConduletError.invalidEndpoint
@@ -181,9 +178,20 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
                 task = session.dataTask(with: request) { (data, response, error) in
                     self.handleResponse(signature, Content(data), response, error)
                 }
-            case .download:
+            case .download(let destination):
                 task = session.downloadTask(with: request) { (url, response, error) in
-                    self.handleResponse(signature, Content(url), response, error)
+                    if let url = url {
+                        do {
+                            try FileManager.default.moveItem(at: url, to: destination)
+                            self.handleResponse(signature, Content(destination), response, error)
+                        }
+                        catch {
+                            self.handleResponse(signature, nil, response, ConduletError.internalError)
+                        }
+                    }
+                    else {
+                        self.handleResponse(signature, nil, response, error)
+                    }
                 }
             case .upload(let content):
                 switch content {
@@ -207,7 +215,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     
     /// Invalidates running task, returns true when task is actually canceled. Captured response blocks and handlers will never be called until task will be performed again or rewound. Override in subclass to change default implementation
     @discardableResult
-    public func cancel() -> Bool {
+    open func cancel() -> Bool {
         
         guard inRunning else {
             return false
@@ -223,7 +231,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     }
     
     /// Rewind task with lastest action performed. If action is not specified task will fail with 'noActionPerformed' error. Override in subclass to change default implementation
-    public func rewind() {
+    open func rewind() {
         
         do {
             
@@ -241,7 +249,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     // MARK: - Handlers
     
     /// Handle general response, this method is called first on response received. Override in subclass to change default implementation
-    public func handleResponse(_ signature: UUID, _ content: Content?, _ response: URLResponse?, _ error: Error?) {
+    open func handleResponse(_ signature: UUID, _ content: Content?, _ response: URLResponse?, _ error: Error?) {
         
         // When the response signature is differs from stored signature, that means we got response from abandoned requests and should ignore it
         guard self.signature == signature else {
@@ -280,7 +288,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     }
     
     /// Handle URLResponse received. This handler is called before starting to parse any data received. Override in subclass to change default implementation
-    public func handleResponse(_ response: URLResponse) throws {
+    open func handleResponse(_ response: URLResponse) throws {
         
         // Pass any non-HTTP response
         guard let response = response as? HTTPURLResponse else {
@@ -295,7 +303,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     }
     
     /// Handle content response. Override in subclass to change default implementation
-    public func handleResponse(_ content: Content, _ response: URLResponse) throws {
+    open func handleResponse(_ content: Content, _ response: URLResponse) throws {
         
         guard let handler = responseHandler else {
             throw ConduletError.noResponseHandler
@@ -306,7 +314,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     }
     
     /// Handle any error. Response parameter can store service response if received. Override in subclass to change default implementation
-    public func handleResponse(_ error: Error, _ response: URLResponse?) {
+    open func handleResponse(_ error: Error, _ response: URLResponse?) {
         
         // Run error handler
         errorHandler?.handle(error: error, response: response)

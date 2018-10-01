@@ -35,10 +35,15 @@ open class TaskBuilder {
         return self
     }
     
-    /// Perform download task
+    /// Perform download task. If destination name not specified, temporary filename will be generated
+    ///
+    /// - Parameter destination: The destination where file should be saved. When not specified, file will be downloaded and saved to temp folder and should be manually removed
     @discardableResult
-    public func download() -> Self {
-        task.perform(action: .download)
+    public func download(to destination: URL? = nil) -> Self {
+        let url = destination ?? FileManager.default.temporaryDirectory
+            .appendingPathComponent(UUID().uuidString)
+            .appendingPathExtension("tmp")
+        task.perform(action: .download(url))
         return self
     }
     

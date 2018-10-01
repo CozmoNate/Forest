@@ -175,21 +175,16 @@ class ServiceTaskTests: QuickSpec {
                         .method(.GET)
                         .file { (url, response) in
                             
-                            let attributes = try! FileManager.default.attributesOfItem(atPath: url.path)
+                            let data = try! Data(contentsOf: url)
                             
-                            if attributes[FileAttributeKey.size] as! Int == 20 {
-                                
-                                let data = try! Data(contentsOf: url)
-                                
-                                if data == original {
-                                    done()
-                                }
-                                else {
-                                    fail("Not the same data!")
-                                }
+                            // Cleanup
+                            try! FileManager.default.removeItem(at: url)
+                            
+                            if data == original {
+                                done()
                             }
                             else {
-                                fail("File size was wrong!")
+                                fail("Not the same data!")
                             }
                         }
                         .error { (error, response) in

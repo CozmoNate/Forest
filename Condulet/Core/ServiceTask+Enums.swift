@@ -51,10 +51,13 @@ public extension ServiceTask {
     }
     
     /// Action performed with ServiceTask
+    /// - perform: Perform task
+    /// - download: Download file and save to specified filename
+    /// - upload: Upload specified content
     public enum Action: CustomStringConvertible {
         
         case perform
-        case download
+        case download(URL)
         case upload(Content)
         
         public var description: String {

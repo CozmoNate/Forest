@@ -8,10 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		7E314CF221625EC80007DAFE /* URLSerializationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E314CF121625EC80007DAFE /* URLSerializationTests.swift */; };
+		7E314CF721628FBE0007DAFE /* ServiceTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBE412F215E6F7A006C882C /* ServiceTask.swift */; };
 		7EBE411F215E6F71006C882C /* Condulet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EBE4115215E6F71006C882C /* Condulet.framework */; };
 		7EBE4124215E6F71006C882C /* ServiceTaskTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBE4123215E6F71006C882C /* ServiceTaskTests.swift */; };
 		7EBE4126215E6F71006C882C /* Condulet.h in Headers */ = {isa = PBXBuildFile; fileRef = 7EBE4118215E6F71006C882C /* Condulet.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7EBE4130215E6F7A006C882C /* ServiceTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBE412F215E6F7A006C882C /* ServiceTask.swift */; };
 		7EBE4136215E715D006C882C /* TaskBuilder+Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBE4135215E715D006C882C /* TaskBuilder+Request.swift */; };
 		7EBE414A215F1A64006C882C /* TaskBuilder+Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBE4149215F1A64006C882C /* TaskBuilder+Response.swift */; };
 		7ED7A56E215FFCFA007657ED /* ProtobufContentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7A56D215FFCFA007657ED /* ProtobufContentHandler.swift */; };
@@ -425,6 +425,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7E314CF721628FBE0007DAFE /* ServiceTask.swift in Sources */,
 				7ED7A57A2160185D007657ED /* URLEncodedContentHandler.swift in Sources */,
 				7EECC2822160C596008845F4 /* ServiceTask+Enums.swift in Sources */,
 				7EECC27A2160AAE1008845F4 /* ServiceTaskErrorHandling.swift in Sources */,
@@ -434,7 +435,6 @@
 				7EBE4136215E715D006C882C /* TaskBuilder+Request.swift in Sources */,
 				7EECC2932161326E008845F4 /* DecodableContentHandler.swift in Sources */,
 				7ED7A58121608F8B007657ED /* TextContentHandler.swift in Sources */,
-				7EBE4130215E6F7A006C882C /* ServiceTask.swift in Sources */,
 				7EE281EA2161E60D00019EE5 /* TaskBuilder.swift in Sources */,
 				7ED7A57221600D1A007657ED /* JSONContentHandler.swift in Sources */,
 				7ED7A57421601180007657ED /* ServiceTaskContentHandling.swift in Sources */,

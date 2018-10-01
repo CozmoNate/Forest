@@ -89,10 +89,13 @@ TaskBuilder()
     .body(text: "123456789")
     .file { (url, response) in
         print("Downloaded: \(url)")
+        // Remove temp file
+        try? FileManager.default.removeItem(at: url)
     }
     .error { (error, response) in
         print("Error occured: \(error)")
     }
+    // When download destination not provided, content will be downloaded and saved to temp file
     .download()
 ```
 
