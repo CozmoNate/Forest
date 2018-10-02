@@ -7,26 +7,29 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7E314CF221625EC80007DAFE /* URLSerializationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E314CF121625EC80007DAFE /* URLSerializationTests.swift */; };
 		7E314CF721628FBE0007DAFE /* ServiceTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBE412F215E6F7A006C882C /* ServiceTask.swift */; };
 		7EBE411F215E6F71006C882C /* Condulet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EBE4115215E6F71006C882C /* Condulet.framework */; };
 		7EBE4124215E6F71006C882C /* ServiceTaskTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBE4123215E6F71006C882C /* ServiceTaskTests.swift */; };
 		7EBE4126215E6F71006C882C /* Condulet.h in Headers */ = {isa = PBXBuildFile; fileRef = 7EBE4118215E6F71006C882C /* Condulet.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7EBE4136215E715D006C882C /* TaskBuilder+Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBE4135215E715D006C882C /* TaskBuilder+Request.swift */; };
-		7EBE414A215F1A64006C882C /* TaskBuilder+Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBE4149215F1A64006C882C /* TaskBuilder+Response.swift */; };
+		7EBE4136215E715D006C882C /* ServiceTask+Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBE4135215E715D006C882C /* ServiceTask+Request.swift */; };
+		7EBE414A215F1A64006C882C /* ServiceTask+Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBE4149215F1A64006C882C /* ServiceTask+Response.swift */; };
 		7ED7A56E215FFCFA007657ED /* ProtobufContentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7A56D215FFCFA007657ED /* ProtobufContentHandler.swift */; };
 		7ED7A57221600D1A007657ED /* JSONContentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7A57121600D1A007657ED /* JSONContentHandler.swift */; };
 		7ED7A57421601180007657ED /* ServiceTaskContentHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7A57321601180007657ED /* ServiceTaskContentHandling.swift */; };
 		7ED7A57A2160185D007657ED /* URLEncodedContentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7A5792160185D007657ED /* URLEncodedContentHandler.swift */; };
 		7ED7A57C21601AC1007657ED /* URLSerialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7A57B21601AC1007657ED /* URLSerialization.swift */; };
 		7ED7A58121608F8B007657ED /* TextContentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7A58021608F8B007657ED /* TextContentHandler.swift */; };
-		7EE281EA2161E60D00019EE5 /* TaskBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE281E92161E60D00019EE5 /* TaskBuilder.swift */; };
+		7EE281EA2161E60D00019EE5 /* ServiceTask+Perform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE281E92161E60D00019EE5 /* ServiceTask+Perform.swift */; };
 		7EE281F42161FE2A00019EE5 /* ConduletError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE281F32161FE2A00019EE5 /* ConduletError.swift */; };
 		7EECC27A2160AAE1008845F4 /* ServiceTaskErrorHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EECC2792160AAE1008845F4 /* ServiceTaskErrorHandling.swift */; };
 		7EECC2822160C596008845F4 /* ServiceTask+Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EECC2812160C596008845F4 /* ServiceTask+Enums.swift */; };
-		7EECC28B21610809008845F4 /* TaskBuilder+Protobuf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EECC28A21610809008845F4 /* TaskBuilder+Protobuf.swift */; };
+		7EECC28B21610809008845F4 /* ServiceTask+Protobuf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EECC28A21610809008845F4 /* ServiceTask+Protobuf.swift */; };
 		7EECC2932161326E008845F4 /* DecodableContentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EECC2922161326E008845F4 /* DecodableContentHandler.swift */; };
 		8411B2471340A40A98CF6509 /* Pods_All_Targets_ConduletTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D3BE0FE0480671010AE049E /* Pods_All_Targets_ConduletTests.framework */; };
+		AA38AB7121639AEB00EC8750 /* URLSerializationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E314CF121625EC80007DAFE /* URLSerializationTests.swift */; };
+		AAD52D3321634C1F00B94446 /* RetrofitTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD52D3221634C1F00B94446 /* RetrofitTask.swift */; };
+		AAD52D3B2163711B00B94446 /* RetrofitTaskTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD52D3A2163711B00B94446 /* RetrofitTaskTests.swift */; };
+		AAD56CAC216397A10086CC50 /* ServiceTask+Handlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD56CAB216397A10086CC50 /* ServiceTask+Handlers.swift */; };
 		EFAA4B81BB537ADE88CEDD14 /* Pods_All_Targets_Condulet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78096D16BF7DAFB2AC3FF2BD /* Pods_All_Targets_Condulet.framework */; };
 /* End PBXBuildFile section */
 
@@ -53,8 +56,8 @@
 		7EBE4123215E6F71006C882C /* ServiceTaskTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTaskTests.swift; sourceTree = "<group>"; };
 		7EBE4125215E6F71006C882C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7EBE412F215E6F7A006C882C /* ServiceTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServiceTask.swift; sourceTree = "<group>"; };
-		7EBE4135215E715D006C882C /* TaskBuilder+Request.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TaskBuilder+Request.swift"; sourceTree = "<group>"; };
-		7EBE4149215F1A64006C882C /* TaskBuilder+Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TaskBuilder+Response.swift"; sourceTree = "<group>"; };
+		7EBE4135215E715D006C882C /* ServiceTask+Request.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ServiceTask+Request.swift"; sourceTree = "<group>"; };
+		7EBE4149215F1A64006C882C /* ServiceTask+Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ServiceTask+Response.swift"; sourceTree = "<group>"; };
 		7ED7A565215FDE6C007657ED /* Condulet.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Condulet.podspec; sourceTree = SOURCE_ROOT; };
 		7ED7A56C215FECEE007657ED /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		7ED7A56D215FFCFA007657ED /* ProtobufContentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProtobufContentHandler.swift; sourceTree = "<group>"; };
@@ -63,12 +66,15 @@
 		7ED7A5792160185D007657ED /* URLEncodedContentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLEncodedContentHandler.swift; sourceTree = "<group>"; };
 		7ED7A57B21601AC1007657ED /* URLSerialization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSerialization.swift; sourceTree = "<group>"; };
 		7ED7A58021608F8B007657ED /* TextContentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextContentHandler.swift; sourceTree = "<group>"; };
-		7EE281E92161E60D00019EE5 /* TaskBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskBuilder.swift; sourceTree = "<group>"; };
+		7EE281E92161E60D00019EE5 /* ServiceTask+Perform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ServiceTask+Perform.swift"; sourceTree = "<group>"; };
 		7EE281F32161FE2A00019EE5 /* ConduletError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConduletError.swift; sourceTree = "<group>"; };
 		7EECC2792160AAE1008845F4 /* ServiceTaskErrorHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTaskErrorHandling.swift; sourceTree = "<group>"; };
 		7EECC2812160C596008845F4 /* ServiceTask+Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ServiceTask+Enums.swift"; sourceTree = "<group>"; };
-		7EECC28A21610809008845F4 /* TaskBuilder+Protobuf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TaskBuilder+Protobuf.swift"; sourceTree = "<group>"; };
+		7EECC28A21610809008845F4 /* ServiceTask+Protobuf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ServiceTask+Protobuf.swift"; sourceTree = "<group>"; };
 		7EECC2922161326E008845F4 /* DecodableContentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodableContentHandler.swift; sourceTree = "<group>"; };
+		AAD52D3221634C1F00B94446 /* RetrofitTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RetrofitTask.swift; sourceTree = "<group>"; };
+		AAD52D3A2163711B00B94446 /* RetrofitTaskTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetrofitTaskTests.swift; sourceTree = "<group>"; };
+		AAD56CAB216397A10086CC50 /* ServiceTask+Handlers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ServiceTask+Handlers.swift"; sourceTree = "<group>"; };
 		AF99ECF42507D8C62FCE8973 /* Pods-All Targets-ConduletTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-All Targets-ConduletTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-All Targets-ConduletTests/Pods-All Targets-ConduletTests.debug.xcconfig"; sourceTree = "<group>"; };
 		EF88038FFB1E59F95B6E1397 /* Pods-All Targets-ConduletTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-All Targets-ConduletTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-All Targets-ConduletTests/Pods-All Targets-ConduletTests.release.xcconfig"; sourceTree = "<group>"; };
 		F8E74FC8BC6E7CB77542D987 /* Pods-All Targets-Condulet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-All Targets-Condulet.release.xcconfig"; path = "Pods/Target Support Files/Pods-All Targets-Condulet/Pods-All Targets-Condulet.release.xcconfig"; sourceTree = "<group>"; };
@@ -132,8 +138,9 @@
 		7EBE4122215E6F71006C882C /* ConduletTests */ = {
 			isa = PBXGroup;
 			children = (
-				7EBE4123215E6F71006C882C /* ServiceTaskTests.swift */,
 				7E314CF121625EC80007DAFE /* URLSerializationTests.swift */,
+				7EBE4123215E6F71006C882C /* ServiceTaskTests.swift */,
+				AAD52D3A2163711B00B94446 /* RetrofitTaskTests.swift */,
 				7EBE4125215E6F71006C882C /* Info.plist */,
 			);
 			path = ConduletTests;
@@ -145,7 +152,7 @@
 				7EECC27D2160BEAA008845F4 /* Common */,
 				7EECC29621614B7A008845F4 /* Handlers */,
 				7EE281EB2161FAD800019EE5 /* ServiceTask */,
-				7EE281EC2161FAE300019EE5 /* TaskBuilder */,
+				AAD52D2C2163408200B94446 /* RetrofitTask */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -166,18 +173,12 @@
 				7EECC2792160AAE1008845F4 /* ServiceTaskErrorHandling.swift */,
 				7EBE412F215E6F7A006C882C /* ServiceTask.swift */,
 				7EECC2812160C596008845F4 /* ServiceTask+Enums.swift */,
+				AAD56CAB216397A10086CC50 /* ServiceTask+Handlers.swift */,
+				7EE281E92161E60D00019EE5 /* ServiceTask+Perform.swift */,
+				7EBE4135215E715D006C882C /* ServiceTask+Request.swift */,
+				7EBE4149215F1A64006C882C /* ServiceTask+Response.swift */,
 			);
 			name = ServiceTask;
-			sourceTree = "<group>";
-		};
-		7EE281EC2161FAE300019EE5 /* TaskBuilder */ = {
-			isa = PBXGroup;
-			children = (
-				7EE281E92161E60D00019EE5 /* TaskBuilder.swift */,
-				7EBE4135215E715D006C882C /* TaskBuilder+Request.swift */,
-				7EBE4149215F1A64006C882C /* TaskBuilder+Response.swift */,
-			);
-			name = TaskBuilder;
 			sourceTree = "<group>";
 		};
 		7EE281F02161FB2600019EE5 /* Handlers */ = {
@@ -191,7 +192,7 @@
 		7EE281F22161FB4600019EE5 /* TaskBuilder */ = {
 			isa = PBXGroup;
 			children = (
-				7EECC28A21610809008845F4 /* TaskBuilder+Protobuf.swift */,
+				7EECC28A21610809008845F4 /* ServiceTask+Protobuf.swift */,
 			);
 			name = TaskBuilder;
 			sourceTree = "<group>";
@@ -214,6 +215,14 @@
 				7EECC2922161326E008845F4 /* DecodableContentHandler.swift */,
 			);
 			name = Handlers;
+			sourceTree = "<group>";
+		};
+		AAD52D2C2163408200B94446 /* RetrofitTask */ = {
+			isa = PBXGroup;
+			children = (
+				AAD52D3221634C1F00B94446 /* RetrofitTask.swift */,
+			);
+			name = RetrofitTask;
 			sourceTree = "<group>";
 		};
 		DE17114DBC74199C9DD768F5 /* Pods */ = {
@@ -426,19 +435,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				7E314CF721628FBE0007DAFE /* ServiceTask.swift in Sources */,
+				AAD52D3321634C1F00B94446 /* RetrofitTask.swift in Sources */,
 				7ED7A57A2160185D007657ED /* URLEncodedContentHandler.swift in Sources */,
 				7EECC2822160C596008845F4 /* ServiceTask+Enums.swift in Sources */,
 				7EECC27A2160AAE1008845F4 /* ServiceTaskErrorHandling.swift in Sources */,
 				7ED7A56E215FFCFA007657ED /* ProtobufContentHandler.swift in Sources */,
-				7EBE414A215F1A64006C882C /* TaskBuilder+Response.swift in Sources */,
+				7EBE414A215F1A64006C882C /* ServiceTask+Response.swift in Sources */,
 				7ED7A57C21601AC1007657ED /* URLSerialization.swift in Sources */,
-				7EBE4136215E715D006C882C /* TaskBuilder+Request.swift in Sources */,
+				7EBE4136215E715D006C882C /* ServiceTask+Request.swift in Sources */,
 				7EECC2932161326E008845F4 /* DecodableContentHandler.swift in Sources */,
 				7ED7A58121608F8B007657ED /* TextContentHandler.swift in Sources */,
-				7EE281EA2161E60D00019EE5 /* TaskBuilder.swift in Sources */,
+				7EE281EA2161E60D00019EE5 /* ServiceTask+Perform.swift in Sources */,
+				AAD56CAC216397A10086CC50 /* ServiceTask+Handlers.swift in Sources */,
 				7ED7A57221600D1A007657ED /* JSONContentHandler.swift in Sources */,
 				7ED7A57421601180007657ED /* ServiceTaskContentHandling.swift in Sources */,
-				7EECC28B21610809008845F4 /* TaskBuilder+Protobuf.swift in Sources */,
+				7EECC28B21610809008845F4 /* ServiceTask+Protobuf.swift in Sources */,
 				7EE281F42161FE2A00019EE5 /* ConduletError.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -447,8 +458,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7E314CF221625EC80007DAFE /* URLSerializationTests.swift in Sources */,
+				AA38AB7121639AEB00EC8750 /* URLSerializationTests.swift in Sources */,
 				7EBE4124215E6F71006C882C /* ServiceTaskTests.swift in Sources */,
+				AAD52D3B2163711B00B94446 /* RetrofitTaskTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

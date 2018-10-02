@@ -23,20 +23,19 @@ class ServiceTaskTests: QuickSpec {
     override func spec() {
         
         describe("ServiceTask") {
-            
+
             afterEach {
                 self.removeAllStubs()
             }
             
             it("can perform request") {
                 
-                self.stub(http(.get, uri: "https://test.test/some"), json(["test": "ok"]))
+                self.stub(http(.get, uri: "test.test"), json(["test": "ok"]))
                 
                 waitUntil { (done) in
                     
-                    TaskBuilder()
-                        .endpoint(.GET, "https://test.test")
-                        .path("/some")
+                    ServiceTask()
+                        .endpoint(.GET, "test.test")
                         .data { (data, response) in
                             done()
                         }
@@ -56,7 +55,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil(timeout: 5) { (done) in
                     
-                    let builder = TaskBuilder()
+                    let task = ServiceTask()
                         .endpoint(.GET, "test.cancel")
                         .response { (content, response) in
                             if canceled {
@@ -71,9 +70,9 @@ class ServiceTaskTests: QuickSpec {
                         }
                         .perform()
                     
-                    if builder.task.cancel() {
+                    if task.cancel() {
                         canceled = true
-                        builder.task.rewind()
+                        task.rewind()
                     }
                     else {
                         fail("Task is failed to cancel!")
@@ -87,7 +86,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil { (done) in
                     
-                    TaskBuilder()
+                    ServiceTask()
                         .url("test.test")
                         .method(.GET)
                         .data { (data, response) in
@@ -106,7 +105,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil { (done) in
                     
-                    TaskBuilder()
+                    ServiceTask()
                         .url("test.test")
                         .method(.GET)
                         .data { (data, response) in
@@ -133,7 +132,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil { (done) in
                     
-                    TaskBuilder()
+                    ServiceTask()
                         .url("test.test")
                         .method(.GET)
                         .json { (object, response) in
@@ -170,7 +169,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil { (done) in
                     
-                    TaskBuilder()
+                    ServiceTask()
                         .url("test.download")
                         .method(.GET)
                         .file { (url, response) in
@@ -238,7 +237,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil { (done) in
                     
-                    TaskBuilder()
+                    ServiceTask()
                         .url("test.test")
                         .method(.PATCH)
                         .body { (message: inout Google_Protobuf_SourceContext) in
@@ -302,7 +301,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil { (done) in
                     
-                    TaskBuilder()
+                    ServiceTask()
                         .url("test.test")
                         .method(.POST)
                         .body(codable: test)

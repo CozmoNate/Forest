@@ -1,5 +1,5 @@
 //
-//  TaskBuilder+Response.swift
+//  ServiceTask+Response.swift
 //  Condulet
 //
 //  Created by Natan Zalkin on 29/09/2018.
@@ -9,19 +9,19 @@
 import Foundation
 
 
-public extension TaskBuilder {
+public extension ServiceTask {
     
     /// Set response handler
     @discardableResult
     public func response(_ handler: ServiceTaskContentHandling) -> Self {
-        task.responseHandler = handler
+        contentHandler = handler
         return self
     }
     
     /// Handle response with block
     @discardableResult
     public func response(_ handler: @escaping (ServiceTask.Content, URLResponse) -> Void) -> Self {
-        task.responseHandler = ContentHandler { [unowned queue = responseQueue] (content, response) in
+        contentHandler = ContentHandler { [unowned queue = responseQueue] (content, response) in
             queue.addOperation {
                 handler(content, response)
             }
@@ -32,14 +32,14 @@ public extension TaskBuilder {
     /// Set error handler
     @discardableResult
     public func error(_ handler: ServiceTaskErrorHandling) -> Self {
-        task.errorHandler = handler
+        errorHandler = handler
         return self
     }
     
     /// Handle error with block
     @discardableResult
     public func error(_ handler: @escaping (Error, URLResponse?) -> Void) -> Self {
-        task.errorHandler = ErrorHandler { [unowned queue = responseQueue] (error, response) in
+        errorHandler = ErrorHandler { [unowned queue = responseQueue] (error, response) in
             queue.addOperation {
                 handler(error, response)
             }
@@ -50,7 +50,7 @@ public extension TaskBuilder {
     /// Handle data response
     @discardableResult
     public func data(_ handler: @escaping (Data, URLResponse) -> Void) -> Self {
-        task.responseHandler = ContentHandler { [unowned queue = responseQueue] (content, response) in
+        contentHandler = ContentHandler { [unowned queue = responseQueue] (content, response) in
             switch content {
             case let .data(data):
                 queue.addOperation {
@@ -66,7 +66,7 @@ public extension TaskBuilder {
     /// Handle file response
     @discardableResult
     public func file(_ handler: @escaping (URL, URLResponse) -> Void) -> Self {
-        task.responseHandler = ContentHandler { [unowned queue = responseQueue] (content, response) in
+        contentHandler = ContentHandler { [unowned queue = responseQueue] (content, response) in
             switch content {
             case let .file(url):
                 queue.addOperation {
@@ -82,7 +82,7 @@ public extension TaskBuilder {
     /// Handle text response
     @discardableResult
     public func text(_ handler: @escaping (String, URLResponse) -> Void) -> Self {
-        task.responseHandler = TextContentHandler { [unowned queue = responseQueue] (string, response) in
+        contentHandler = TextContentHandler { [unowned queue = responseQueue] (string, response) in
             queue.addOperation {
                 handler(string, response)
             }
@@ -93,7 +93,7 @@ public extension TaskBuilder {
     /// Handle json response
     @discardableResult
     public func json(_ handler: @escaping (Any, URLResponse) -> Void) -> Self {
-        task.responseHandler = JSONContentHandler { [unowned queue = responseQueue] (object, response) in
+        contentHandler = JSONContentHandler { [unowned queue = responseQueue] (object, response) in
             queue.addOperation {
                 handler(object, response)
             }
@@ -104,7 +104,7 @@ public extension TaskBuilder {
     /// Handle url-encoded response
     @discardableResult
     public func urlencoded(_ handler: @escaping ([String: String], URLResponse) -> Void) -> Self {
-        task.responseHandler = URLEncodedContentHandler { [unowned queue = responseQueue] (dictionary, response) in
+        contentHandler = URLEncodedContentHandler { [unowned queue = responseQueue] (dictionary, response) in
             queue.addOperation {
                 handler(dictionary, response)
             }
@@ -115,46 +115,12 @@ public extension TaskBuilder {
     /// Handle json response with serialized Decodable object of type
     @discardableResult
     public func codable<T: Decodable>(_ handler: @escaping (T, URLResponse) -> Void) -> Self {
-        task.responseHandler = DecodableContentHandler { [unowned queue = responseQueue] (object: T, response) in
+        contentHandler = DecodableContentHandler { [unowned queue = responseQueue] (object: T, response) in
             queue.addOperation {
                 handler(object, response)
             }
         }
         return self
-    }
-    
-}
-
-public extension TaskBuilder {
-    
-    /// Generic content handler with block
-    public class ContentHandler: ServiceTaskContentHandling {
-        
-        public var handler: ((ServiceTask.Content, URLResponse) throws -> Void)?
-        
-        /// Create an instance of the handler. NOTE: throwing block will be executed on background thread.
-        public init(_ block: ((ServiceTask.Content, URLResponse) throws -> Void)? = nil) {
-            handler = block
-        }
-        
-        public func handle(content: ServiceTask.Content, response: URLResponse) throws {
-            try self.handler?(content, response)
-        }
-    }
-    
-    /// Generic error handler with block
-    public class ErrorHandler: ServiceTaskErrorHandling {
-        
-        public var handler: ((Error, URLResponse?) -> Void)?
-        
-        /// Create an instance of the handler. NOTE: block will be executed on background thread
-        public init(_ block: ((Error, URLResponse?) -> Void)? = nil) {
-            handler = block
-        }
-        
-        public func handle(error: Error, response: URLResponse?) {
-            self.handler?(error, response)
-        }
     }
     
 }

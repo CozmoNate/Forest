@@ -32,7 +32,7 @@ Just put the files from `Core` and `Protobuf` directories somethere in your proj
 ### Make a GET request expecting json response
 
 ```swift
-TaskBuilder()
+ServiceTask()
     .url("https://host.com/path/to/endpoint")
     .method(.GET)
     .query(["param": value])
@@ -60,7 +60,7 @@ struct NameResponse: Decodable {
     let isValid: Bool
 }
 
-TaskBuilder()
+ServiceTask()
     // Set base url and HTTP method
     .endpoint(.POST, "https://host.com")
     // Add path to resource
@@ -78,11 +78,12 @@ TaskBuilder()
     .perform()
 ```
 
+
 Just download some file:
 
 ```swift
 
-TaskBuilder()
+ServiceTask()
     .headers(["Authentication": "Bearer \(token)"])
     .method(.PUT)
     .url("https://host.com/file/12345")
@@ -103,7 +104,7 @@ Send and receive Protobuf messages:
 
 ```swift
 
-TaskBuilder()
+ServiceTask()
     .endpoint(.POST, "https://host.com")
     // Create and configure request message in place
     .body { (message: inout Google_Protobuf_SourceContext) in

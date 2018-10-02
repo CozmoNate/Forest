@@ -10,17 +10,17 @@ import Foundation
 
 
 public extension Notification.Name {
-    
+
     public enum Condulet {
-        
+
         /// Posted when a ServiceTask is performed. The notification `object` contains the instance of URLSessionTask started.
         public static let TaskPerformed = Notification.Name(rawValue: "Condulet.TaskPerformed")
-        
+
         /// Posted when a ServiceTask is received response. The notification `object` contains the instance of URLSessionTask completed.
         public static let TaskCompleted = Notification.Name(rawValue: "Condulet.TaskCompleted")
-        
+
     }
-    
+
 }
 
 /// URLSessionTask wrapping class allowing to build, send, cancel and rewind network requests. Built for subclassing
@@ -66,7 +66,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     }
     
     // MARK: - Configuration properties
-    
+
     /// A URLSession instance used to create URLSessionTask
     public var session: URLSession?
     /// A URLComponents instance describing service endpoint
@@ -78,12 +78,14 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     /// HTTP body data
     public var body: Data?
     /// Service response handler
-    public var responseHandler: ServiceTaskContentHandling?
+    public var contentHandler: ServiceTaskContentHandling?
     /// Failure handler
     public var errorHandler: ServiceTaskErrorHandling?
+    // The queue will be used to dispatch response
+    public var responseQueue: OperationQueue
     
     // MARK: - Properties
-    
+
     /// The action of the task performed.
     public var action: Action?
     /// Signature is used to determine if response from URLSessionTask still relevant and should be handled
@@ -97,22 +99,31 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
         set { headers["Content-Type"] = newValue }
     }
 
-    public var inRunning: Bool {
-        return task?.state == .running || task?.state == .suspended
+    open var isRunning: Bool {
+        return signature != nil
     }
 
     // MARK: - Lifecycle
     
     /// Creates the instance of ServiceTask
-    public init(session: URLSession = URLSession.shared, endpoint: URLComponents = URLComponents(), method: ServiceTask.Method? = nil, headers: [String: String] = [:], body: Data? = nil, responseHandler: ServiceTaskContentHandling? = nil, errorHandler: ServiceTaskErrorHandling? = nil) {
+    public init(
+        session: URLSession = URLSession.shared,
+        endpoint: URLComponents = URLComponents(),
+        method: ServiceTask.Method? = nil,
+        headers: [String: String] = [:],
+        body: Data? = nil,
+        contentHandler: ServiceTaskContentHandling? = nil,
+        errorHandler: ServiceTaskErrorHandling? = nil,
+        responseQueue: OperationQueue = OperationQueue.main) {
         
         self.session = session
         self.endpoint = endpoint
         self.method = method
         self.headers = headers
         self.body = body
-        self.responseHandler = responseHandler
+        self.contentHandler = contentHandler
         self.errorHandler = errorHandler
+        self.responseQueue = responseQueue
     }
     
     // MARK: - Builder
@@ -135,32 +146,18 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
         
         // Prepare body
         request.httpBody = body
-        
+
         return request
     }
     
     // MARK: - Actions
-    
-    /// Associate provided task instance, signature and action with the ServiceTask instance.
-    open func perform(task: URLSessionTask, action: Action, signature: UUID) {
-        
-        self.task = task
-        self.action = action
-        self.signature = signature
-        
-        task.resume()
-        
-        DispatchQueue.main.async {
-            NotificationCenter.default.post(name: Notification.Name.Condulet.TaskPerformed, object: task)
-        }
-    }
     
     /// Perform task with action.
     open func perform(action: Action) {
         
         do {
             
-            guard !inRunning else {
+            guard !isRunning else {
                 throw ConduletError.alreadyRunning
             }
             
@@ -213,36 +210,45 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
         }
     }
     
-    /// Invalidates running task, returns true when task is actually canceled. Captured response blocks and handlers will never be called until task will be performed again or rewound.
+    /// Associate provided task instance, signature and action with the ServiceTask instance.
+    open func perform(task: URLSessionTask, action: Action, signature: UUID) {
+        
+        self.task = task
+        self.action = action
+        self.signature = signature
+        
+        task.resume()
+
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: Notification.Name.Condulet.TaskPerformed, object: task)
+        }
+    }
+    
+    /// Cancels running task. Captured response blocks and handlers will never be called until task will be performed again or rewound.
     @discardableResult
     open func cancel() -> Bool {
-        
-        guard inRunning else {
+
+        guard isRunning else {
             return false
         }
-        
+
         // Invalidate URLSessionTask completion handler
         signature = nil
-        
+
         // Cancel task
         task?.cancel()
-        
+
         return true
     }
     
     /// Rewind task with lastest action performed. If action is not specified task will fail with 'noActionPerformed' error.
     open func rewind() {
         
-        do {
-            
-            guard let action = action else {
-                throw ConduletError.noActionPerformed
-            }
-            
+        if let action = action {
             perform(action: action)
-            
-        } catch {
-            handleResponse(error, nil)
+        }
+        else {
+            handleResponse(ConduletError.noActionPerformed, nil)
         }
     }
     
@@ -257,13 +263,13 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
         }
         
         self.signature = nil
-        
+
         if let task = task {
             DispatchQueue.main.async {
                 NotificationCenter.default.post(name: Notification.Name.Condulet.TaskCompleted, object: task)
             }
         }
-        
+
         do {
             
             if let error = error {
@@ -305,7 +311,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     /// Handle content response.
     open func handleResponse(_ content: Content, _ response: URLResponse) throws {
         
-        guard let handler = responseHandler else {
+        guard let handler = contentHandler else {
             throw ConduletError.noResponseHandler
         }
         
