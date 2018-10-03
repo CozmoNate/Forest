@@ -7,13 +7,13 @@ Condulet is a simple wrapper built on top of URLSession and URLSessionTask. When
 ### CocoaPods
 
 ```ruby
-pod 'Condulet', :git => 'https://github.com/kozlek/Condulet.git'
+pod 'Condulet'
 ```
 
 Add Protobufs supporting extensions:
 
 ```ruby
-pod 'Condulet/Protobuf', :git => 'https://github.com/kozlek/Condulet.git'
+pod 'Condulet/Protobuf'
 ```
 
 And don't forget to import the framework:
