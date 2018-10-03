@@ -29,6 +29,8 @@ Just put the files from `Core` and `Protobuf` directories somethere in your proj
 
 ## Usage
 
+The core class which helps to prepare network request and handle response is ServiceTask. ServiceTask also is a factory to itself. You can see all factory methods inside ServiceTask+Request.swift. Response handling methods is defined inside ServiceTask+Response.swift. And keep in mind, ServiceTask is a helper class that mostly built for subclassing. It is useful out of the box, but if you need to intercept error or provide base URL, feel free to make a custom subclass. Or use RetrofitTask if it suitable to your needs.   
+
 ### Make a GET request expecting json response
 
 ```swift
