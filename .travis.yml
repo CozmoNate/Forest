@@ -11,10 +11,10 @@ env:
 language: swift
 osx_image: xcode10
 
-#before_install:
-#  - gem install cocoapods-acknowledgements
-#  - gem install cocoapods
-#  - pod repo update
+before_install:
+  - gem install cocoapods-acknowledgements
+  - gem install cocoapods
+  - pod repo update
 
 script:
   - if [ $RUN_TESTS == "YES" ]; then
