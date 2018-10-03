@@ -10,7 +10,7 @@ import Foundation
 
 
 /// Implement retrofitter that can override requests and intercept task responses
-public protocol TaskRetrofitting: class {
+public protocol TaskRetrofitting {
 
     /// Change request after it is configured by the task and before it will send
     func configure(request: inout URLRequest) throws
@@ -36,7 +36,7 @@ open class RetrofitTask: ServiceTask {
     public static var syncQueue: DispatchQueue = DispatchQueue(label: "RetrofitTask.SerialQueue")
 
     /// Retrofitter of the task
-    public weak var retrofitter: TaskRetrofitting?
+    public var retrofitter: TaskRetrofitting?
 
     public init(
         retrofitter: TaskRetrofitting? = nil,
