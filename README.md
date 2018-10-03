@@ -1,6 +1,6 @@
 # Condulet [![Build Status](https://travis-ci.com/kozlek/Condulet.svg?branch=master)](https://travis-ci.com/kozlek/Condulet)
 
-Condulet is a simple wrapper built on top of URLSession and URLSessionTask. When you need to simply send request, receive data, parse value and return to completion block - this framework is for you. Condulet also flexible and extensible. You can add your custom response handlers and data parsers. Condulet provide most of the features you'll need in your day-by-day work, without stressing you with overcomplicated abstractions. That the main purpose of it - help to make your job done.
+Condulet is a simple wrapper built on top of `URLSession` and `URLSessionTask`. When you need to simply send request, receive data, parse value and return to completion block - this framework is for you. Condulet also flexible and extensible. You can add your custom response handlers and data parsers. Condulet provide most of the features you'll need in your day to day work, without stressing you with overcomplicated abstractions. That the main purpose of it - help to make your job done.
 
 ## Installation
 
@@ -29,7 +29,7 @@ Just put the files from `Core` and `Protobuf` directories somethere in your proj
 
 ## Usage
 
-The core class which helps to prepare network request and handle response is ServiceTask. ServiceTask also is a factory to itself. You can see all factory methods inside ServiceTask+Request.swift. Response handling methods is defined inside ServiceTask+Response.swift. And keep in mind, ServiceTask is a helper class that mostly built for subclassing. It is useful out of the box, but if you need to intercept error or provide base URL, feel free to make a custom subclass. Or use RetrofitTask if it suitable to your needs.   
+The core class which helps to prepare network request and handle response is `ServiceTask`. `ServiceTask` also is a factory to itself. You can see all factory methods inside "ServiceTask+Request.swift". Response handling methods is defined inside "ServiceTask+Response.swift". And keep in mind, `ServiceTask` is a helper class that mostly built for subclassing. It is useful out of the box, but if you need to intercept error or provide base URL, feel free to make a custom subclass. Check also `RetrofitTask` class may be it will be suitable to your needs.   
 
 ### Make a GET request expecting json response
 
