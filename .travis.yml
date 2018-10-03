@@ -6,7 +6,7 @@ env:
   global:
     - WORKSPACE=Condulet.xcworkspace
   matrix:
-    - DESTINATION="OS=10.0,name=iPhone 8" SCHEME="ConduletTests" SDK="iphonesimulator10.0" RUN_TESTS="YES"
+    - DESTINATION="OS:12.0,name=iPhone 8" SCHEME="ConduletTests" SDK="iphonesimulator10.0" RUN_TESTS="YES"
 
 language: swift
 osx_image: xcode10
