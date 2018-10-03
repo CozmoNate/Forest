@@ -6,15 +6,15 @@ env:
   global:
     - WORKSPACE=Condulet.xcworkspace
   matrix:
-    - DESTINATION="OS:12.0,name=iPhone 8" SCHEME="ConduletTests" SDK="iphonesimulator10.0" RUN_TESTS="YES"
+    - DESTINATION="OS=12.0,name=iPhone 8" SCHEME="ConduletTests" SDK="iphonesimulator10.0" RUN_TESTS="YES"
 
 language: swift
 osx_image: xcode10
 
-before_install:
-  - gem install cocoapods-acknowledgements
-  - gem install cocoapods
-  - pod repo update
+#before_install:
+#  - gem install cocoapods-acknowledgements
+#  - gem install cocoapods
+#  - pod repo update
 
 script:
   - if [ $RUN_TESTS == "YES" ]; then
