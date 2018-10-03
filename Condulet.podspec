@@ -8,7 +8,7 @@ Condulet is a simple wrapper built on top of URLSession and URLSessionTask. Cond
   s.homepage         = 'https://github.com/kozlek/Condulet'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Natan Zalkin' => 'natan.zalkin@me.com' }
-  s.source           = { :git => 'https://github.com/kozlek/Condulet.git', :tag => s.version.to_s }
+  s.source           = { :git => 'https://github.com/kozlek/Condulet.git', :tag => "#{s.version}" }
   s.module_name      = 'Condulet'
   s.swift_version    = '4.1'
 

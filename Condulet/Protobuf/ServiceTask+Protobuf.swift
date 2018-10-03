@@ -42,4 +42,10 @@ public extension ServiceTask {
         }
         return self
     }
+
+    /// Handle protobuf message response
+    @discardableResult
+    public func result<T: Message>(proto handler: @escaping (T, URLResponse) -> Void) -> Self {
+        return proto(handler)
+    }
 }

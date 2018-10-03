@@ -63,6 +63,12 @@ public extension ServiceTask {
         return self
     }
     
+    /// Handle data response
+    @discardableResult
+    public func result(data handler: @escaping (Data, URLResponse) -> Void) -> Self {
+        return data(handler)
+    }
+    
     /// Handle file response
     @discardableResult
     public func file(_ handler: @escaping (URL, URLResponse) -> Void) -> Self {
@@ -79,6 +85,12 @@ public extension ServiceTask {
         return self
     }
     
+    /// Handle file response
+    @discardableResult
+    public func result(file handler: @escaping (URL, URLResponse) -> Void) -> Self {
+        return file(handler)
+    }
+
     /// Handle text response
     @discardableResult
     public func text(_ handler: @escaping (String, URLResponse) -> Void) -> Self {
@@ -88,6 +100,12 @@ public extension ServiceTask {
             }
         }
         return self
+    }
+
+    /// Handle text response
+    @discardableResult
+    public func result(text handler: @escaping (String, URLResponse) -> Void) -> Self {
+        return text(handler)
     }
     
     /// Handle json response
@@ -100,6 +118,12 @@ public extension ServiceTask {
         }
         return self
     }
+
+    /// Handle json response
+    @discardableResult
+    public func result(json handler: @escaping (Any, URLResponse) -> Void) -> Self {
+        return json(handler)
+    }
     
     /// Handle url-encoded response
     @discardableResult
@@ -111,6 +135,12 @@ public extension ServiceTask {
         }
         return self
     }
+
+    /// Handle url-encoded response
+    @discardableResult
+    public func result(urlencoded handler: @escaping ([String: String], URLResponse) -> Void) -> Self {
+        return urlencoded(handler)
+    }
     
     /// Handle json response with serialized Decodable object of type
     @discardableResult
@@ -121,6 +151,12 @@ public extension ServiceTask {
             }
         }
         return self
+    }
+
+    /// Handle json response with serialized Decodable object of type
+    @discardableResult
+    public func result<T: Decodable>(codable handler: @escaping (T, URLResponse) -> Void) -> Self {
+        return codable(handler)
     }
     
 }
