@@ -12,7 +12,7 @@ import Foundation
 public extension ServiceTask {
 
     /// Generic content handler with block
-    public class ContentHandler: ServiceTaskContentHandling {
+    public class ResponseHandler: ServiceTaskResponseHandling {
 
         public var handler: ((ServiceTask.Content, URLResponse) throws -> Void)?
 
@@ -21,7 +21,12 @@ public extension ServiceTask {
             handler = block
         }
 
-        public func handle(content: ServiceTask.Content, response: URLResponse) throws {
+        public func handle(content: ServiceTask.Content?, response: URLResponse) throws {
+
+            guard let content = content else {
+                throw ConduletError.invalidContent
+            }
+
             try self.handler?(content, response)
         }
     }

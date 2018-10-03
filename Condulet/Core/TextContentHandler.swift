@@ -10,7 +10,7 @@ import Foundation
 
 
 /// A handler that expects and parse response with plain text content. Completion block returns string object on success
-open class TextContentHandler: ServiceTaskContentHandling {
+open class TextContentHandler: ServiceTaskResponseHandling {
     
     public var completion: ((String, URLResponse) -> Void)?
     
@@ -18,9 +18,9 @@ open class TextContentHandler: ServiceTaskContentHandling {
         self.completion = completion
     }
     
-    public func handle(content: ServiceTask.Content, response: URLResponse) throws {
+    public func handle(content: ServiceTask.Content?, response: URLResponse) throws {
         
-        guard response.mimeType == "text/plain" else {
+        guard let content = content, response.mimeType == "text/plain" else {
             throw ConduletError.invalidContent
         }
         

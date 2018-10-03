@@ -45,7 +45,7 @@ open class RetrofitTask: ServiceTask {
         method: ServiceTask.Method? = nil,
         headers: [String: String] = [:],
         body: Data? = nil,
-        contentHandler: ServiceTaskContentHandling? = nil,
+        contentHandler: ServiceTaskResponseHandling? = nil,
         errorHandler: ServiceTaskErrorHandling? = nil,
         responseQueue: OperationQueue = OperationQueue.main) {
 

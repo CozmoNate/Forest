@@ -1,5 +1,5 @@
 //
-//  ServiceTaskContentHandling.swift
+//  ServiceTaskResponseHandling.swift
 //  Condulet
 //
 //  Created by Natan Zalkin on 29/09/2018.
@@ -10,8 +10,8 @@ import Foundation
 
 
 /// A handler for ServiceTask content response
-public protocol ServiceTaskContentHandling {
+public protocol ServiceTaskResponseHandling {
     
-    func handle(content: ServiceTask.Content, response: URLResponse) throws
+    func handle(content: ServiceTask.Content?, response: URLResponse) throws
     
 }

@@ -15,7 +15,7 @@
 		7EBE414A215F1A64006C882C /* ServiceTask+Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBE4149215F1A64006C882C /* ServiceTask+Response.swift */; };
 		7ED7A56E215FFCFA007657ED /* ProtobufContentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7A56D215FFCFA007657ED /* ProtobufContentHandler.swift */; };
 		7ED7A57221600D1A007657ED /* JSONContentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7A57121600D1A007657ED /* JSONContentHandler.swift */; };
-		7ED7A57421601180007657ED /* ServiceTaskContentHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7A57321601180007657ED /* ServiceTaskContentHandling.swift */; };
+		7ED7A57421601180007657ED /* ServiceTaskResponseHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7A57321601180007657ED /* ServiceTaskResponseHandling.swift */; };
 		7ED7A57A2160185D007657ED /* URLEncodedContentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7A5792160185D007657ED /* URLEncodedContentHandler.swift */; };
 		7ED7A57C21601AC1007657ED /* URLSerialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7A57B21601AC1007657ED /* URLSerialization.swift */; };
 		7ED7A58121608F8B007657ED /* TextContentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7A58021608F8B007657ED /* TextContentHandler.swift */; };
@@ -62,7 +62,7 @@
 		7ED7A56C215FECEE007657ED /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		7ED7A56D215FFCFA007657ED /* ProtobufContentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProtobufContentHandler.swift; sourceTree = "<group>"; };
 		7ED7A57121600D1A007657ED /* JSONContentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONContentHandler.swift; sourceTree = "<group>"; };
-		7ED7A57321601180007657ED /* ServiceTaskContentHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTaskContentHandling.swift; sourceTree = "<group>"; };
+		7ED7A57321601180007657ED /* ServiceTaskResponseHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTaskResponseHandling.swift; sourceTree = "<group>"; };
 		7ED7A5792160185D007657ED /* URLEncodedContentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLEncodedContentHandler.swift; sourceTree = "<group>"; };
 		7ED7A57B21601AC1007657ED /* URLSerialization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSerialization.swift; sourceTree = "<group>"; };
 		7ED7A58021608F8B007657ED /* TextContentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextContentHandler.swift; sourceTree = "<group>"; };
@@ -169,7 +169,7 @@
 		7EE281EB2161FAD800019EE5 /* ServiceTask */ = {
 			isa = PBXGroup;
 			children = (
-				7ED7A57321601180007657ED /* ServiceTaskContentHandling.swift */,
+				7ED7A57321601180007657ED /* ServiceTaskResponseHandling.swift */,
 				7EECC2792160AAE1008845F4 /* ServiceTaskErrorHandling.swift */,
 				7EBE412F215E6F7A006C882C /* ServiceTask.swift */,
 				7EECC2812160C596008845F4 /* ServiceTask+Enums.swift */,
@@ -448,7 +448,7 @@
 				7EE281EA2161E60D00019EE5 /* ServiceTask+Perform.swift in Sources */,
 				AAD56CAC216397A10086CC50 /* ServiceTask+Handlers.swift in Sources */,
 				7ED7A57221600D1A007657ED /* JSONContentHandler.swift in Sources */,
-				7ED7A57421601180007657ED /* ServiceTaskContentHandling.swift in Sources */,
+				7ED7A57421601180007657ED /* ServiceTaskResponseHandling.swift in Sources */,
 				7EECC28B21610809008845F4 /* ServiceTask+Protobuf.swift in Sources */,
 				7EE281F42161FE2A00019EE5 /* ConduletError.swift in Sources */,
 			);

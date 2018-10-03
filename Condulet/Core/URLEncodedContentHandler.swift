@@ -10,7 +10,7 @@ import Foundation
 
 
 /// A handler that expects and parse response with URL-encoded content. Completion block returns dictionary object on success
-open class URLEncodedContentHandler: ServiceTaskContentHandling {
+open class URLEncodedContentHandler: ServiceTaskResponseHandling {
     
     public var completion: (([String: String], URLResponse) -> Void)?
     
@@ -18,9 +18,9 @@ open class URLEncodedContentHandler: ServiceTaskContentHandling {
         self.completion = completion
     }
     
-    public func handle(content: ServiceTask.Content, response: URLResponse) throws {
+    public func handle(content: ServiceTask.Content?, response: URLResponse) throws {
         
-        guard response.mimeType == "application/x-www-form-urlencoded" else {
+        guard let content = content, response.mimeType == "application/x-www-form-urlencoded" else {
             throw ConduletError.invalidContent
         }
         

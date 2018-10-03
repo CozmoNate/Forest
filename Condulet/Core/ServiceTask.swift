@@ -78,7 +78,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     /// HTTP body data
     public var body: Data?
     /// Service response handler
-    public var contentHandler: ServiceTaskContentHandling?
+    public var responseHandler: ServiceTaskResponseHandling?
     /// Failure handler
     public var errorHandler: ServiceTaskErrorHandling?
     // The queue will be used to dispatch response
@@ -112,7 +112,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
         method: ServiceTask.Method? = nil,
         headers: [String: String] = [:],
         body: Data? = nil,
-        contentHandler: ServiceTaskContentHandling? = nil,
+        contentHandler: ServiceTaskResponseHandling? = nil,
         errorHandler: ServiceTaskErrorHandling? = nil,
         responseQueue: OperationQueue = OperationQueue.main) {
         
@@ -121,7 +121,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
         self.method = method
         self.headers = headers
         self.body = body
-        self.contentHandler = contentHandler
+        self.responseHandler = contentHandler
         self.errorHandler = errorHandler
         self.responseQueue = responseQueue
     }
@@ -279,39 +279,27 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
             guard let response = response else {
                 throw ConduletError.invalidResponse
             }
-            
-            try handleResponse(response)
-            
-            guard let content = content else {
-                throw ConduletError.invalidResponse
-            }
-            
+
             try handleResponse(content, response)
             
         } catch {
             handleResponse(error, response)
         }
     }
-    
-    /// Handle URLResponse received. This handler is called before starting to parse any data received.
-    open func handleResponse(_ response: URLResponse) throws {
-        
-        // Pass any non-HTTP response
-        guard let response = response as? HTTPURLResponse else {
-            return
-        }
-        
-        // In case of HTTP response, pass only response with valid status code
-        guard 200..<300 ~= response.statusCode else {
-            throw ConduletError.statusCode(response.statusCode)
-        }
-        
-    }
-    
+
     /// Handle content response.
-    open func handleResponse(_ content: Content, _ response: URLResponse) throws {
-        
-        guard let handler = contentHandler else {
+    open func handleResponse(_ content: Content?, _ response: URLResponse) throws {
+
+        // Pass any non-HTTP response
+        if let response = response as? HTTPURLResponse {
+
+            // In case of HTTP response, pass only response with valid status code
+            guard 200..<300 ~= response.statusCode else {
+                throw ConduletError.statusCode(response.statusCode)
+            }
+        }
+
+        guard let handler = responseHandler else {
             throw ConduletError.noResponseHandler
         }
         

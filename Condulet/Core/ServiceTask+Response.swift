@@ -13,15 +13,15 @@ public extension ServiceTask {
     
     /// Set response handler
     @discardableResult
-    public func response(_ handler: ServiceTaskContentHandling) -> Self {
-        contentHandler = handler
+    public func response(_ handler: ServiceTaskResponseHandling) -> Self {
+        responseHandler = handler
         return self
     }
     
     /// Handle response with block
     @discardableResult
     public func response(_ handler: @escaping (ServiceTask.Content, URLResponse) -> Void) -> Self {
-        contentHandler = ContentHandler { [unowned queue = responseQueue] (content, response) in
+        responseHandler = ResponseHandler { [unowned queue = responseQueue] (content, response) in
             queue.addOperation {
                 handler(content, response)
             }
@@ -50,7 +50,7 @@ public extension ServiceTask {
     /// Handle data response
     @discardableResult
     public func data(_ handler: @escaping (Data, URLResponse) -> Void) -> Self {
-        contentHandler = ContentHandler { [unowned queue = responseQueue] (content, response) in
+        responseHandler = ResponseHandler { [unowned queue = responseQueue] (content, response) in
             switch content {
             case let .data(data):
                 queue.addOperation {
@@ -72,7 +72,7 @@ public extension ServiceTask {
     /// Handle file response
     @discardableResult
     public func file(_ handler: @escaping (URL, URLResponse) -> Void) -> Self {
-        contentHandler = ContentHandler { [unowned queue = responseQueue] (content, response) in
+        responseHandler = ResponseHandler { [unowned queue = responseQueue] (content, response) in
             switch content {
             case let .file(url):
                 queue.addOperation {
@@ -94,7 +94,7 @@ public extension ServiceTask {
     /// Handle text response
     @discardableResult
     public func text(_ handler: @escaping (String, URLResponse) -> Void) -> Self {
-        contentHandler = TextContentHandler { [unowned queue = responseQueue] (string, response) in
+        responseHandler = TextContentHandler { [unowned queue = responseQueue] (string, response) in
             queue.addOperation {
                 handler(string, response)
             }
@@ -111,7 +111,7 @@ public extension ServiceTask {
     /// Handle json response
     @discardableResult
     public func json(_ handler: @escaping (Any, URLResponse) -> Void) -> Self {
-        contentHandler = JSONContentHandler { [unowned queue = responseQueue] (object, response) in
+        responseHandler = JSONContentHandler { [unowned queue = responseQueue] (object, response) in
             queue.addOperation {
                 handler(object, response)
             }
@@ -128,7 +128,7 @@ public extension ServiceTask {
     /// Handle url-encoded response
     @discardableResult
     public func urlencoded(_ handler: @escaping ([String: String], URLResponse) -> Void) -> Self {
-        contentHandler = URLEncodedContentHandler { [unowned queue = responseQueue] (dictionary, response) in
+        responseHandler = URLEncodedContentHandler { [unowned queue = responseQueue] (dictionary, response) in
             queue.addOperation {
                 handler(dictionary, response)
             }
@@ -145,7 +145,7 @@ public extension ServiceTask {
     /// Handle json response with serialized Decodable object of type
     @discardableResult
     public func codable<T: Decodable>(_ handler: @escaping (T, URLResponse) -> Void) -> Self {
-        contentHandler = DecodableContentHandler { [unowned queue = responseQueue] (object: T, response) in
+        responseHandler = DecodableContentHandler { [unowned queue = responseQueue] (object: T, response) in
             queue.addOperation {
                 handler(object, response)
             }

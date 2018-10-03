@@ -35,7 +35,7 @@ public extension ServiceTask {
     /// Handle protobuf message response
     @discardableResult
     public func proto<T: Message>(_ handler: @escaping (T, URLResponse) -> Void) -> Self {
-        contentHandler = ProtobufContentHandler { [unowned queue = responseQueue] (message: T, response) in
+        responseHandler = ProtobufContentHandler { [unowned queue = responseQueue] (message: T, response) in
             queue.addOperation {
                 handler(message, response)
             }
