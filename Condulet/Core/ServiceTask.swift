@@ -13,10 +13,10 @@ public extension Notification.Name {
 
     public enum Condulet {
 
-        /// Posted when a ServiceTask is performed. The notification `object` contains the instance of URLSessionTask started.
+        /// Posted when a ServiceTask is performed. The notification `object` contains the instance of ServiceTask.
         public static let TaskPerformed = Notification.Name(rawValue: "Condulet.TaskPerformed")
 
-        /// Posted when a ServiceTask is received response. The notification `object` contains the instance of URLSessionTask completed.
+        /// Posted when a ServiceTask is received response. The notification `object` contains the instance of ServiceTask.
         public static let TaskCompleted = Notification.Name(rawValue: "Condulet.TaskCompleted")
 
     }
@@ -92,6 +92,8 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     public var signature: UUID?
     /// The underlying task running
     public var task: URLSessionTask?
+    /// The content received with the response, if any
+    public var content: Content?
 
     /// Easy access to 'Content-Type' HTTP headers entry
     public var contentType: String? {
@@ -173,32 +175,32 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
             switch action {
             case .perform:
                 task = session.dataTask(with: request) { (data, response, error) in
-                    self.handleResponse(signature, Content(data), response, error)
+                    self.handleResponse(signature, Content(data), error)
                 }
             case .download(let destination):
                 task = session.downloadTask(with: request) { (url, response, error) in
                     if let url = url {
                         do {
                             try FileManager.default.moveItem(at: url, to: destination)
-                            self.handleResponse(signature, Content(destination), response, error)
+                            self.handleResponse(signature, Content(destination), error)
                         }
                         catch {
-                            self.handleResponse(signature, nil, response, ConduletError.invalidDestination)
+                            self.handleResponse(signature, nil, ConduletError.invalidDestination)
                         }
                     }
                     else {
-                        self.handleResponse(signature, nil, response, error)
+                        self.handleResponse(signature, nil, error)
                     }
                 }
             case .upload(let content):
                 switch content {
                 case .data(let data):
                     task = session.uploadTask(with: request, from: data) { (data, response, error) in
-                        self.handleResponse(signature, Content(data), response, error)
+                        self.handleResponse(signature, Content(data), error)
                     }
                 case .file(let url):
                     task = session.uploadTask(with: request, fromFile: url) { (data, response, error) in
-                        self.handleResponse(signature, Content(data), response, error)
+                        self.handleResponse(signature, Content(data), error)
                     }
                 }
             }
@@ -206,7 +208,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
             perform(task: task, action: .perform, signature: signature)
             
         } catch {
-            handleResponse(error, nil)
+            handleResponse(error)
         }
     }
     
@@ -220,7 +222,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
         task.resume()
 
         DispatchQueue.main.async {
-            NotificationCenter.default.post(name: Notification.Name.Condulet.TaskPerformed, object: task)
+            NotificationCenter.default.post(name: Notification.Name.Condulet.TaskPerformed, object: self)
         }
     }
     
@@ -248,50 +250,49 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
             perform(action: action)
         }
         else {
-            handleResponse(ConduletError.noActionPerformed, nil)
+            handleResponse(ConduletError.noActionPerformed)
         }
     }
     
     // MARK: - Handlers
     
     /// Handle general response, this method is called first on response received.
-    open func handleResponse(_ signature: UUID, _ content: Content?, _ response: URLResponse?, _ error: Error?) {
+    open func handleResponse(_ signature: UUID, _ content: Content?, _ error: Error?) {
         
         // When the response signature is differs from stored signature, that means we got response from abandoned requests and should ignore it
         guard self.signature == signature else {
             return // Response is no longer relevant
         }
-        
-        self.signature = nil
 
-        if let task = task {
-            DispatchQueue.main.async {
-                NotificationCenter.default.post(name: Notification.Name.Condulet.TaskCompleted, object: task)
-            }
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: Notification.Name.Condulet.TaskCompleted, object: self)
         }
+
+        self.signature = nil
+        self.content = content
 
         do {
             
             if let error = error {
                 throw error
             }
-            
-            guard let response = response else {
-                throw ConduletError.invalidResponse
-            }
 
-            try handleResponse(content, response)
+            try handleResponse(content)
             
         } catch {
-            handleResponse(error, response)
+            handleResponse(error)
         }
     }
 
     /// Handle content response.
-    open func handleResponse(_ content: Content?, _ response: URLResponse) throws {
+    open func handleResponse(_ content: Content?) throws {
+
+        guard let response = task?.response else {
+            throw ConduletError.invalidResponse
+        }
 
         // Pass any non-HTTP response
-        if let response = response as? HTTPURLResponse {
+        if let response = task?.response as? HTTPURLResponse {
 
             // In case of HTTP response, pass only response with valid status code
             guard 200..<300 ~= response.statusCode else {
@@ -308,10 +309,10 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     }
     
     /// Handle any error. Response parameter can store service response if received.
-    open func handleResponse(_ error: Error, _ response: URLResponse?) {
+    open func handleResponse(_ error: Error) {
         
         // Run error handler
-        errorHandler?.handle(error: error, response: response)
+        errorHandler?.handle(error: error, response: task?.response)
     }
     
 }

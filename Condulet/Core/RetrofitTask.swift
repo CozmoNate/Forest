@@ -73,11 +73,11 @@ open class RetrofitTask: ServiceTask {
         }
     }
 
-    open override func handleResponse(_ signature: UUID, _ content: ServiceTask.Content?, _ response: URLResponse?, _ error: Error?) {
+    open override func handleResponse(_ signature: UUID, _ content: ServiceTask.Content?, _ error: Error?) {
         RetrofitTask.syncQueue.async {
 
             // Should intercept response?
-            if let response = response, let retrofitter = self.retrofitter, retrofitter.shouldIntercept(response: response) {
+            if let response = self.task?.response, let retrofitter = self.retrofitter, retrofitter.shouldIntercept(response: response) {
 
                 // Pause task activities
                 RetrofitTask.syncQueue.suspend()
@@ -88,7 +88,7 @@ open class RetrofitTask: ServiceTask {
                 retrofitter.handle(response: response) { (error) in
 
                     if let error = error {
-                        RetrofitTask.runningTasks.forEach { $0.handleResponse(error, response) }
+                        RetrofitTask.runningTasks.forEach { $0.handleResponse(error) }
                     }
                     else {
                         // Reshcedule all cancelled tasks
@@ -106,7 +106,7 @@ open class RetrofitTask: ServiceTask {
             RetrofitTask.runningTasks.remove(self)
 
             // Handle response
-            super.handleResponse(signature, content, response, error)
+            super.handleResponse(signature, content, error)
         }
     }
 
