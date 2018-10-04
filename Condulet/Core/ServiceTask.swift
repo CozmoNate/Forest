@@ -38,7 +38,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
             parameters += "\(method.rawValue)"
         }
         
-        if let url = endpoint.string, !url.isEmpty {
+        if let url = url.string, !url.isEmpty {
             parameters += " (\(url))"
         }
 
@@ -70,7 +70,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     /// A URLSession instance used to create URLSessionTask
     public var session: URLSession?
     /// A URLComponents instance describing service endpoint
-    public var endpoint: URLComponents
+    public var url: URLComponents
     /// A HTTP method used for request
     public var method: Method?
     /// HTTP headers added to request
@@ -119,7 +119,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
         responseQueue: OperationQueue = OperationQueue.main) {
         
         self.session = session
-        self.endpoint = endpoint
+        self.url = endpoint
         self.method = method
         self.headers = headers
         self.body = body
@@ -133,7 +133,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     /// Produces a request built from ServiceTask parameters. When have invalid parameters an error will be thrown.
     open func makeRequest() throws -> URLRequest {
         
-        guard let url = endpoint.url else {
+        guard let url = url.url else {
             throw ConduletError.invalidEndpoint
         }
         

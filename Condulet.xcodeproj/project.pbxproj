@@ -27,8 +27,6 @@
 		7EECC2932161326E008845F4 /* DecodableContentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EECC2922161326E008845F4 /* DecodableContentHandler.swift */; };
 		8411B2471340A40A98CF6509 /* Pods_All_Targets_ConduletTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D3BE0FE0480671010AE049E /* Pods_All_Targets_ConduletTests.framework */; };
 		AA38AB7121639AEB00EC8750 /* URLSerializationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E314CF121625EC80007DAFE /* URLSerializationTests.swift */; };
-		AAD52D3321634C1F00B94446 /* RetrofitTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD52D3221634C1F00B94446 /* RetrofitTask.swift */; };
-		AAD52D3B2163711B00B94446 /* RetrofitTaskTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD52D3A2163711B00B94446 /* RetrofitTaskTests.swift */; };
 		AAD56CAC216397A10086CC50 /* ServiceTask+Handlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD56CAB216397A10086CC50 /* ServiceTask+Handlers.swift */; };
 		EFAA4B81BB537ADE88CEDD14 /* Pods_All_Targets_Condulet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78096D16BF7DAFB2AC3FF2BD /* Pods_All_Targets_Condulet.framework */; };
 /* End PBXBuildFile section */
@@ -72,8 +70,6 @@
 		7EECC2812160C596008845F4 /* ServiceTask+Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ServiceTask+Enums.swift"; sourceTree = "<group>"; };
 		7EECC28A21610809008845F4 /* ServiceTask+Protobuf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ServiceTask+Protobuf.swift"; sourceTree = "<group>"; };
 		7EECC2922161326E008845F4 /* DecodableContentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodableContentHandler.swift; sourceTree = "<group>"; };
-		AAD52D3221634C1F00B94446 /* RetrofitTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RetrofitTask.swift; sourceTree = "<group>"; };
-		AAD52D3A2163711B00B94446 /* RetrofitTaskTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetrofitTaskTests.swift; sourceTree = "<group>"; };
 		AAD56CAB216397A10086CC50 /* ServiceTask+Handlers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ServiceTask+Handlers.swift"; sourceTree = "<group>"; };
 		AF99ECF42507D8C62FCE8973 /* Pods-All Targets-ConduletTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-All Targets-ConduletTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-All Targets-ConduletTests/Pods-All Targets-ConduletTests.debug.xcconfig"; sourceTree = "<group>"; };
 		EF88038FFB1E59F95B6E1397 /* Pods-All Targets-ConduletTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-All Targets-ConduletTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-All Targets-ConduletTests/Pods-All Targets-ConduletTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -140,7 +136,6 @@
 			children = (
 				7E314CF121625EC80007DAFE /* URLSerializationTests.swift */,
 				7EBE4123215E6F71006C882C /* ServiceTaskTests.swift */,
-				AAD52D3A2163711B00B94446 /* RetrofitTaskTests.swift */,
 				7EBE4125215E6F71006C882C /* Info.plist */,
 			);
 			path = ConduletTests;
@@ -152,7 +147,6 @@
 				7EECC27D2160BEAA008845F4 /* Common */,
 				7EECC29621614B7A008845F4 /* Handlers */,
 				7EE281EB2161FAD800019EE5 /* ServiceTask */,
-				AAD52D2C2163408200B94446 /* RetrofitTask */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -215,14 +209,6 @@
 				7EECC2922161326E008845F4 /* DecodableContentHandler.swift */,
 			);
 			name = Handlers;
-			sourceTree = "<group>";
-		};
-		AAD52D2C2163408200B94446 /* RetrofitTask */ = {
-			isa = PBXGroup;
-			children = (
-				AAD52D3221634C1F00B94446 /* RetrofitTask.swift */,
-			);
-			name = RetrofitTask;
 			sourceTree = "<group>";
 		};
 		DE17114DBC74199C9DD768F5 /* Pods */ = {
@@ -435,7 +421,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				7E314CF721628FBE0007DAFE /* ServiceTask.swift in Sources */,
-				AAD52D3321634C1F00B94446 /* RetrofitTask.swift in Sources */,
 				7ED7A57A2160185D007657ED /* URLEncodedContentHandler.swift in Sources */,
 				7EECC2822160C596008845F4 /* ServiceTask+Enums.swift in Sources */,
 				7EECC27A2160AAE1008845F4 /* ServiceTaskErrorHandling.swift in Sources */,
@@ -460,7 +445,6 @@
 			files = (
 				AA38AB7121639AEB00EC8750 /* URLSerializationTests.swift in Sources */,
 				7EBE4124215E6F71006C882C /* ServiceTaskTests.swift in Sources */,
-				AAD52D3B2163711B00B94446 /* RetrofitTaskTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

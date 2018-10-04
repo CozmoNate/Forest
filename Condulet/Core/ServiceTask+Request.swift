@@ -22,7 +22,7 @@ public extension ServiceTask {
     @discardableResult
     public func url(_ string: String) -> Self {
         if let endpoint = URLComponents(string: string) {
-            self.endpoint = endpoint
+            self.url = endpoint
         }
         return self
     }
@@ -31,7 +31,7 @@ public extension ServiceTask {
     @discardableResult
     public func url(_ url: URL) -> Self {
         if let endpoint = URLComponents(url: url, resolvingAgainstBaseURL: false) {
-            self.endpoint = endpoint
+            self.url = endpoint
         }
         return self
     }
@@ -39,7 +39,7 @@ public extension ServiceTask {
     /// Define url as components
     @discardableResult
     public func components(_ components: URLComponents) -> Self {
-        self.endpoint = components
+        self.url = components
         return self
     }
     
@@ -47,7 +47,7 @@ public extension ServiceTask {
     @discardableResult
     public func endpoint(_ method: ServiceTask.Method, _ string: String) -> Self {
         if let endpoint = URLComponents(string: string) {
-            self.endpoint = endpoint
+            self.url = endpoint
         }
         self.method = method
         return self
@@ -57,79 +57,99 @@ public extension ServiceTask {
     @discardableResult
     public func endpoint(_ method: ServiceTask.Method, _ url: URL) -> Self {
         if let endpoint = URLComponents(url: url, resolvingAgainstBaseURL: false) {
-            self.endpoint = endpoint
+            self.url = endpoint
         }
         self.method = method
+        return self
+    }
+
+    /// Define service API url and method
+    @discardableResult
+    public func endpoint(_ method: String, _ string: String) -> Self {
+        if let endpoint = URLComponents(string: string) {
+            self.url = endpoint
+        }
+        self.method = Method(rawValue: method)
+        return self
+    }
+
+    /// Define service API url and method
+    @discardableResult
+    public func endpoint(_ method: String, _ url: URL) -> Self {
+        if let endpoint = URLComponents(url: url, resolvingAgainstBaseURL: false) {
+            self.url = endpoint
+        }
+        self.method = Method(rawValue: method)
         return self
     }
     
     /// Set endpoint sheme
     @discardableResult
     public func scheme(_ scheme: String) -> Self {
-        endpoint.scheme = scheme
+        url.scheme = scheme
         return self
     }
     
     /// Set endpoint host
     @discardableResult
     public func host(_ host: String) -> Self {
-        endpoint.host = host
+        url.host = host
         return self
     }
     
     /// Set endpoint user
     @discardableResult
     public func user(_ user: String) -> Self {
-        endpoint.user = user
+        url.user = user
         return self
     }
     
     /// Set endpoint password
     @discardableResult
     public func password(_ password: String) -> Self {
-        endpoint.password = password
+        url.password = password
         return self
     }
     
     /// Set endpoint port
     @discardableResult
     public func port(_ port: Int) -> Self {
-        endpoint.port = port
+        url.port = port
         return self
     }
     
     /// Set endpoint relative path
     @discardableResult
     public func path(_ path: String) -> Self {
-        endpoint.path = path
+        url.path = path
         return self
     }
     
     /// Set endpoint fragment
     @discardableResult
     public func fragment(_ fragment: String) -> Self {
-        endpoint.fragment = fragment
+        url.fragment = fragment
         return self
     }
     
     /// Set endpoint query parameters
     @discardableResult
     public func query(_ query: String) -> Self {
-        endpoint.query = query
+        url.query = query
         return self
     }
     
     /// Set endpoint query parameters
     @discardableResult
     public func query(_ query: [String: String]) -> Self {
-        endpoint.queryItems = query.map { URLQueryItem(name: $0.key, value: $0.value) }
+        url.queryItems = query.map { URLQueryItem(name: $0.key, value: $0.value) }
         return self
     }
     
     /// Set endpoint query parameters
     @discardableResult
     public func query(_ query: [URLQueryItem]) -> Self {
-        endpoint.queryItems = query
+        url.queryItems = query
         return self
     }
     
@@ -137,6 +157,13 @@ public extension ServiceTask {
     @discardableResult
     public func method(_ method: ServiceTask.Method) -> Self {
         self.method = method
+        return self
+    }
+
+    /// Set HTTP method for request
+    @discardableResult
+    public func method(_ method: String) -> Self {
+        self.method = Method(rawValue: method)
         return self
     }
     
