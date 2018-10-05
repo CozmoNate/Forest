@@ -366,13 +366,14 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
         
         self.signature = nil
         self.content = content
+
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: Notification.Name.Condulet.TaskCompleted, object: self)
+        }
         
         do {
 
             if let error = error {
-                guard !(interceptor?.serviceTask(self, intercept: error) ?? false) else {
-                    return
-                }
                 throw error
             }
 
@@ -389,13 +390,14 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
             try handleContent(content, response)
             
         } catch {
-            
+
+            guard !(interceptor?.serviceTask(self, intercept: error) ?? false) else {
+                return
+            }
+
             handleError(error, underlayingTask?.response)
         }
-        
-        DispatchQueue.main.async {
-            NotificationCenter.default.post(name: Notification.Name.Condulet.TaskCompleted, object: self)
-        }
+
     }
     
     // MARK: - Response handling
