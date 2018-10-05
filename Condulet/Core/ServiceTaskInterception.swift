@@ -9,6 +9,7 @@
 import Foundation
 
 
+/// Interceptor allows to modify default behaviour of ServiceTask without subclassing
 public protocol ServiceTaskInterception {
 
     /// Modify request before assigning it to URLSessionTask. Throwing error will cause the task to fail with provided error
