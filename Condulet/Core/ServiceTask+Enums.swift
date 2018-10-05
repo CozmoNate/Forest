@@ -101,7 +101,7 @@ public extension ServiceTask {
         case none
         case data(Data)
         case file(URL)
-        //case multipart
+        case multipart(MultipartFormData)
         
         init(_ data: Data?) {
             if let data = data {

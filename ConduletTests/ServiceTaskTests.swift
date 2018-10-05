@@ -319,6 +319,68 @@ class ServiceTaskTests: QuickSpec {
                         .perform()
                 }
             }
+
+            it("can perform request with multipart form data") {
+
+                func testMultipart(_ method: HTTPMethod, uri: String) -> (_ request: URLRequest) -> Bool {
+                    return { (request:URLRequest) in
+
+                        if let requestMethod = request.httpMethod, requestMethod == method.description {
+                            if let stream = request.httpBodyStream, let length = request.allHTTPHeaderFields?["Content-Length"] {
+
+                                let size = Int(length)!
+                                let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: size)
+                                defer {
+                                    buffer.deallocate()
+                                }
+
+                                stream.open()
+                                stream.read(buffer, maxLength: size)
+                                stream.close()
+
+                                let data = Data(bytes: buffer, count: size)
+
+                                guard let text = String(data: data, encoding: .utf8) else {
+                                    return false
+                                }
+
+                                guard text == "--TEST\r\nContent-Disposition: form-data; name=\"Test\"\r\n\r\nValue\r\n--TEST--\r\n" else {
+                                    return false
+                                }
+
+                                print("multipart: \n\(text)")
+
+                                return Mockingjay.uri(uri)(request)
+
+                            }
+                        }
+
+                        return false
+                    }
+                }
+
+                self.stub(testMultipart(.post, uri: "test.multipart"), json(["test": "ok"]))
+
+                waitUntil { (done) in
+
+                    var data = ServiceTask.MultipartFormData()
+
+                    data.boundary = "TEST"
+                    data.appendMediaItem(.parameter(name: "Test", value: "Value"))
+
+                    ServiceTask()
+                        .endpoint(.POST, "test.multipart")
+                        .body(multipart: data)
+                        .content { (content, response) in
+                            done()
+                        }
+                        .error { (error, response) in
+                            fail("\(error)")
+                        }
+                        .perform()
+
+                }
+            }
         }
     }
     

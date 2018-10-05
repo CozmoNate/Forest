@@ -42,6 +42,14 @@ public extension ServiceTask {
         body = Body(data)
         return self
     }
+
+    /// Set HTTP request body as 
+    @discardableResult
+    public func body(multipart data: MultipartFormData) -> Self {
+        contentType = data.contentType
+        body = .multipart(data)
+        return self
+    }
     
     /// Set HTTP request body, load data from file
     @discardableResult

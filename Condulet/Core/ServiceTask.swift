@@ -64,7 +64,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
         if let url = url.string, !url.isEmpty {
             parameters += " (\(url))"
         }
-
+        
         guard !parameters.isEmpty else {
             return description
         }
@@ -177,7 +177,8 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
         
         return request
     }
-    
+
+    /// Fills request HTTP body with the data
     open func prepareBody(for request: inout URLRequest) throws {
         
         switch body {
@@ -187,6 +188,74 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
             request.httpBody = data
         case .file(let url):
             request.httpBody = try Data(contentsOf: url)
+        case .multipart(let data):
+            request.httpBody = try data.generateBodyData()
+        }
+    }
+
+    /// Produces data task
+    open func prepareDataTask(for request: inout URLRequest, with signature: UUID) throws -> URLSessionDataTask {
+
+        guard let session = session else {
+            throw ConduletError.noSessionSpecified
+        }
+
+        return session.dataTask(with: request) { (data, response, error) in
+            self.dispatchResponse(signature, Content(data), response, error)
+        }
+    }
+
+    /// Produces download task
+    open func prepareDownloadTask(for request: inout URLRequest, with signature: UUID, destination: URL, resume data: Data?) throws -> URLSessionDownloadTask {
+
+        guard let session = session else {
+            throw ConduletError.noSessionSpecified
+        }
+
+        let completion = { (url: URL?, response: URLResponse?, error: Error?) -> Void in
+            if let url = url {
+                do {
+                    try FileManager.default.moveItem(at: url, to: destination)
+                    self.dispatchResponse(signature, Content(destination), response, error)
+                }
+                catch {
+                    self.dispatchResponse(signature, nil, response, ConduletError.invalidDestination)
+                }
+            }
+            else {
+                self.dispatchResponse(signature, nil, response, error)
+            }
+        }
+        if let data = data {
+            return session.downloadTask(withResumeData: data, completionHandler: completion)
+        }
+        else {
+            return session.downloadTask(with: request, completionHandler: completion)
+        }
+    }
+
+    /// Produces upload task
+    open func prepareUploadTask(for request: inout URLRequest, with signature: UUID) throws -> URLSessionUploadTask {
+
+        guard let session = session else {
+            throw ConduletError.noSessionSpecified
+        }
+
+        switch body {
+        case .none:
+            throw ConduletError.noRequestBody
+        case .data(let data):
+            return session.uploadTask(with: request, from: data) { (data, response, error) in
+                self.dispatchResponse(signature, Content(data), response, error)
+            }
+        case .file(let url):
+            return session.uploadTask(with: request, fromFile: url) { (data, response, error) in
+                self.dispatchResponse(signature, Content(data), response, error)
+            }
+        case .multipart(let data):
+            return session.uploadTask(with: request, from: try data.generateBodyData()) { (data, response, error) in
+                self.dispatchResponse(signature, Content(data), response, error)
+            }
         }
     }
     
@@ -200,10 +269,6 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
             guard !isRunning else {
                 throw ConduletError.alreadyRunning
             }
-            
-            guard let session = session else {
-                throw ConduletError.noSessionSpecified
-            }
 
             self.action = action
 
@@ -211,53 +276,26 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
             let signature = UUID()
             
             let task: URLSessionTask
+
             switch action {
+            // Perform
             case .perform:
                 try prepareBody(for: &request)
                 try interceptor?.serviceTask(self, modify: &request)
-                task = session.dataTask(with: request) { (data, response, error) in
-                    self.dispatchResponse(signature, Content(data), response, error)
-                }
-            case .download(let destination, let resumeData):
+                task = try prepareDataTask(for: &request, with: signature)
+            // Download
+            case .download(let path, let data):
                 try prepareBody(for: &request)
                 try interceptor?.serviceTask(self, modify: &request)
-                let completion = { (url: URL?, response: URLResponse?, error: Error?) -> Void in
-                    if let url = url {
-                        do {
-                            try FileManager.default.moveItem(at: url, to: destination)
-                            self.dispatchResponse(signature, Content(destination), response, error)
-                        }
-                        catch {
-                            self.dispatchResponse(signature, nil, response, ConduletError.invalidDestination)
-                        }
-                    }
-                    else {
-                        self.dispatchResponse(signature, nil, response, error)
-                    }
-                }
-                if let resumeData = resumeData {
-                    task = session.downloadTask(withResumeData: resumeData, completionHandler: completion)
-                }
-                else {
-                    task = session.downloadTask(with: request, completionHandler: completion)
-                }
+                task = try prepareDownloadTask(for: &request, with: signature, destination: path, resume: data)
+            // Upload
             case .upload:
                 try interceptor?.serviceTask(self, modify: &request)
-                switch body {
-                case .none:
-                    throw ConduletError.noRequestBody
-                case .data(let data):
-                    task = session.uploadTask(with: request, from: data) { (data, response, error) in
-                        self.dispatchResponse(signature, Content(data), response, error)
-                    }
-                case .file(let url):
-                    task = session.uploadTask(with: request, fromFile: url) { (data, response, error) in
-                        self.dispatchResponse(signature, Content(data), response, error)
-                    }
-                }
+                // Upload tasks ignore request body, so handle body type manually
+                task = try prepareUploadTask(for: &request, with: signature)
             }
             
-            perform(task: task, signature: signature)
+            perform(task: task, with: signature)
             
         } catch {
             handleError(error)
@@ -306,7 +344,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     // MARK: - URLSessionTask backing
     
     /// Sign and perform URLSessionTask
-    open func perform(task: URLSessionTask, signature: UUID) {
+    open func perform(task: URLSessionTask, with signature: UUID) {
         
         self.underlayingTask = task
         self.signature = signature
