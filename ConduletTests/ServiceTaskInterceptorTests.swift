@@ -33,7 +33,7 @@ class ServiceTaskInterceptorTests: QuickSpec, ServiceTaskInterception {
         if shouldFailRequest { throw Errors.test }
     }
 
-    func serviceTask(_ task: ServiceTask, intercept respone: URLResponse?) throws -> Bool {
+    func serviceTask(_ task: ServiceTask, intercept response: URLResponse?) throws -> Bool {
         if shouldFailResponse { throw Errors.test }
         return try responseHandler?(task) ?? false
     }

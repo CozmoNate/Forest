@@ -86,7 +86,7 @@ public extension ServiceTask {
 
                 case .url(let name, let fileName, let mimeType, let url):
                     result.append("Content-Disposition: form-data; name=\"\(name)\"; filename=\"\(fileName ?? url.lastPathComponent)\"\(lineBreakSequence)")
-                    result.append("Content-Type: \(mimeType ?? contentTypeForURL(url))\(lineBreakSequence)\(lineBreakSequence)")
+                    result.append("Content-Type: \(mimeType ?? mimeTypeForFileAtURL(url))\(lineBreakSequence)\(lineBreakSequence)")
                     result.append(try Data(contentsOf: url))
                     result.append(lineBreakSequence)
                 }

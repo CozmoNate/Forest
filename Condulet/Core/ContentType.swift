@@ -34,7 +34,7 @@ import Foundation
 import MobileCoreServices
 
 
-func mimeTypeFromPathExtension(_ pathExtension: String) -> String? {
+public func mimeTypeFromPathExtension(_ pathExtension: String) -> String? {
     guard let uti = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, pathExtension as CFString, kUTTagClassFilenameExtension)?.takeRetainedValue() else {
         return nil
     }
@@ -44,6 +44,6 @@ func mimeTypeFromPathExtension(_ pathExtension: String) -> String? {
     return mime as String
 }
 
-func contentTypeForURL(_ url: URL) -> String {
+public func mimeTypeForFileAtURL(_ url: URL) -> String {
     return mimeTypeFromPathExtension(url.pathExtension) ?? "application/octet-stream"
 }

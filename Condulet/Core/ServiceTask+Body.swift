@@ -54,7 +54,7 @@ public extension ServiceTask {
     /// Set HTTP request body, load data from file
     @discardableResult
     public func body(url: URL) -> Self {
-        contentType = contentTypeForURL(url)
+        contentType = mimeTypeForFileAtURL(url)
         body = Body(url)
         return self
     }
