@@ -9,6 +9,8 @@
 import Foundation
 
 
+// MARK: - Response handlers
+
 public extension ServiceTask {
     
     /// Set response handler
@@ -20,7 +22,55 @@ public extension ServiceTask {
     
     /// Handle response with block
     @discardableResult
-    public func response(_ handler: @escaping (ServiceTask.Content, URLResponse) -> Void) -> Self {
+    public func response(content handler: @escaping (ServiceTask.Content, URLResponse) -> Void) -> Self {
+        return content(handler)
+    }
+    
+    /// Handle data response. If received response other type task will fail with ConduletError.invalidResponse
+    @discardableResult
+    public func response(data handler: @escaping (Data, URLResponse) -> Void) -> Self {
+        return data(handler)
+    }
+    
+    /// Handle file response. If received response other type task will fail with ConduletError.invalidResponse
+    @discardableResult
+    public func response(file handler: @escaping (URL, URLResponse) -> Void) -> Self {
+        return file(handler)
+    }
+    
+    /// Handle text response. If received response other type task will fail with ConduletError.invalidResponse
+    @discardableResult
+    public func response(text handler: @escaping (String, URLResponse) -> Void) -> Self {
+        return text(handler)
+    }
+    
+    /// Handle json response. If received response other type task will fail with ConduletError.invalidResponse
+    @discardableResult
+    public func response(json handler: @escaping (Any, URLResponse) -> Void) -> Self {
+        return json(handler)
+    }
+    
+    /// Handle url-encoded response. If received response other type task will fail with ConduletError.invalidResponse
+    @discardableResult
+    public func response(urlencoded handler: @escaping ([String: String], URLResponse) -> Void) -> Self {
+        return urlencoded(handler)
+    }
+    
+    /// Handle json response with serialized Decodable object of type. If received response other type task will fail with ConduletError.invalidResponse
+    @discardableResult
+    public func response<T: Decodable>(codable handler: @escaping (T, URLResponse) -> Void) -> Self {
+        return codable(handler)
+    }
+    
+}
+
+// MARK: - Named response handlers
+
+public extension ServiceTask {
+    
+    /// Handle response with block
+    @discardableResult
+    public func content(_ handler: @escaping (ServiceTask.Content, URLResponse) -> Void) -> Self {
         responseHandler = ResponseHandler { [unowned queue = responseQueue] (content, response) in
             queue.addOperation {
                 handler(content, response)
@@ -28,26 +78,8 @@ public extension ServiceTask {
         }
         return self
     }
-    
-    /// Set error handler
-    @discardableResult
-    public func error(_ handler: ServiceTaskErrorHandling) -> Self {
-        errorHandler = handler
-        return self
-    }
-    
-    /// Handle error with block
-    @discardableResult
-    public func error(_ handler: @escaping (Error, URLResponse?) -> Void) -> Self {
-        errorHandler = ErrorHandler { [unowned queue = responseQueue] (error, response) in
-            queue.addOperation {
-                handler(error, response)
-            }
-        }
-        return self
-    }
 
-    /// Handle data response
+    /// Handle data response. If received response other type task will fail with ConduletError.invalidResponse
     @discardableResult
     public func data(_ handler: @escaping (Data, URLResponse) -> Void) -> Self {
         responseHandler = ResponseHandler { [unowned queue = responseQueue] (content, response) in
@@ -63,13 +95,7 @@ public extension ServiceTask {
         return self
     }
     
-    /// Handle data response
-    @discardableResult
-    public func result(data handler: @escaping (Data, URLResponse) -> Void) -> Self {
-        return data(handler)
-    }
-    
-    /// Handle file response
+    /// Handle file response. If received response other type task will fail with ConduletError.invalidResponse
     @discardableResult
     public func file(_ handler: @escaping (URL, URLResponse) -> Void) -> Self {
         responseHandler = ResponseHandler { [unowned queue = responseQueue] (content, response) in
@@ -84,14 +110,8 @@ public extension ServiceTask {
         }
         return self
     }
-    
-    /// Handle file response
-    @discardableResult
-    public func result(file handler: @escaping (URL, URLResponse) -> Void) -> Self {
-        return file(handler)
-    }
 
-    /// Handle text response
+    /// Handle text response. If received response other type task will fail with ConduletError.invalidResponse
     @discardableResult
     public func text(_ handler: @escaping (String, URLResponse) -> Void) -> Self {
         responseHandler = TextContentHandler { [unowned queue = responseQueue] (string, response) in
@@ -102,13 +122,7 @@ public extension ServiceTask {
         return self
     }
 
-    /// Handle text response
-    @discardableResult
-    public func result(text handler: @escaping (String, URLResponse) -> Void) -> Self {
-        return text(handler)
-    }
-    
-    /// Handle json response
+    /// Handle json response. If received response other type task will fail with ConduletError.invalidResponse
     @discardableResult
     public func json(_ handler: @escaping (Any, URLResponse) -> Void) -> Self {
         responseHandler = JSONContentHandler { [unowned queue = responseQueue] (object, response) in
@@ -118,14 +132,8 @@ public extension ServiceTask {
         }
         return self
     }
-
-    /// Handle json response
-    @discardableResult
-    public func result(json handler: @escaping (Any, URLResponse) -> Void) -> Self {
-        return json(handler)
-    }
     
-    /// Handle url-encoded response
+    /// Handle url-encoded response. If received response other type task will fail with ConduletError.invalidResponse
     @discardableResult
     public func urlencoded(_ handler: @escaping ([String: String], URLResponse) -> Void) -> Self {
         responseHandler = URLEncodedContentHandler { [unowned queue = responseQueue] (dictionary, response) in
@@ -135,14 +143,8 @@ public extension ServiceTask {
         }
         return self
     }
-
-    /// Handle url-encoded response
-    @discardableResult
-    public func result(urlencoded handler: @escaping ([String: String], URLResponse) -> Void) -> Self {
-        return urlencoded(handler)
-    }
     
-    /// Handle json response with serialized Decodable object of type
+    /// Handle json response with serialized Decodable object of type. If received response other type task will fail with ConduletError.invalidResponse
     @discardableResult
     public func codable<T: Decodable>(_ handler: @escaping (T, URLResponse) -> Void) -> Self {
         responseHandler = DecodableContentHandler { [unowned queue = responseQueue] (object: T, response) in
@@ -151,12 +153,6 @@ public extension ServiceTask {
             }
         }
         return self
-    }
-
-    /// Handle json response with serialized Decodable object of type
-    @discardableResult
-    public func result<T: Decodable>(codable handler: @escaping (T, URLResponse) -> Void) -> Self {
-        return codable(handler)
     }
     
 }

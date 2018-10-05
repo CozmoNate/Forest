@@ -58,7 +58,7 @@ public extension ServiceTask {
         
         case perform
         case download(URL)
-        case upload(Content)
+        case upload
         
         public var description: String {
             switch self {
@@ -68,6 +68,32 @@ public extension ServiceTask {
                 return "Download"
             case .upload:
                 return "Upload"
+            }
+        }
+    }
+    
+    public enum Body {
+        
+        case none
+        case data(Data)
+        case file(URL)
+        //case multipart
+        
+        init(_ data: Data?) {
+            if let data = data {
+                self = .data(data)
+            }
+            else {
+                self = .none
+            }
+        }
+        
+        init(_ url: URL?) {
+            if let url = url {
+                self = .file(url)
+            }
+            else {
+                self = .none
             }
         }
     }

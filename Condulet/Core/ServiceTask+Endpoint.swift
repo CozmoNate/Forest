@@ -1,5 +1,5 @@
 //
-//  ServiceTask+Request.swift
+//  ServiceTask+Endpoint.swift
 //  Condulet
 //
 //  Created by Natan Zalkin on 28/09/2018.
@@ -11,10 +11,17 @@ import Foundation
 
 public extension ServiceTask {
     
-    /// Set URLSession instance to use when creating URLSessionTask instance
+    /// Set HTTP method for request
     @discardableResult
-    public func session(_ session: URLSession) -> Self {
-        self.session = session
+    public func method(_ method: ServiceTask.Method) -> Self {
+        self.method = method
+        return self
+    }
+    
+    /// Set HTTP method for request
+    @discardableResult
+    public func method(_ method: String) -> Self {
+        self.method = Method(rawValue: method)
         return self
     }
     
@@ -150,81 +157,6 @@ public extension ServiceTask {
     @discardableResult
     public func query(_ query: [URLQueryItem]) -> Self {
         url.queryItems = query
-        return self
-    }
-    
-    /// Set HTTP method for request
-    @discardableResult
-    public func method(_ method: ServiceTask.Method) -> Self {
-        self.method = method
-        return self
-    }
-
-    /// Set HTTP method for request
-    @discardableResult
-    public func method(_ method: String) -> Self {
-        self.method = Method(rawValue: method)
-        return self
-    }
-    
-    /// Set HTTP headers for request. Set 'merge' parameter to false to override headers
-    @discardableResult
-    public func headers(_ headers: [String: String], merge: Bool = true) -> Self {
-        if merge {
-            self.headers.merge(headers, uniquingKeysWith: { return $1 })
-        }
-        else {
-            self.headers = headers
-        }
-        return self
-    }
-    
-    /// Set HTTP request body
-    @discardableResult
-    public func body(_ data: Data) -> Self {
-        self.body = data
-        return self
-    }
-    
-    /// Set HTTP request body
-    @discardableResult
-    public func body(text: String) -> Self {
-        contentType = "text/plain"
-        body = text.data(using: .utf8)
-        return self
-    }
-    
-    /// Set HTTP request body
-    @discardableResult
-    public func body(json: [AnyHashable: Any]) -> Self {
-        contentType = "application/json"
-        body = try? JSONSerialization.data(withJSONObject: json, options: [])
-        return self
-    }
-
-    /// Set HTTP request body
-    @discardableResult
-    public func body(json: [Any]) -> Self {
-        contentType = "application/json"
-        body = try? JSONSerialization.data(withJSONObject: json, options: [])
-        return self
-    }
-    
-    /// Set HTTP request body
-    @discardableResult
-    public func body(urlencoded: [String: String]) -> Self {
-        contentType = "application/x-www-form-urlencoded"
-        body = try? URLSerialization.data(with: urlencoded)
-        return self
-    }
-
-    private static let jsonEncoder = JSONEncoder()
-    
-    /// Set HTTP request body
-    @discardableResult
-    public func body<T: Encodable>(codable: T) -> Self {
-        contentType = "application/json"
-        body = try? JSONEncoder().encode(codable)
         return self
     }
     

@@ -57,7 +57,7 @@ class ServiceTaskTests: QuickSpec {
                     
                     let task = ServiceTask()
                         .endpoint(.GET, "test.cancel")
-                        .response { (content, response) in
+                        .content { (content, response) in
                             if canceled {
                                 done()
                             }
@@ -233,12 +233,12 @@ class ServiceTaskTests: QuickSpec {
                 var message = Google_Protobuf_SourceContext()
                 message.fileName = "Test"
                 
-                self.stub(testProto(.patch, uri: "test.test", message: message), json(["file_name": "Test"], headers: ["Content-Type": "application/json", "grpc-metadata-content-type": "application/grpc"]))
+                self.stub(testProto(.patch, uri: "test.test.com", message: message), json(["file_name": "Test"], headers: ["Content-Type": "application/json", "grpc-metadata-content-type": "application/grpc"]))
                 
                 waitUntil { (done) in
                     
                     ServiceTask()
-                        .url("test.test")
+                        .url("test.test.com")
                         .method(.PATCH)
                         .body { (message: inout Google_Protobuf_SourceContext) in
                             message.fileName = "Test"

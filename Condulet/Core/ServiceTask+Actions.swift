@@ -11,6 +11,13 @@ import Foundation
 
 public extension ServiceTask {
 
+    /// Set URLSession instance to use when creating URLSessionTask instance
+    @discardableResult
+    public func session(_ session: URLSession) -> Self {
+        self.session = session
+        return self
+    }
+    
     /// Perform data task
     @discardableResult
     public func perform() -> Self {
@@ -30,17 +37,10 @@ public extension ServiceTask {
         return self
     }
     
-    /// Perform upload data task
+    /// Perform upload task. This is similar to perform but uses URLSessionUploadTask which could run in background
     @discardableResult
-    public func upload(from data: Data) -> Self {
-        perform(action: .upload(.data(data)))
-        return self
-    }
-    
-    /// Perform upload file task
-    @discardableResult
-    public func upload(from url: URL) -> Self {
-        perform(action: .upload(.file(url)))
+    public func upload() -> Self {
+        perform(action: .upload)
         return self
     }
     

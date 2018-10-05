@@ -19,6 +19,8 @@ public enum ConduletError: Error {
     case noMethodSpecified
     /// The task is not performed yet, so not possible to rewind
     case noActionPerformed
+    /// No data provided for request
+    case noRequestBody
     /// Response does not handled
     case noResponseHandler
     /// Task is already executed
