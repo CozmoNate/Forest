@@ -6,6 +6,30 @@
 //  Copyright © 2018 Natan Zalkin. All rights reserved.
 //
 
+/*
+ *
+ * Copyright (c) 2018 Natan Zalkin
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *
+ */
+
 import Foundation
 
 
@@ -63,6 +87,10 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     public static func == (lhs: ServiceTask, rhs: ServiceTask) -> Bool {
         return lhs.hashValue == rhs.hashValue
     }
+
+    // MARK: - Interceptor
+
+    public var interceptor: ServiceTaskInterception?
     
     // MARK: - Configuration properties
 
@@ -85,13 +113,13 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     
     // MARK: - Properties
 
-    /// The action of the task performed.
+    /// Last action performed
     public var action: Action?
     /// Signature is used to determine if response from URLSessionTask still relevant and should be handled
     public var signature: UUID?
-    /// The underlying task running
-    public var task: URLSessionTask?
-    /// The content received with the response, if any
+    /// The underlying URLSessionTask that has been performed
+    public var underlayingTask: URLSessionTask?
+    /// The content received with the last response
     public var content: Content?
 
     /// Easy access to 'Content-Type' HTTP headers entry
@@ -115,7 +143,8 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
         body: Body = .none,
         contentHandler: ServiceTaskResponseHandling? = nil,
         errorHandler: ServiceTaskErrorHandling? = nil,
-        responseQueue: OperationQueue = OperationQueue.main) {
+        responseQueue: OperationQueue = OperationQueue.main,
+        interceptor: ServiceTaskInterception? = nil) {
         
         self.session = session
         self.url = endpoint
@@ -125,6 +154,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
         self.responseHandler = contentHandler
         self.errorHandler = errorHandler
         self.responseQueue = responseQueue
+        self.interceptor = interceptor
     }
     
     // MARK: - Builder
@@ -174,7 +204,9 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
             guard let session = session else {
                 throw ConduletError.noSessionSpecified
             }
-            
+
+            self.action = action
+
             var request = try makeRequest()
             let signature = UUID()
             
@@ -182,41 +214,50 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
             switch action {
             case .perform:
                 try prepareBody(for: &request)
+                try interceptor?.serviceTask(self, modify: &request)
                 task = session.dataTask(with: request) { (data, response, error) in
-                    self.dispatchResponse(signature, Content(data), error)
+                    self.dispatchResponse(signature, Content(data), response, error)
                 }
-            case .download(let destination):
+            case .download(let destination, let resumeData):
                 try prepareBody(for: &request)
-                task = session.downloadTask(with: request) { (url, response, error) in
+                try interceptor?.serviceTask(self, modify: &request)
+                let completion = { (url: URL?, response: URLResponse?, error: Error?) -> Void in
                     if let url = url {
                         do {
                             try FileManager.default.moveItem(at: url, to: destination)
-                            self.dispatchResponse(signature, Content(destination), error)
+                            self.dispatchResponse(signature, Content(destination), response, error)
                         }
                         catch {
-                            self.dispatchResponse(signature, nil, ConduletError.invalidDestination)
+                            self.dispatchResponse(signature, nil, response, ConduletError.invalidDestination)
                         }
                     }
                     else {
-                        self.dispatchResponse(signature, nil, error)
+                        self.dispatchResponse(signature, nil, response, error)
                     }
                 }
+                if let resumeData = resumeData {
+                    task = session.downloadTask(withResumeData: resumeData, completionHandler: completion)
+                }
+                else {
+                    task = session.downloadTask(with: request, completionHandler: completion)
+                }
             case .upload:
+                try interceptor?.serviceTask(self, modify: &request)
                 switch body {
                 case .none:
                     throw ConduletError.noRequestBody
                 case .data(let data):
                     task = session.uploadTask(with: request, from: data) { (data, response, error) in
-                        self.dispatchResponse(signature, Content(data), error)
+                        self.dispatchResponse(signature, Content(data), response, error)
                     }
                 case .file(let url):
                     task = session.uploadTask(with: request, fromFile: url) { (data, response, error) in
-                        self.dispatchResponse(signature, Content(data), error)
+                        self.dispatchResponse(signature, Content(data), response, error)
                     }
                 }
             }
             
-            perform(task: task, action: .perform, signature: signature)
+            perform(task: task, signature: signature)
             
         } catch {
             handleError(error)
@@ -224,8 +265,9 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     }
     
     /// Cancels running task. Captured response blocks and handlers will never be called until task will be performed again or rewound.
+    /// Optionally resume data can be produced on cancel in case of download task, otherwise completion will be called with nil data
     @discardableResult
-    open func cancel() -> Bool {
+    open func cancel(byProducingResumeData resumeDataHandler: ((Data?) -> Void)? = nil) -> Bool {
 
         guard isRunning else {
             return false
@@ -234,8 +276,18 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
         // Invalidate URLSessionTask completion handler
         signature = nil
 
-        // Cancel task
-        task?.cancel()
+        // Cancel with resume data
+        if let resumeDataHandler = resumeDataHandler {
+            if let downloadTask = underlayingTask as? URLSessionDownloadTask {
+                downloadTask.cancel(byProducingResumeData: resumeDataHandler)
+                return true
+            }
+            else {
+                resumeDataHandler(nil)
+            }
+        }
+
+        underlayingTask?.cancel()
 
         return true
     }
@@ -254,10 +306,9 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     // MARK: - URLSessionTask backing
     
     /// Sign and perform URLSessionTask
-    open func perform(task: URLSessionTask, action: Action, signature: UUID) {
+    open func perform(task: URLSessionTask, signature: UUID) {
         
-        self.task = task
-        self.action = action
+        self.underlayingTask = task
         self.signature = signature
         
         task.resume()
@@ -268,7 +319,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     }
     
     /// Dispatch response received from URLSessionTask, decide how response will be handled
-    open func dispatchResponse(_ signature: UUID, _ content: Content?, _ error: Error?) {
+    open func dispatchResponse(_ signature: UUID, _ content: Content?, _ response: URLResponse?, _ error: Error?) {
         
         // When the response signature is differs from stored signature, that means we got response from abandoned requests and should ignore it
         guard self.signature == signature else {
@@ -279,21 +330,29 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
         self.content = content
         
         do {
-            
+
             if let error = error {
+                guard !(interceptor?.serviceTask(self, intercept: error) ?? false) else {
+                    return
+                }
                 throw error
             }
-            
-            guard let response = task?.response else {
-                throw ConduletError.invalidResponse
+
+            guard !(try interceptor?.serviceTask(self, intercept: response) ?? false) else {
+                return
             }
-            
+
             try handleResponse(response)
+
+            guard !(try interceptor?.serviceTask(self, intercept: content) ?? false) else {
+                return
+            }
+
             try handleContent(content, response)
             
         } catch {
             
-            handleError(error, task?.response)
+            handleError(error, underlayingTask?.response)
         }
         
         DispatchQueue.main.async {
@@ -303,10 +362,10 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     
     // MARK: - Response handling
     
-    open func handleResponse(_ response: URLResponse) throws {
-        
-        // Pass any non-HTTP response
-        if let response = task?.response as? HTTPURLResponse {
+    open func handleResponse(_ response: URLResponse?) throws {
+
+        // Pass any non-HTTP response or no reponse
+        if let response = response as? HTTPURLResponse {
             
             // In case of HTTP response, pass only response with valid status code
             guard 200..<300 ~= response.statusCode else {
@@ -316,8 +375,12 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     }
 
     /// Handle content response.
-    open func handleContent(_ content: Content?, _ response: URLResponse) throws {
+    open func handleContent(_ content: Content?, _ response: URLResponse?) throws {
 
+        guard let response = response else {
+            throw ConduletError.invalidResponse
+        }
+        
         guard let handler = responseHandler else {
             throw ConduletError.noResponseHandler
         }

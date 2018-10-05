@@ -2,7 +2,7 @@
 //  ServiceTask+Handlers.swift
 //  Condulet
 //
-//  Created by Zalkin, Natan on 02/10/2018.
+//  Created by Natan Zalkin on 02/10/2018.
 //  Copyright © 2018 Natan Zalkin. All rights reserved.
 //
 
