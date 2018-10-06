@@ -46,19 +46,19 @@ open class ProtobufContentHandler<T: Message>: ServiceTaskResponseHandling {
     public func handle(content: ServiceTask.Content?, response: URLResponse) throws {
         
         guard let httpResponse = response as? HTTPURLResponse else {
-            throw ConduletError.invalidResponse
+            throw ServiceTaskError.invalidResponse
         }
         
         guard let content = content, httpResponse.mimeType == "application/json" else {
-            throw ConduletError.invalidResponseContent
+            throw ServiceTaskError.invalidResponseContent
         }
         
         guard let metadataContentType = httpResponse.allHeaderFields["grpc-metadata-content-type"] as? String else {
-            throw ConduletError.invalidResponseContent
+            throw ServiceTaskError.invalidResponseContent
         }
         
         guard metadataContentType == "application/grpc" else {
-            throw ConduletError.invalidResponseContent
+            throw ServiceTaskError.invalidResponseContent
         }
         
         switch content {
@@ -66,7 +66,7 @@ open class ProtobufContentHandler<T: Message>: ServiceTaskResponseHandling {
             let message = try T(jsonUTF8Data: data)
             completion?(message, response)
         default:
-            throw ConduletError.invalidResponseContent
+            throw ServiceTaskError.invalidResponseContent
         }
     }
 }

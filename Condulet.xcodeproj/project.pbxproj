@@ -25,7 +25,7 @@
 		7ED7A57C21601AC1007657ED /* URLSerialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7A57B21601AC1007657ED /* URLSerialization.swift */; };
 		7ED7A58121608F8B007657ED /* TextContentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7A58021608F8B007657ED /* TextContentHandler.swift */; };
 		7EE281EA2161E60D00019EE5 /* ServiceTask+Actions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE281E92161E60D00019EE5 /* ServiceTask+Actions.swift */; };
-		7EE281F42161FE2A00019EE5 /* ConduletError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE281F32161FE2A00019EE5 /* ConduletError.swift */; };
+		7EE281F42161FE2A00019EE5 /* ServiceTaskError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE281F32161FE2A00019EE5 /* ServiceTaskError.swift */; };
 		7EECC27A2160AAE1008845F4 /* ServiceTaskErrorHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EECC2792160AAE1008845F4 /* ServiceTaskErrorHandling.swift */; };
 		7EECC2822160C596008845F4 /* ServiceTask+Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EECC2812160C596008845F4 /* ServiceTask+Enums.swift */; };
 		7EECC28B21610809008845F4 /* ServiceTask+Protobuf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EECC28A21610809008845F4 /* ServiceTask+Protobuf.swift */; };
@@ -79,7 +79,7 @@
 		7ED7A57B21601AC1007657ED /* URLSerialization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSerialization.swift; sourceTree = "<group>"; };
 		7ED7A58021608F8B007657ED /* TextContentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextContentHandler.swift; sourceTree = "<group>"; };
 		7EE281E92161E60D00019EE5 /* ServiceTask+Actions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ServiceTask+Actions.swift"; sourceTree = "<group>"; };
-		7EE281F32161FE2A00019EE5 /* ConduletError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConduletError.swift; sourceTree = "<group>"; };
+		7EE281F32161FE2A00019EE5 /* ServiceTaskError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTaskError.swift; sourceTree = "<group>"; };
 		7EECC2792160AAE1008845F4 /* ServiceTaskErrorHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTaskErrorHandling.swift; sourceTree = "<group>"; };
 		7EECC2812160C596008845F4 /* ServiceTask+Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ServiceTask+Enums.swift"; sourceTree = "<group>"; };
 		7EECC28A21610809008845F4 /* ServiceTask+Protobuf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ServiceTask+Protobuf.swift"; sourceTree = "<group>"; };
@@ -185,6 +185,7 @@
 				7ED7A57321601180007657ED /* ServiceTaskResponseHandling.swift */,
 				7EECC2792160AAE1008845F4 /* ServiceTaskErrorHandling.swift */,
 				AA045AC021675BC400BD92D4 /* ServiceTaskInterception.swift */,
+				7EE281F32161FE2A00019EE5 /* ServiceTaskError.swift */,
 				7EBE412F215E6F7A006C882C /* ServiceTask.swift */,
 				7EECC2812160C596008845F4 /* ServiceTask+Enums.swift */,
 				AAD56CAB216397A10086CC50 /* ServiceTask+Handlers.swift */,
@@ -217,7 +218,6 @@
 		7EECC27D2160BEAA008845F4 /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				7EE281F32161FE2A00019EE5 /* ConduletError.swift */,
 				7E06C83321672593008E4AC6 /* ContentType.swift */,
 				AA15EE9F21677C76004F36C1 /* MultipartFormData.swift */,
 				7ED7A57B21601AC1007657ED /* URLSerialization.swift */,
@@ -468,7 +468,7 @@
 				7E0C19E72166BBDC00494FCF /* ServiceTask+Error.swift in Sources */,
 				7ED7A57421601180007657ED /* ServiceTaskResponseHandling.swift in Sources */,
 				7EECC28B21610809008845F4 /* ServiceTask+Protobuf.swift in Sources */,
-				7EE281F42161FE2A00019EE5 /* ConduletError.swift in Sources */,
+				7EE281F42161FE2A00019EE5 /* ServiceTaskError.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

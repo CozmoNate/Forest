@@ -1,5 +1,5 @@
 //
-//  ConduletError.swift
+//  ServiceTaskError.swift
 //  Condulet
 //
 //  Created by Natan Zalkin on 01/10/2018.
@@ -33,7 +33,7 @@
 import Foundation
 
 
-public enum ConduletError: Error {
+public enum ServiceTaskError: Error {
     
     /// You shoud provide endpoint information
     case invalidEndpoint

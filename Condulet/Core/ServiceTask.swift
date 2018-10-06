@@ -163,11 +163,11 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     open func makeRequest() throws -> URLRequest {
         
         guard let url = url.url else {
-            throw ConduletError.invalidEndpoint
+            throw ServiceTaskError.invalidEndpoint
         }
         
         guard let method = method else {
-            throw ConduletError.noMethodSpecified
+            throw ServiceTaskError.noMethodSpecified
         }
 
         var request = URLRequest(url: url)
@@ -191,7 +191,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
             request.httpBody = data
         case .file(let url):
             guard let stream = InputStream(url: url) else {
-                throw ConduletError.invalidFile
+                throw ServiceTaskError.invalidFile
             }
             request.httpBodyStream = stream
         case .stream(let stream):
@@ -203,7 +203,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     open func prepareDataTask(for request: inout URLRequest, with signature: UUID) throws -> URLSessionDataTask {
 
         guard let session = session else {
-            throw ConduletError.noSessionSpecified
+            throw ServiceTaskError.noSessionSpecified
         }
 
         return session.dataTask(with: request) { (data, response, error) in
@@ -215,7 +215,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     open func prepareDownloadTask(for request: inout URLRequest, with signature: UUID, destination: URL, resume data: Data?) throws -> URLSessionDownloadTask {
 
         guard let session = session else {
-            throw ConduletError.noSessionSpecified
+            throw ServiceTaskError.noSessionSpecified
         }
 
         let completion = { (url: URL?, response: URLResponse?, error: Error?) -> Void in
@@ -225,7 +225,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
                     self.dispatchResponse(signature, Content(destination), response, error)
                 }
                 catch {
-                    self.dispatchResponse(signature, nil, response, ConduletError.invalidDestination)
+                    self.dispatchResponse(signature, nil, response, ServiceTaskError.invalidDestination)
                 }
             }
             else {
@@ -244,11 +244,11 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     open func prepareUploadTask(for request: inout URLRequest, with signature: UUID) throws -> URLSessionUploadTask {
 
         guard let session = session else {
-            throw ConduletError.noSessionSpecified
+            throw ServiceTaskError.noSessionSpecified
         }
         
         guard let body = body else {
-            throw ConduletError.noRequestBody
+            throw ServiceTaskError.noRequestBody
         }
 
         switch body {
@@ -261,7 +261,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
                 self.dispatchResponse(signature, Content(data), response, error)
             }
         case .stream:
-            throw ConduletError.invalidContentType
+            throw ServiceTaskError.invalidContentType
         }
     }
     
@@ -273,7 +273,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
         do {
             
             guard !isRunning else {
-                throw ConduletError.alreadyRunning
+                throw ServiceTaskError.alreadyRunning
             }
 
             self.action = action
@@ -421,7 +421,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
             
             // In case of HTTP response, pass only response with valid status code
             guard 200..<300 ~= response.statusCode else {
-                throw ConduletError.statusCode(response.statusCode)
+                throw ServiceTaskError.statusCode(response.statusCode)
             }
         }
     }
@@ -430,11 +430,11 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     open func handleContent(_ content: Content?, _ response: URLResponse?) throws {
 
         guard let response = response else {
-            throw ConduletError.invalidResponse
+            throw ServiceTaskError.invalidResponse
         }
         
         guard let handler = responseHandler else {
-            throw ConduletError.noResponseHandler
+            throw ServiceTaskError.noResponseHandler
         }
         
         // Run response handler

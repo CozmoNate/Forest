@@ -133,7 +133,7 @@ class ServiceTaskTests: QuickSpec {
                         }
                         .error { (error, response) in
                             switch error {
-                            case ConduletError.statusCode(404):
+                            case ServiceTaskError.statusCode(404):
                                 done()
                             default:
                                 fail()
@@ -219,30 +219,19 @@ class ServiceTaskTests: QuickSpec {
                 func testProto(_ method: HTTPMethod, uri: String, message: Google_Protobuf_SourceContext) -> (_ request: URLRequest) -> Bool {
                     return { (request:URLRequest) in
                         
-                        if let requestMethod = request.httpMethod, requestMethod == method.description {
-                            if let stream = request.httpBodyStream, let length = request.allHTTPHeaderFields?["Content-Length"] {
-                                
-                                let size = Int(length)!
-                                let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: size)
-                                defer {
-                                    buffer.deallocate()
+                        if let requestMethod = request.httpMethod, requestMethod == method.description, let stream = request.httpBodyStream {
+
+                            let data = self.readData(from: stream)
+
+                            do {
+                                let decoded = try Google_Protobuf_SourceContext(jsonUTF8Data: data)
+                                if decoded != message {
+                                    fail("messages are different!")
                                 }
-                                
-                                stream.open()
-                                stream.read(buffer, maxLength: size)
-                                stream.close()
-                                
-                                let data = Data(bytes: buffer, count: size)
-                                
-                                do {
-                                    let decoded = try Google_Protobuf_SourceContext(jsonUTF8Data: data)
-                                    if decoded == message {
-                                        return Mockingjay.uri(uri)(request)
-                                    }
-                                    return false
-                                } catch {
-                                    print(error)
-                                }
+
+                                return Mockingjay.uri(uri)(request)
+                            } catch {
+                                print(error)
                             }
                         }
                         

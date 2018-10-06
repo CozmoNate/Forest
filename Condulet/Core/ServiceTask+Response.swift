@@ -113,7 +113,7 @@ public extension ServiceTask {
                     handler(data, response)
                 }
             default:
-                throw ConduletError.invalidResponse
+                throw ServiceTaskError.invalidResponse
             }
         }
         return self
@@ -129,7 +129,7 @@ public extension ServiceTask {
                     handler(url, response)
                 }
             default:
-                throw ConduletError.invalidResponse
+                throw ServiceTaskError.invalidResponse
             }
         }
         return self

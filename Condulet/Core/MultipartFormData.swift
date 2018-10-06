@@ -44,7 +44,7 @@ public enum MultipartFormDataError: Error {
 }
 
 /// This class is used to compose requst body using 'multipart/form-data' encoding
-public struct MultipartFormData {
+public class MultipartFormData {
     
     public enum EncodingResult<T> {
         case success(T)
@@ -55,7 +55,7 @@ public struct MultipartFormData {
     public var boundary: String
     /// The size in bytes of memory buffer to be used to transfer data from file to output file/data while encoding content
     public var bufferSize: Int
-    
+    /// The list of media items to encode
     public private(set) var mediaItems = [MediaItem]()
     /// Size of the raw multipart data of all items. This size does not include any coding overheads
     public private(set) var contentSize = UInt64(0)
@@ -74,7 +74,7 @@ public struct MultipartFormData {
         self.bufferSize = bufferSize
     }
     
-    public mutating func appendMediaItem(_ item: MediaItem) throws {
+    public func appendMediaItem(_ item: MediaItem) throws {
         
         switch item {
             
@@ -97,7 +97,6 @@ public struct MultipartFormData {
         
         mediaItems.append(item)
     }
-    
     
     /// Encode multipart content in memory
     public func generateContentData(completion: @escaping (EncodingResult<Data>) -> Void) {

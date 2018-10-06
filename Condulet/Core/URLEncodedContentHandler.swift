@@ -45,7 +45,7 @@ open class URLEncodedContentHandler: ServiceTaskResponseHandling {
     public func handle(content: ServiceTask.Content?, response: URLResponse) throws {
         
         guard let content = content, response.mimeType == "application/x-www-form-urlencoded" else {
-            throw ConduletError.invalidResponseContent
+            throw ServiceTaskError.invalidResponseContent
         }
         
         switch content {
@@ -53,7 +53,7 @@ open class URLEncodedContentHandler: ServiceTaskResponseHandling {
             let object = try URLSerialization.dictionary(with: data)
             completion?(object, response)
         default:
-            throw ConduletError.invalidResponseContent
+            throw ServiceTaskError.invalidResponseContent
         }
     }
     

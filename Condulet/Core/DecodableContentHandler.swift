@@ -46,7 +46,7 @@ open class DecodableContentHandler<T: Decodable>: ServiceTaskResponseHandling {
     public func handle(content: ServiceTask.Content?, response: URLResponse) throws {
         
         guard let content = content, response.mimeType == "application/json" else {
-            throw ConduletError.invalidResponseContent
+            throw ServiceTaskError.invalidResponseContent
         }
         
         switch content {
@@ -54,7 +54,7 @@ open class DecodableContentHandler<T: Decodable>: ServiceTaskResponseHandling {
             let object = try decoder.decode(T.self, from: data)
             completion?(object, response)
         default:
-            throw ConduletError.invalidResponseContent
+            throw ServiceTaskError.invalidResponseContent
         }
     }
     
