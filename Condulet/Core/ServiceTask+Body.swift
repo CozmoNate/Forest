@@ -39,15 +39,7 @@ public extension ServiceTask {
     @discardableResult
     public func body(mimeType: String? = nil, data: Data) -> Self {
         contentType = mimeType
-        body = Body(data)
-        return self
-    }
-
-    /// Set HTTP request body as 
-    @discardableResult
-    public func body(multipart data: MultipartFormData) -> Self {
-        contentType = data.contentType
-        body = .multipart(data)
+        body = Content(data)
         return self
     }
     
@@ -55,7 +47,7 @@ public extension ServiceTask {
     @discardableResult
     public func body(url: URL) -> Self {
         contentType = mimeTypeForFileAtURL(url)
-        body = Body(url)
+        body = Content(url)
         return self
     }
     
@@ -63,7 +55,7 @@ public extension ServiceTask {
     @discardableResult
     public func body(text: String) -> Self {
         contentType = "text/plain"
-        body = Body(text.data(using: .utf8))
+        body = Content(text.data(using: .utf8))
         return self
     }
     
@@ -71,7 +63,7 @@ public extension ServiceTask {
     @discardableResult
     public func body(json: [AnyHashable: Any]) -> Self {
         contentType = "application/json"
-        body = Body(try? JSONSerialization.data(withJSONObject: json, options: []))
+        body = Content(try? JSONSerialization.data(withJSONObject: json, options: []))
         return self
     }
     
@@ -79,7 +71,7 @@ public extension ServiceTask {
     @discardableResult
     public func body(json: [Any]) -> Self {
         contentType = "application/json"
-        body = Body(try? JSONSerialization.data(withJSONObject: json, options: []))
+        body = Content(try? JSONSerialization.data(withJSONObject: json, options: []))
         return self
     }
     
@@ -87,7 +79,7 @@ public extension ServiceTask {
     @discardableResult
     public func body(urlencoded: [String: String]) -> Self {
         contentType = "application/x-www-form-urlencoded"
-        body = Body(try? URLSerialization.data(with: urlencoded))
+        body = Content(try? URLSerialization.data(with: urlencoded))
         return self
     }
     
@@ -97,8 +89,15 @@ public extension ServiceTask {
     @discardableResult
     public func body<T: Encodable>(codable: T) -> Self {
         contentType = "application/json"
-        body = Body(try? JSONEncoder().encode(codable))
+        body = Content(try? JSONEncoder().encode(codable))
         return self
     }
     
+    /// Set HTTP request body as multipart form data
+    @discardableResult
+    public func multipart(boundary: String, content: Content) -> Self {
+        contentType = "multipart/form-data; boundary=\(boundary)"
+        body = content
+        return self
+    }
 }

@@ -24,7 +24,7 @@ public extension ServiceTask {
         public func handle(content: ServiceTask.Content?, response: URLResponse) throws {
 
             guard let content = content else {
-                throw ConduletError.invalidContent
+                throw ConduletError.invalidResponseContent
             }
 
             try self.handler?(content, response)

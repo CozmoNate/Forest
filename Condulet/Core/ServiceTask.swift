@@ -103,7 +103,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     /// HTTP headers added to request
     public var headers: [String: String]
     /// HTTP body data
-    public var body: Body
+    public var body: Content?
     /// Service response handler
     public var responseHandler: ServiceTaskResponseHandling?
     /// Failure handler
@@ -140,7 +140,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
         endpoint: URLComponents = URLComponents(),
         method: ServiceTask.Method? = nil,
         headers: [String: String] = [:],
-        body: Body = .none,
+        body: Content? = nil,
         contentHandler: ServiceTaskResponseHandling? = nil,
         errorHandler: ServiceTaskErrorHandling? = nil,
         responseQueue: OperationQueue = OperationQueue.main,
@@ -179,17 +179,23 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     }
 
     /// Fills request HTTP body with the data
-    open func prepareBody(for request: inout URLRequest) throws {
+    open func prepareContent(for request: inout URLRequest) throws {
+        
+        guard let body = body else {
+            request.httpBody = nil
+            return
+        }
         
         switch body {
-        case .none:
-            request.httpBody = nil
         case .data(let data):
             request.httpBody = data
         case .file(let url):
-            request.httpBody = try Data(contentsOf: url)
-        case .multipart(let data):
-            request.httpBody = try data.generateBodyData()
+            guard let stream = InputStream(url: url) else {
+                throw ConduletError.invalidFile
+            }
+            request.httpBodyStream = stream
+        case .stream(let stream):
+            request.httpBodyStream = stream
         }
     }
 
@@ -240,10 +246,12 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
         guard let session = session else {
             throw ConduletError.noSessionSpecified
         }
+        
+        guard let body = body else {
+            throw ConduletError.noRequestBody
+        }
 
         switch body {
-        case .none:
-            throw ConduletError.noRequestBody
         case .data(let data):
             return session.uploadTask(with: request, from: data) { (data, response, error) in
                 self.dispatchResponse(signature, Content(data), response, error)
@@ -252,10 +260,8 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
             return session.uploadTask(with: request, fromFile: url) { (data, response, error) in
                 self.dispatchResponse(signature, Content(data), response, error)
             }
-        case .multipart(let data):
-            return session.uploadTask(with: request, from: try data.generateBodyData()) { (data, response, error) in
-                self.dispatchResponse(signature, Content(data), response, error)
-            }
+        case .stream:
+            throw ConduletError.invalidContentType
         }
     }
     
@@ -280,12 +286,12 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
             switch action {
             // Perform
             case .perform:
-                try prepareBody(for: &request)
+                try prepareContent(for: &request)
                 try interceptor?.serviceTask(self, modify: &request)
                 task = try prepareDataTask(for: &request, with: signature)
             // Download
             case .download(let path, let data):
-                try prepareBody(for: &request)
+                try prepareContent(for: &request)
                 try interceptor?.serviceTask(self, modify: &request)
                 task = try prepareDownloadTask(for: &request, with: signature, destination: path, resume: data)
             // Upload
@@ -330,15 +336,21 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
         return true
     }
     
-    /// Rewind task with lastest action performed. If action is not specified task will fail with 'noActionPerformed' error.
-    open func rewind() {
+    /// Rewind task with lastest action performed. This will cancel running task. If action is not specified this method will return false, running task will not be canceled and no action will be performed
+    @discardableResult
+    open func rewind() -> Bool {
         
-        if let action = action {
-            perform(action: action)
+        guard let action = action else {
+            return false
         }
-        else {
-            handleError(ConduletError.noActionPerformed)
+        
+        if isRunning {
+            cancel()
         }
+        
+        perform(action: action)
+        
+        return true
     }
     
     // MARK: - URLSessionTask backing

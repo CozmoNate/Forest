@@ -96,38 +96,12 @@ public extension ServiceTask {
         }
     }
     
-    public enum Body {
-        
-        case none
-        case data(Data)
-        case file(URL)
-        case multipart(MultipartFormData)
-        
-        init(_ data: Data?) {
-            if let data = data {
-                self = .data(data)
-            }
-            else {
-                self = .none
-            }
-        }
-        
-        init(_ url: URL?) {
-            if let url = url {
-                self = .file(url)
-            }
-            else {
-                self = .none
-            }
-        }
-    }
-    
-    /// Content type of the response received
+    /// Content type used to represent the request body or response data received
     public enum Content {
         
         case data(Data)
         case file(URL)
-        //case stream(InputStream)
+        case stream(InputStream)
         
         init?(_ data: Data?) {
             guard let data = data else {
@@ -141,6 +115,13 @@ public extension ServiceTask {
                 return nil
             }
             self = .file(url)
+        }
+        
+        init?(_ stream: InputStream?) {
+            guard let stream = stream else {
+                return nil
+            }
+            self = .stream(stream)
         }
     }
     

@@ -86,7 +86,7 @@ Just download some file:
 ```swift
 
 ServiceTask()
-    .headers(["Authentication": "Bearer \(token)"])
+    .headers(["Authorization": "Bearer \(token)"])
     .method(.PUT)
     .url("https://host.com/file/12345")
     .body(text: "123456789")

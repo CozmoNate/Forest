@@ -33,7 +33,7 @@
 		8411B2471340A40A98CF6509 /* Pods_All_Targets_ConduletTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D3BE0FE0480671010AE049E /* Pods_All_Targets_ConduletTests.framework */; };
 		AA045AC121675BC400BD92D4 /* ServiceTaskInterception.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA045AC021675BC400BD92D4 /* ServiceTaskInterception.swift */; };
 		AA045AC32167673600BD92D4 /* ServiceTaskInterceptorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA045AC22167673600BD92D4 /* ServiceTaskInterceptorTests.swift */; };
-		AA15EEA021677C76004F36C1 /* ServiceTask+MultipartFormData.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA15EE9F21677C76004F36C1 /* ServiceTask+MultipartFormData.swift */; };
+		AA15EEA021677C76004F36C1 /* MultipartFormData.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA15EE9F21677C76004F36C1 /* MultipartFormData.swift */; };
 		AA38AB7121639AEB00EC8750 /* URLSerializationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E314CF121625EC80007DAFE /* URLSerializationTests.swift */; };
 		AAD56CAC216397A10086CC50 /* ServiceTask+Handlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD56CAB216397A10086CC50 /* ServiceTask+Handlers.swift */; };
 		EFAA4B81BB537ADE88CEDD14 /* Pods_All_Targets_Condulet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78096D16BF7DAFB2AC3FF2BD /* Pods_All_Targets_Condulet.framework */; };
@@ -86,7 +86,7 @@
 		7EECC2922161326E008845F4 /* DecodableContentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodableContentHandler.swift; sourceTree = "<group>"; };
 		AA045AC021675BC400BD92D4 /* ServiceTaskInterception.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTaskInterception.swift; sourceTree = "<group>"; };
 		AA045AC22167673600BD92D4 /* ServiceTaskInterceptorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTaskInterceptorTests.swift; sourceTree = "<group>"; };
-		AA15EE9F21677C76004F36C1 /* ServiceTask+MultipartFormData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ServiceTask+MultipartFormData.swift"; sourceTree = "<group>"; };
+		AA15EE9F21677C76004F36C1 /* MultipartFormData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultipartFormData.swift; sourceTree = "<group>"; };
 		AAD56CAB216397A10086CC50 /* ServiceTask+Handlers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ServiceTask+Handlers.swift"; sourceTree = "<group>"; };
 		AF99ECF42507D8C62FCE8973 /* Pods-All Targets-ConduletTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-All Targets-ConduletTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-All Targets-ConduletTests/Pods-All Targets-ConduletTests.debug.xcconfig"; sourceTree = "<group>"; };
 		EF88038FFB1E59F95B6E1397 /* Pods-All Targets-ConduletTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-All Targets-ConduletTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-All Targets-ConduletTests/Pods-All Targets-ConduletTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -187,7 +187,6 @@
 				AA045AC021675BC400BD92D4 /* ServiceTaskInterception.swift */,
 				7EBE412F215E6F7A006C882C /* ServiceTask.swift */,
 				7EECC2812160C596008845F4 /* ServiceTask+Enums.swift */,
-				AA15EE9F21677C76004F36C1 /* ServiceTask+MultipartFormData.swift */,
 				AAD56CAB216397A10086CC50 /* ServiceTask+Handlers.swift */,
 				7EE281E92161E60D00019EE5 /* ServiceTask+Actions.swift */,
 				7EBE4135215E715D006C882C /* ServiceTask+Endpoint.swift */,
@@ -218,9 +217,10 @@
 		7EECC27D2160BEAA008845F4 /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				7E06C83321672593008E4AC6 /* ContentType.swift */,
-				7ED7A57B21601AC1007657ED /* URLSerialization.swift */,
 				7EE281F32161FE2A00019EE5 /* ConduletError.swift */,
+				7E06C83321672593008E4AC6 /* ContentType.swift */,
+				AA15EE9F21677C76004F36C1 /* MultipartFormData.swift */,
+				7ED7A57B21601AC1007657ED /* URLSerialization.swift */,
 			);
 			name = Common;
 			sourceTree = "<group>";
@@ -454,7 +454,7 @@
 				7ED7A56E215FFCFA007657ED /* ProtobufContentHandler.swift in Sources */,
 				7EBE414A215F1A64006C882C /* ServiceTask+Response.swift in Sources */,
 				7ED7A57C21601AC1007657ED /* URLSerialization.swift in Sources */,
-				AA15EEA021677C76004F36C1 /* ServiceTask+MultipartFormData.swift in Sources */,
+				AA15EEA021677C76004F36C1 /* MultipartFormData.swift in Sources */,
 				7EBE4136215E715D006C882C /* ServiceTask+Endpoint.swift in Sources */,
 				7EECC2932161326E008845F4 /* DecodableContentHandler.swift in Sources */,
 				7ED7A58121608F8B007657ED /* TextContentHandler.swift in Sources */,

@@ -45,7 +45,7 @@ open class JSONContentHandler: ServiceTaskResponseHandling {
     public func handle(content: ServiceTask.Content?, response: URLResponse) throws {
         
         guard let content = content, response.mimeType == "application/json" else {
-            throw ConduletError.invalidContent
+            throw ConduletError.invalidResponseContent
         }
         
         switch content {
@@ -53,7 +53,7 @@ open class JSONContentHandler: ServiceTaskResponseHandling {
             let object = try JSONSerialization.jsonObject(with: data, options: [.allowFragments])
             completion?(object, response)
         default:
-            throw ConduletError.invalidContent
+            throw ConduletError.invalidResponseContent
         }
     }
     

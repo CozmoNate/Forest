@@ -45,7 +45,7 @@ open class TextContentHandler: ServiceTaskResponseHandling {
     public func handle(content: ServiceTask.Content?, response: URLResponse) throws {
         
         guard let content = content, response.mimeType == "text/plain" else {
-            throw ConduletError.invalidContent
+            throw ConduletError.invalidResponseContent
         }
         
         switch content {
@@ -55,7 +55,7 @@ open class TextContentHandler: ServiceTaskResponseHandling {
             }
             completion?(string, response)
         default:
-            throw ConduletError.invalidContent
+            throw ConduletError.invalidResponseContent
         }
     }
     

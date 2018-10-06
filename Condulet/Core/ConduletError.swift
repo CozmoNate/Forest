@@ -37,12 +37,14 @@ public enum ConduletError: Error {
     
     /// You shoud provide endpoint information
     case invalidEndpoint
+    /// The content type povided is not supported
+    case invalidContentType
     /// You shoud specify default session for task
     case noSessionSpecified
     /// You shoud specify HTTP method for action
     case noMethodSpecified
-    /// The task is not performed yet, so not possible to rewind
-    case noActionPerformed
+    /// Data required
+    case noDataProvided
     /// No data provided for request
     case noRequestBody
     /// Response does not handled
@@ -52,13 +54,15 @@ public enum ConduletError: Error {
     /// Task received unsupported response server response
     case invalidResponse
     /// Task received unsupported response content
-    case invalidContent
+    case invalidResponseContent
     /// Task response handler have decoding issues
     case decodingFailure
     /// Failed to encode request body
     case encodingFailure
     /// Download destination is invalid
     case invalidDestination
+    /// File URL is invalid or file is not accessible
+    case invalidFile
     /// Status code error
     case statusCode(Int)
 }

@@ -41,7 +41,7 @@ public extension ServiceTask {
     public func body<T: Message>(proto message: T) -> Self {
         contentType = "application/x-www-form-urlencoded"
         headers["grpc-metadata-content-type"] = "application/grpc"
-        body = Body(try? message.jsonUTF8Data())
+        body = Content(try? message.jsonUTF8Data())
         return self
     }
     
@@ -52,7 +52,7 @@ public extension ServiceTask {
         headers["grpc-metadata-content-type"] = "application/grpc"
         var message = T()
         configure(&message)
-        body = Body(try? message.jsonUTF8Data())
+        body = Content(try? message.jsonUTF8Data())
         return self
     }
     

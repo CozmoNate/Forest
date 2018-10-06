@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'Condulet'
-  s.version          = '1.3.1'
+  s.version          = '1.4'
   s.summary          = 'Condulet makes it simple to send requests to web services'
   s.description      = <<-DESC
 Condulet is a simple wrapper built on top of URLSession and URLSessionTask. Condulet provides most of the features you'll need in your day-by-day work, without stressing you with overcomplicated abstractions.

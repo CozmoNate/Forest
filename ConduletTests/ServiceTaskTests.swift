@@ -20,6 +20,26 @@ class ServiceTaskTests: QuickSpec {
         let data: String
     }
     
+    func readData(from stream: InputStream) -> Data {
+        
+        var data = Data()
+        
+        stream.open()
+        while stream.hasBytesAvailable {
+            let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: 100000)
+            defer {
+                buffer.deallocate()
+            }
+            let result = stream.read(buffer, maxLength: 100000)
+            if result > 0 {
+                data.append(buffer, count: result)
+            }
+        }
+        stream.close()
+        
+        return data
+    }
+    
     override func spec() {
         
         describe("ServiceTask") {
@@ -260,44 +280,24 @@ class ServiceTaskTests: QuickSpec {
             
             it("can send and receive Codable objects") {
                 
-                func testDecodable(_ method: HTTPMethod, uri: String, object: Test) -> (_ request: URLRequest) -> Bool {
+                func testDecodable(object: Codable) -> (_ request: URLRequest) -> Response {
                     return { (request:URLRequest) in
                         
-                        if let requestMethod = request.httpMethod, requestMethod == method.description {
-                            if let stream = request.httpBodyStream, let length = request.allHTTPHeaderFields?["Content-Length"] {
-                                
-                                let size = Int(length)!
-                                let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: size)
-                                defer {
-                                    buffer.deallocate()
-                                }
-                                
-                                stream.open()
-                                stream.read(buffer, maxLength: size)
-                                stream.close()
-                                
-                                let data = Data(bytes: buffer, count: size)
-                                
-                                do {
-                                    let decoded = try JSONDecoder().decode(Test.self, from: data)
-                                    if decoded.data == object.data {
-                                        return Mockingjay.uri(uri)(request)
-                                    }
-                                    return false
-                                } catch {
-                                    print(error)
-                                }
-                            }
+                        if let stream = request.httpBodyStream {
+                            
+                            let data = self.readData(from: stream)
+                            
+                            let response = HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: ["Content-Type": "application/json"])
+                            return Mockingjay.Response.success(response!, .content(data))
                         }
                         
-                        return false
+                        return Mockingjay.Response.failure(NSError(domain: "Test", code: 1, userInfo: [NSLocalizedDescriptionKey: "No multipart stream!"]))
                     }
                 }
                 
                 let test = Test(data: "Test")
-                let data = try! JSONEncoder().encode(test)
                 
-                self.stub(testDecodable(.post, uri: "test.test", object: test), jsonData(data))
+                self.stub(http(.post, uri: "test.test"), testDecodable(object: test))
                 
                 waitUntil { (done) in
                     
@@ -306,12 +306,8 @@ class ServiceTaskTests: QuickSpec {
                         .method(.POST)
                         .body(codable: test)
                         .codable { (object: Test, response) in
-                            if object.data == "Test" {
-                                done()
-                            }
-                            else {
-                                fail()
-                            }
+                            expect(object.data).to(equal("Test"))
+                            done()
                         }
                         .error { (error, response) in
                             fail("\(error)")
@@ -322,62 +318,65 @@ class ServiceTaskTests: QuickSpec {
 
             it("can perform request with multipart form data") {
 
-                func testMultipart(_ method: HTTPMethod, uri: String) -> (_ request: URLRequest) -> Bool {
+                func testMultipartData() -> (_ request: URLRequest) -> Response {
                     return { (request:URLRequest) in
-
-                        if let requestMethod = request.httpMethod, requestMethod == method.description {
-                            if let stream = request.httpBodyStream, let length = request.allHTTPHeaderFields?["Content-Length"] {
-
-                                let size = Int(length)!
-                                let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: size)
-                                defer {
-                                    buffer.deallocate()
-                                }
-
-                                stream.open()
-                                stream.read(buffer, maxLength: size)
-                                stream.close()
-
-                                let data = Data(bytes: buffer, count: size)
-
-                                guard let text = String(data: data, encoding: .utf8) else {
-                                    return false
-                                }
-
-                                guard text == "--TEST\r\nContent-Disposition: form-data; name=\"Test\"\r\n\r\nValue\r\n--TEST--\r\n" else {
-                                    return false
-                                }
-
-                                print("multipart: \n\(text)")
-
-                                return Mockingjay.uri(uri)(request)
-
-                            }
+                        if let stream = request.httpBodyStream {
+                            
+                            let data = self.readData(from: stream)
+                            let result = String(data: data, encoding: .utf8)
+                            
+                            expect(result).to(equal("--TEST\r\nContent-Disposition: form-data; name=\"Param\"\r\n\r\nValue\r\n--TEST\r\nContent-Disposition: form-data; name=\"Data\"\r\nContent-Type: data\r\n\r\nTest\r\n--TEST\r\nContent-Disposition: form-data; name=\"File\"; filename=\"filename\"\r\nContent-Type: file\r\n\r\nTest\r\n--TEST\r\nContent-Disposition: form-data; name=\"URL\"; filename=\"filename\"\r\nContent-Type: url\r\n\r\nTest\r\n--TEST--\r\n"))
+                            
+                            let response = HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)
+                            return Mockingjay.Response.success(response!, .content(Data()))
                         }
-
-                        return false
+                        
+                        return Mockingjay.Response.failure(NSError(domain: "Test", code: 1, userInfo: [NSLocalizedDescriptionKey: "No multipart stream!"]))
                     }
                 }
 
-                self.stub(testMultipart(.post, uri: "test.multipart"), json(["test": "ok"]))
+                self.stub(http(.post, uri: "test.multipart"), testMultipartData())
 
                 waitUntil { (done) in
 
-                    var data = ServiceTask.MultipartFormData()
+                    var multipartData = MultipartFormData()
 
-                    data.boundary = "TEST"
-                    data.appendMediaItem(.parameter(name: "Test", value: "Value"))
-
-                    ServiceTask()
-                        .endpoint(.POST, "test.multipart")
-                        .body(multipart: data)
-                        .content { (content, response) in
-                            done()
-                        }
-                        .error { (error, response) in
+                    multipartData.boundary = "TEST"
+                    
+                    let testFileURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString).appendingPathExtension("test")
+                    
+                    try? "Test".data(using: .utf8)!.write(to: testFileURL)
+                    
+                    do {
+                        try multipartData.appendMediaItem(.parameter(name: "Param", value: "Value"))
+                        try multipartData.appendMediaItem(.data(name: "Data", mimeType: "data", data: "Test".data(using: .utf8)!))
+                        try multipartData.appendMediaItem(.file(name: "File", fileName: "filename", mimeType: "file", data: "Test".data(using: .utf8)!))
+                        try multipartData.appendMediaItem(.url(name: "URL", fileName: "filename", mimeType: "url", url: testFileURL))
+                    }
+                    catch {
+                        fail("\(error)")
+                    }
+                    
+                    multipartData.generateContentData { (result) in
+                        
+                        switch result {
+                        case .success(let encoded):
+                            ServiceTask()
+                                .endpoint(.POST, "test.multipart")
+                                .multipart(boundary: multipartData.boundary, content: .data(encoded))
+                                .content { (content, response) in
+                                    done()
+                                }
+                                .error { (error, response) in
+                                    fail("\(error)")
+                                }
+                                .perform()
+                        case .failure(let error):
                             fail("\(error)")
                         }
-                        .perform()
+                        
+                        try? FileManager.default.removeItem(at: testFileURL)
+                    }
 
                 }
             }

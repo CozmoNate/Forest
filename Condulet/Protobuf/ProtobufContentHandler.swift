@@ -50,15 +50,15 @@ open class ProtobufContentHandler<T: Message>: ServiceTaskResponseHandling {
         }
         
         guard let content = content, httpResponse.mimeType == "application/json" else {
-            throw ConduletError.invalidContent
+            throw ConduletError.invalidResponseContent
         }
         
         guard let metadataContentType = httpResponse.allHeaderFields["grpc-metadata-content-type"] as? String else {
-            throw ConduletError.invalidContent
+            throw ConduletError.invalidResponseContent
         }
         
         guard metadataContentType == "application/grpc" else {
-            throw ConduletError.invalidContent
+            throw ConduletError.invalidResponseContent
         }
         
         switch content {
@@ -66,7 +66,7 @@ open class ProtobufContentHandler<T: Message>: ServiceTaskResponseHandling {
             let message = try T(jsonUTF8Data: data)
             completion?(message, response)
         default:
-            throw ConduletError.invalidContent
+            throw ConduletError.invalidResponseContent
         }
     }
 }
