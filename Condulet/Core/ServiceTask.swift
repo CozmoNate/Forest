@@ -144,7 +144,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
         contentHandler: ServiceTaskResponseHandling? = nil,
         errorHandler: ServiceTaskErrorHandling? = nil,
         responseQueue: OperationQueue = OperationQueue.main,
-        interceptor: ServiceTaskRetrofitting? = nil) {
+        retrofitter: ServiceTaskRetrofitting? = nil) {
         
         self.session = session
         self.url = endpoint
@@ -154,7 +154,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
         self.responseHandler = contentHandler
         self.errorHandler = errorHandler
         self.responseQueue = responseQueue
-        self.retrofitter = interceptor
+        self.retrofitter = retrofitter
     }
     
     // MARK: - Builder
