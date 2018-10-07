@@ -186,7 +186,7 @@ ServiceTask()
 ## Author
 
 
-Natan Natan Zalkin.zalkin@me.com
+Natan Natan natan.zalkin@me.com
 
 ## License
 
