@@ -92,7 +92,7 @@ public extension ServiceTask {
         body = Content(try? JSONEncoder().encode(codable))
         return self
     }
-    
+
     /// Set HTTP request body as multipart form data
     @discardableResult
     public func multipart(boundary: String, content: Content) -> Self {

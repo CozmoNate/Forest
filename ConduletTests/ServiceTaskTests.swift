@@ -249,19 +249,21 @@ class ServiceTaskTests: QuickSpec {
                     ServiceTask()
                         .url("test.test.com")
                         .method(.PATCH)
-                        .body { (message: inout Google_Protobuf_SourceContext) in
+                        .body(proto: Google_Protobuf_SourceContext.self) { (message) in
                             message.fileName = "Test"
                         }
-                        .proto{ (message: Google_Protobuf_SourceContext, response) in
-                            if message.fileName == "Test" {
-                                done()
+                        .response(proto: Google_Protobuf_SourceContext.self) { (response) -> Void in
+                            switch response {
+                            case .success(let message):
+                                if message.fileName == "Test" {
+                                    done()
+                                }
+                                else {
+                                    fail()
+                                }
+                            case .failure(let error):
+                                fail("\(error)")
                             }
-                            else {
-                                fail()
-                            }
-                        }
-                        .error { (error, response) in
-                            fail("\(error)")
                         }
                         .perform()
                 }

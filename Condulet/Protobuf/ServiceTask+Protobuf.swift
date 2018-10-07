@@ -55,7 +55,18 @@ public extension ServiceTask {
         body = Content(try? message.jsonUTF8Data())
         return self
     }
-    
+
+    /// Send body with protobuf messsage. This method creates an instance of type specified and passes it to configuration block
+    @discardableResult
+    public func body<T: Message>(proto type: T.Type, configure: (inout T) -> Void) -> Self {
+        contentType = "application/x-www-form-urlencoded"
+        headers["grpc-metadata-content-type"] = "application/grpc"
+        var message = T()
+        configure(&message)
+        body = Content(try? message.jsonUTF8Data())
+        return self
+    }
+
     /// Handle protobuf message response. If received response of other type task will fail with ConduletError.invalidResponse
     @discardableResult
     public func proto<T: Message>(_ handler: @escaping (T, URLResponse) -> Void) -> Self {
@@ -69,7 +80,13 @@ public extension ServiceTask {
 
     /// Handle protobuf message response. If received response of other type task will fail with ConduletError.invalidResponse
     @discardableResult
-    public func response<T: Message>(proto handler: @escaping (T, URLResponse) -> Void) -> Self {
-        return proto(handler)
+    public func response<T: Message>(proto type: T.Type, handler: @escaping (Response<T>) -> Void) -> Self {
+        proto { (message, response) in
+            handler(Response.success(message))
+        }
+        error { (error, response) in
+            handler(Response.failure(error))
+        }
+        return self
     }
 }

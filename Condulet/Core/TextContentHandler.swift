@@ -50,7 +50,11 @@ open class TextContentHandler: ServiceTaskResponseHandling {
         
         switch content {
         case let .data(data):
-            guard let string = String(data: data, encoding: .utf8) else {
+            var encoding: String.Encoding = .utf8
+            if let textEncodingName = response.textEncodingName {
+                encoding = String.Encoding(rawValue: UInt(CFStringConvertIANACharSetNameToEncoding(textEncodingName as NSString)))
+            }
+            guard let string = String(data: data, encoding: encoding) else {
                 throw ServiceTaskError.decodingFailure
             }
             completion?(string, response)
