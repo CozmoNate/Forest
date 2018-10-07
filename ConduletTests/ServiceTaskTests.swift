@@ -330,31 +330,31 @@ class ServiceTaskTests: QuickSpec {
 
                 waitUntil { (done) in
 
-                    var multipartData = MultipartFormData()
+                    var formData = MultipartFormData()
 
-                    multipartData.boundary = "TEST"
+                    formData.boundary = "TEST"
                     
                     let testFileURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString).appendingPathExtension("test")
                     
                     try? "Test".data(using: .utf8)!.write(to: testFileURL)
                     
                     do {
-                        try multipartData.appendMediaItem(.parameter(name: "Param", value: "Value"))
-                        try multipartData.appendMediaItem(.data(name: "Data", mimeType: "data", data: "Test".data(using: .utf8)!))
-                        try multipartData.appendMediaItem(.file(name: "File", fileName: "filename", mimeType: "file", data: "Test".data(using: .utf8)!))
-                        try multipartData.appendMediaItem(.url(name: "URL", fileName: "filename", mimeType: "url", url: testFileURL))
+                        try formData.appendMediaItem(.parameter(name: "Param", value: "Value"))
+                        try formData.appendMediaItem(.data(name: "Data", mimeType: "data", data: "Test".data(using: .utf8)!))
+                        try formData.appendMediaItem(.file(name: "File", fileName: "filename", mimeType: "file", data: "Test".data(using: .utf8)!))
+                        try formData.appendMediaItem(.url(name: "URL", fileName: "filename", mimeType: "url", url: testFileURL))
                     }
                     catch {
                         fail("\(error)")
                     }
                     
-                    multipartData.generateContentData { (result) in
+                    formData.generateContentData { (result) in
                         
                         switch result {
                         case .success(let encoded):
                             ServiceTask()
                                 .endpoint(.POST, "test.multipart")
-                                .multipart(boundary: multipartData.boundary, content: .data(encoded))
+                                .multipart(formData: .data(encoded), boundary: formData.boundary)
                                 .content { (content, response) in
                                     done()
                                 }
