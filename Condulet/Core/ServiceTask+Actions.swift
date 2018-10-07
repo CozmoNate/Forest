@@ -61,7 +61,7 @@ public extension ServiceTask {
         return self
     }
     
-    /// Perform upload task. This is similar to perform but uses URLSessionUploadTask which could run in background
+    /// Perform upload task. This is similar to perform but uses URLSessionUploadTask which could run in background.
     @discardableResult
     public func upload() -> Self {
         perform(action: .upload)

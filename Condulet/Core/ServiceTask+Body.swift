@@ -35,6 +35,14 @@ import Foundation
 
 public extension ServiceTask {
     
+    /// Set HTTP request body as multipart form data
+    @discardableResult
+    public func multipart(formData content: Content, boundary: String) -> Self {
+        contentType = "multipart/form-data; boundary=\(boundary)"
+        body = content
+        return self
+    }
+    
     /// Set HTTP request body
     @discardableResult
     public func body(mimeType: String? = nil, data: Data) -> Self {
@@ -83,8 +91,6 @@ public extension ServiceTask {
         return self
     }
     
-    private static let jsonEncoder = JSONEncoder()
-    
     /// Set HTTP request body
     @discardableResult
     public func body<T: Encodable>(codable: T) -> Self {
@@ -92,12 +98,5 @@ public extension ServiceTask {
         body = Content(try? JSONEncoder().encode(codable))
         return self
     }
-
-    /// Set HTTP request body as multipart form data
-    @discardableResult
-    public func multipart(boundary: String, content: Content) -> Self {
-        contentType = "multipart/form-data; boundary=\(boundary)"
-        body = content
-        return self
-    }
+    
 }

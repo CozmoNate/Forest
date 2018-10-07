@@ -1,5 +1,5 @@
 //
-//  ServiceTask+Endpoint.swift
+//  ServiceTask+Request.swift
 //  Condulet
 //
 //  Created by Natan Zalkin on 28/09/2018.
@@ -34,6 +34,19 @@ import Foundation
 
 
 public extension ServiceTask {
+    
+    /// Append HTTP headers to request. Set 'merge' parameter to false to override existing headers.
+    @discardableResult
+    public func headers(_ headers: [String: String], merge: Bool = true) -> Self {
+        if merge {
+            // Append by overriding existing key with new one in case of collision
+            self.headers.merge(headers, uniquingKeysWith: { return $1 })
+        }
+        else {
+            self.headers = headers
+        }
+        return self
+    }
     
     /// Set HTTP method for request
     @discardableResult

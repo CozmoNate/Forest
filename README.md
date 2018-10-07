@@ -1,6 +1,6 @@
 # Condulet [![Build Status](https://travis-ci.com/kozlek/Condulet.svg?branch=master)](https://travis-ci.com/kozlek/Condulet)
 
-Condulet is a simple wrapper built on top of `URLSession` and `URLSessionTask`. When you need to simply send request, receive data, parse value and return to completion block - this framework is for you. Condulet also flexible and extensible. You can add your custom response handlers and data parsers. Condulet provide most of the features you'll need in your day to day work, without stressing you with overcomplicated abstractions. That the main purpose of it - help to make your job done.
+Condulet is convenient API client construction framework built on top of `URLSession` and `URLSessionTask`. It is flexible and extensible. You can add your custom response handlers and data parsers, but you don't need to. Coundulet already supports plenty of data types including multipart form data generation and Protobufs json message parsing and sending. Condulet provide most of the features you will need in your day to day work without stressing you with overcomplicated abstractions. The main purpose of it - make your job easier. And my job too :) 
 
 ## Installation
 
@@ -128,7 +128,7 @@ formData.generateContentFile { (result) in
     case .success(let url):
         ServiceTask()
             .endpoint(.POST, "https://host.com/upload")
-            .multipart(boundary: formData.boundary, content: .file(url))
+            .multipart(formData: .file(url), boundary: formData.boundary)
             .response(content: { (response) in
                 switch response {
                 case .success:
@@ -186,7 +186,7 @@ ServiceTask()
 ## Author
 
 
-Natan Natan natan.zalkin@me.com
+Natan Zalkin natan.zalkin@me.com
 
 ## License
 
