@@ -13,7 +13,7 @@ import SwiftProtobuf
 
 @testable import Condulet
 
-class ServiceTaskInterceptorTests: QuickSpec, ServiceTaskInterception {
+class ServiceTaskInterceptorTests: QuickSpec, ServiceTaskRetrofitting {
 
     enum Errors: Error {
         case test

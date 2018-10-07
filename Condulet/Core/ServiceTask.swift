@@ -90,7 +90,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
 
     // MARK: - Interceptor
 
-    public var interceptor: ServiceTaskInterception?
+    public var retrofitter: ServiceTaskRetrofitting?
     
     // MARK: - Configuration properties
 
@@ -144,7 +144,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
         contentHandler: ServiceTaskResponseHandling? = nil,
         errorHandler: ServiceTaskErrorHandling? = nil,
         responseQueue: OperationQueue = OperationQueue.main,
-        interceptor: ServiceTaskInterception? = nil) {
+        interceptor: ServiceTaskRetrofitting? = nil) {
         
         self.session = session
         self.url = endpoint
@@ -154,7 +154,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
         self.responseHandler = contentHandler
         self.errorHandler = errorHandler
         self.responseQueue = responseQueue
-        self.interceptor = interceptor
+        self.retrofitter = interceptor
     }
     
     // MARK: - Builder
@@ -287,16 +287,16 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
             // Perform
             case .perform:
                 try prepareContent(for: &request)
-                try interceptor?.serviceTask(self, modify: &request)
+                try retrofitter?.serviceTask(self, modify: &request)
                 task = try prepareDataTask(for: &request, with: signature)
             // Download
             case .download(let path, let data):
                 try prepareContent(for: &request)
-                try interceptor?.serviceTask(self, modify: &request)
+                try retrofitter?.serviceTask(self, modify: &request)
                 task = try prepareDownloadTask(for: &request, with: signature, destination: path, resume: data)
             // Upload
             case .upload:
-                try interceptor?.serviceTask(self, modify: &request)
+                try retrofitter?.serviceTask(self, modify: &request)
                 // Upload tasks ignore request body, so handle body type manually
                 task = try prepareUploadTask(for: &request, with: signature)
             }
@@ -389,13 +389,13 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
                 throw error
             }
 
-            guard !(try interceptor?.serviceTask(self, intercept: response) ?? false) else {
+            guard !(try retrofitter?.serviceTask(self, intercept: response) ?? false) else {
                 return
             }
 
             try handleResponse(response)
 
-            guard !(try interceptor?.serviceTask(self, intercept: content) ?? false) else {
+            guard !(try retrofitter?.serviceTask(self, intercept: content) ?? false) else {
                 return
             }
 
@@ -403,7 +403,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
             
         } catch {
 
-            guard !(interceptor?.serviceTask(self, intercept: error) ?? false) else {
+            guard !(retrofitter?.serviceTask(self, intercept: error) ?? false) else {
                 return
             }
 
