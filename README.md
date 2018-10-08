@@ -1,4 +1,6 @@
-# Condulet [![Build Status](https://travis-ci.com/kozlek/Condulet.svg?branch=master)](https://travis-ci.com/kozlek/Condulet)
+# Condulet 
+
+[![Build Status](https://travis-ci.com/kozlek/Condulet.svg?branch=master)](https://travis-ci.com/kozlek/Condulet)
 
 Condulet is flexible and convenient API client construction framework built on top of `URLSession` and `URLSessionTask`. It can handle plenty of data types including multipart form data generation, sending and receiving json encoded Protobuf messages. Of course you can use your custom response handlers and data parsers with Coundulet. Condulet provides most of the features needed to build robust client for your backend services. The main purpose of it - make your job done. And my job too :) 
 
