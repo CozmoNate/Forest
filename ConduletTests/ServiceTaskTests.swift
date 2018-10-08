@@ -296,12 +296,14 @@ class ServiceTaskTests: QuickSpec {
                         .url("test.test")
                         .method(.POST)
                         .body(codable: test)
-                        .codable { (object: Test, response) in
-                            expect(object.data).to(equal("Test"))
-                            done()
-                        }
-                        .error { (error, response) in
-                            fail("\(error)")
+                        .response { (response: ServiceTask.Response<Test>) -> Void in
+                            switch response {
+                            case .success(let object):
+                                expect(object.data).to(equal("Test"))
+                                done()
+                            case .failure(let error):
+                                fail("\(error)")
+                            }
                         }
                         .perform()
                 }

@@ -80,7 +80,30 @@ public extension ServiceTask {
 
     /// Handle protobuf message response. If received response of other type task will fail with ConduletError.invalidResponse
     @discardableResult
+    public func proto<T: Message>(_ type: T.Type, handler: @escaping (T, URLResponse) -> Void) -> Self {
+        responseHandler = ProtobufContentHandler { [unowned queue = responseQueue] (message: T, response) in
+            queue.addOperation {
+                handler(message, response)
+            }
+        }
+        return self
+    }
+
+    /// Handle protobuf message response. If received response of other type task will fail with ConduletError.invalidResponse
+    @discardableResult
     public func response<T: Message>(proto type: T.Type, handler: @escaping (Response<T>) -> Void) -> Self {
+        proto { (message, response) in
+            handler(Response.success(message))
+        }
+        error { (error, response) in
+            handler(Response.failure(error))
+        }
+        return self
+    }
+
+    /// Handle protobuf message response. If received response of other type task will fail with ConduletError.invalidResponse
+    @discardableResult
+    public func response<T: Message>(proto handler: @escaping (Response<T>) -> Void) -> Self {
         proto { (message, response) in
             handler(Response.success(message))
         }

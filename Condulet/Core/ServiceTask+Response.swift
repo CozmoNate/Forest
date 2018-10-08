@@ -138,6 +138,17 @@ public extension ServiceTask {
         return self
     }
 
+    /// Handle json response with serialized Decodable object of type. If received response of other type task will fail with ConduletError.invalidResponse
+    @discardableResult
+    public func codable<T: Decodable>(_ type: T.Type, handler: @escaping (T, URLResponse) -> Void) -> Self {
+        responseHandler = DecodableContentHandler { [unowned queue = responseQueue] (object: T, response) in
+            queue.addOperation {
+                handler(object, response)
+            }
+        }
+        return self
+    }
+
     /// Handle error with block
     @discardableResult
     public func error(_ handler: @escaping (Error, URLResponse?) -> Void) -> Self {
@@ -238,6 +249,18 @@ public extension ServiceTask {
     /// Handle json response with serialized Decodable object of type. If received response of other type task will fail with ConduletError.invalidResponse
     @discardableResult
     public func response<T: Decodable>(codable type: T.Type, handler: @escaping (Response<T>) -> Void) -> Self {
+        codable { (object, response) in
+            handler(Response.success(object))
+        }
+        error { (error, response) in
+            handler(Response.failure(error))
+        }
+        return self
+    }
+
+    /// Handle json response with serialized Decodable object of type. If received response of other type task will fail with ConduletError.invalidResponse
+    @discardableResult
+    public func response<T: Decodable>(codable handler: @escaping (Response<T>) -> Void) -> Self {
         codable { (object, response) in
             handler(Response.success(object))
         }
