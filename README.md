@@ -117,20 +117,14 @@ Upload multipart form data encoded content:
 let formData = MultipartFormData()
 
 do {
+
     try formData.appendMediaItem(.url(name: "image", fileName: nil, mimeType: nil, url: *url*))
-}
-catch {
-    print("\(error))
-    return
-}
-
-formData.generateContentFile { (result) in
-
-    switch result {
-    case .success(let url):
-        ServiceTask()
+    
+    let encoded = try formData.encode()
+    
+    ServiceTask()
             .endpoint(.POST, "https://host.com/upload")
-            .multipart(formData: .file(url), boundary: formData.boundary)
+            .multipart(formData: .data(encoded), boundary: formData.boundary)
             .response(content: { (response) in
                 switch response {
                 case .success:
@@ -140,10 +134,10 @@ formData.generateContentFile { (result) in
                 }
             })
             .perform()
-
-    case .failure(let error):
-        print("Failed to generate form data: \(error)")
-    }
+}
+catch {
+    print("\(error))
+    return
 }
 ```
 
