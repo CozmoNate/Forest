@@ -46,14 +46,9 @@ public enum MultipartFormDataError: Error {
 /// This class is used to compose requst body using 'multipart/form-data' encoding
 public class MultipartFormData {
     
-    public enum EncodingResult<T> {
-        case success(T)
-        case failure(Error)
-    }
-    
     /// The name of the boundary
     public var boundary: String
-    /// The size in bytes of memory buffer to be used to transfer data from file to output file/data while encoding content
+    /// The size in bytes of memory buffer to be used to transfer data from file to output file/data while encoding content. Default value is 1Mb
     public var bufferSize: Int
     /// The list of media items to encode
     public private(set) var mediaItems = [MediaItem]()
@@ -99,84 +94,31 @@ public class MultipartFormData {
     }
     
     /// Encode multipart content in memory
-    public func generateContentData(completion: @escaping (EncodingResult<Data>) -> Void) {
-        DispatchQueue.global().async {
-         
-            do {
-                
-                let memoryStream = OutputStream(toMemory: ())
-                
-                try self.writeContent(to: memoryStream)
-                
-                guard let data = memoryStream.property(forKey: Stream.PropertyKey.dataWrittenToMemoryStreamKey) as? Data else {
-                    throw MultipartFormDataError.streamOperationFailure
-                }
-                
-                completion(EncodingResult.success(data))
-            }
-            catch {
-                completion(EncodingResult.failure(error))
-            }
-        }
-    }
-    
-    /// Encode and save multipart content into temoprary file. You are responsible to delete provided file when it is not needed anymore
-    public func generateContentFile(completion: @escaping (EncodingResult<URL>) -> Void) {
+    public func encode() throws -> Data {
         
-        DispatchQueue.global().async {
-            
-            do {
-                
-                let url = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString).appendingPathExtension("multipart")
-                
-                guard let fileStream = OutputStream(url: url, append: false) else {
-                    throw MultipartFormDataError.fileIsNotWriteable(url)
-                }
-                
-                try self.writeContent(to: fileStream)
-                
-                completion(EncodingResult.success(url))
-            }
-            catch {
-                completion(EncodingResult.failure(error))
-            }
-        }
-    }
-    
-    private func transfer(from input: InputStream, to output: OutputStream) throws {
+        let memoryStream = OutputStream(toMemory: ())
         
-        let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: bufferSize)
-        defer {
-            buffer.deallocate()
+        try encode(to: memoryStream)
+        
+        guard let data = memoryStream.property(forKey: .dataWrittenToMemoryStreamKey) as? Data else {
+            throw MultipartFormDataError.streamOperationFailure
         }
         
-        while input.hasBytesAvailable {
-            let readResult = input.read(buffer, maxLength: bufferSize)
-            guard readResult > 0 else {
-                if readResult < 0 {
-                    throw input.streamError ?? MultipartFormDataError.streamOperationFailure
-                }
-                return
-            }
-            let writeResult = output.write(buffer, maxLength: readResult)
-            if writeResult != readResult {
-                throw output.streamError ?? MultipartFormDataError.streamOperationFailure
-            }
-        }
+        return data
     }
     
-    private func transfer(from url: URL, to output: OutputStream, bufferSize: Int = 1_000_000) throws {
-        guard let input = InputStream(url: url) else {
-            throw MultipartFormDataError.fileIsNotAccessible(url)
+    /// Encode and save multipart content into file
+    public func encode(to file: URL, append: Bool = false) throws {
+
+        guard let fileStream = OutputStream(url: file, append: append) else {
+            throw MultipartFormDataError.fileIsNotWriteable(file)
         }
-        input.open()
-        defer {
-            input.close()
-        }
-        try transfer(from: input, to: output)
+        
+        try encode(to: fileStream)
     }
     
-    private func writeContent(to stream: OutputStream) throws {
+    /// Encode and write multipart content into provided instance of OutputStream
+    public func encode(to stream: OutputStream) throws {
         
         stream.open()
         defer {
@@ -220,6 +162,40 @@ public class MultipartFormData {
         
         try stream.write("--\(boundary)--".appendLineBreak())
     }
+    
+    private func transfer(from url: URL, to output: OutputStream) throws {
+        guard let input = InputStream(url: url) else {
+            throw MultipartFormDataError.fileIsNotAccessible(url)
+        }
+        input.open()
+        defer {
+            input.close()
+        }
+        try transfer(from: input, to: output)
+    }
+    
+    private func transfer(from input: InputStream, to output: OutputStream) throws {
+        
+        let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: bufferSize)
+        defer {
+            buffer.deallocate()
+        }
+        
+        while input.hasBytesAvailable {
+            let readResult = input.read(buffer, maxLength: bufferSize)
+            guard readResult > 0 else {
+                if readResult < 0 {
+                    throw input.streamError ?? MultipartFormDataError.streamOperationFailure
+                }
+                return
+            }
+            let writeResult = output.write(buffer, maxLength: readResult)
+            if writeResult != readResult {
+                throw output.streamError ?? MultipartFormDataError.streamOperationFailure
+            }
+        }
+    }
+    
 }
 
 public extension MultipartFormData {
@@ -260,7 +236,7 @@ extension String {
     
     static let lineBreakSequence = "\r\n"
     
-    func appendLineBreak(numberOfTimes: UInt = 1) -> String {
+    func appendLineBreak() -> String {
         return self + .lineBreakSequence
     }
 }

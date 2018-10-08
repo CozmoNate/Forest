@@ -182,7 +182,6 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     open func prepareContent(for request: inout URLRequest) throws {
         
         guard let body = body else {
-            request.httpBody = nil
             return
         }
         

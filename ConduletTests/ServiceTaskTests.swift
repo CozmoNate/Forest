@@ -332,44 +332,33 @@ class ServiceTaskTests: QuickSpec {
 
                 waitUntil { (done) in
 
-                    var formData = MultipartFormData()
+                    let formData = MultipartFormData()
 
                     formData.boundary = "TEST"
                     
                     let testFileURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString).appendingPathExtension("test")
                     
-                    try? "Test".data(using: .utf8)!.write(to: testFileURL)
+                    try! "Test".data(using: .utf8)!.write(to: testFileURL)
                     
-                    do {
-                        try formData.appendMediaItem(.parameter(name: "Param", value: "Value"))
-                        try formData.appendMediaItem(.data(name: "Data", mimeType: "data", data: "Test".data(using: .utf8)!))
-                        try formData.appendMediaItem(.file(name: "File", fileName: "filename", mimeType: "file", data: "Test".data(using: .utf8)!))
-                        try formData.appendMediaItem(.url(name: "URL", fileName: "filename", mimeType: "url", url: testFileURL))
-                    }
-                    catch {
-                        fail("\(error)")
-                    }
+                    try! formData.appendMediaItem(.parameter(name: "Param", value: "Value"))
+                    try! formData.appendMediaItem(.data(name: "Data", mimeType: "data", data: "Test".data(using: .utf8)!))
+                    try! formData.appendMediaItem(.file(name: "File", fileName: "filename", mimeType: "file", data: "Test".data(using: .utf8)!))
+                    try! formData.appendMediaItem(.url(name: "URL", fileName: "filename", mimeType: "url", url: testFileURL))
+
+                    let encoded = try! formData.encode()
                     
-                    formData.generateContentData { (result) in
-                        
-                        switch result {
-                        case .success(let encoded):
-                            ServiceTask()
-                                .endpoint(.POST, "test.multipart")
-                                .multipart(formData: .data(encoded), boundary: formData.boundary)
-                                .content { (content, response) in
-                                    done()
-                                }
-                                .error { (error, response) in
-                                    fail("\(error)")
-                                }
-                                .perform()
-                        case .failure(let error):
+                    try? FileManager.default.removeItem(at: testFileURL)
+                    
+                    ServiceTask()
+                        .endpoint(.POST, "test.multipart")
+                        .multipart(formData: .data(encoded), boundary: formData.boundary)
+                        .content { (content, response) in
+                            done()
+                        }
+                        .error { (error, response) in
                             fail("\(error)")
                         }
-                        
-                        try? FileManager.default.removeItem(at: testFileURL)
-                    }
+                        .perform()
 
                 }
             }
