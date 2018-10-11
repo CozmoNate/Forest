@@ -1,13 +1,12 @@
 //
-//  URLEncodedContentHandler.swift
+//  ServiceTaskBuilder.swift
 //  Condulet
 //
-//  Created by Natan Zalkin on 29/09/2018.
+//  Created by Natan Zalkin on 11/10/2018.
 //  Copyright © 2018 Natan Zalkin. All rights reserved.
 //
 
 /*
- *
  * Copyright (c) 2018 Natan Zalkin
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -29,32 +28,40 @@
  * SOFTWARE.
  *
  */
+ 
 
 import Foundation
 
 
-/// A handler that expects and parse response with URL-encoded content. Completion block returns dictionary object on success
-open class URLEncodedContentHandler: ServiceTaskResponseHandling {
+open class ServiceTaskBuilder: ServiceTaskBuilding {
     
-    public var completion: (([String: String], URLResponse) -> Void)?
+    public typealias Task = ServiceTask
     
-    public init(completion: (([String: String], URLResponse) -> Void)? = nil) {
-        self.completion = completion
+    public var task: Task
+    
+    public init(task: Task = ServiceTask()) {
+        self.task = task
     }
     
-    public func handle(content: ServiceTaskContent?, response: URLResponse) throws {
+    public init(session: URLSession = URLSession.shared,
+                url: URLComponents = URLComponents(),
+                method: HTTPMethod? = nil,
+                headers: [String: String] = [:],
+                body: ServiceTaskContent? = nil,
+                responseHandler: ServiceTaskResponseHandling? = nil,
+                errorHandler: ServiceTaskErrorHandling? = nil,
+                responseQueue: OperationQueue = OperationQueue.main,
+                retrofitter: ServiceTaskRetrofitting? = nil) {
         
-        guard let content = content, response.mimeType == "application/x-www-form-urlencoded" else {
-            throw ServiceTaskError.invalidResponseContent
-        }
-        
-        switch content {
-        case let .data(data):
-            let object = try URLEncodedSerialization.dictionary(with: data)
-            completion?(object, response)
-        default:
-            throw ServiceTaskError.invalidResponseContent
-        }
+        self.task = ServiceTask(
+            session: session,
+            url: url,
+            method: method,
+            headers: headers,
+            body: body,
+            responseHandler: responseHandler,
+            errorHandler: errorHandler,
+            responseQueue: responseQueue,
+            retrofitter: retrofitter)
     }
-    
 }

@@ -88,22 +88,18 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
         return lhs.hashValue == rhs.hashValue
     }
 
-    // MARK: - Interceptor
-
-    public var retrofitter: ServiceTaskRetrofitting?
-    
-    // MARK: - Configuration properties
+    // MARK: - ServiceTaskConfigurable
 
     /// A URLSession instance used to create URLSessionTask
     public var session: URLSession?
     /// A URLComponents instance describing service endpoint
     public var url: URLComponents
     /// A HTTP method used for request
-    public var method: Method?
+    public var method: HTTPMethod?
     /// HTTP headers added to request
     public var headers: [String: String]
     /// HTTP body data
-    public var body: Content?
+    public var body: ServiceTaskContent?
     /// Service response handler
     public var responseHandler: ServiceTaskResponseHandling?
     /// Failure handler
@@ -111,22 +107,20 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     // The queue will be used to dispatch response
     public var responseQueue: OperationQueue
     
+    // MARK: - ServiceTaskRetrofitting
+    
+    public var retrofitter: ServiceTaskRetrofitting?
+    
     // MARK: - Properties
 
     /// Last action performed
-    public var action: Action?
+    public var action: ServiceTaskAction?
     /// Signature is used to determine if response from URLSessionTask still relevant and should be handled
     public var signature: UUID?
     /// The underlying URLSessionTask that has been performed
     public var underlayingTask: URLSessionTask?
     /// The content received with the last response
-    public var content: Content?
-
-    /// Easy access to 'Content-Type' HTTP headers entry
-    public var contentType: String? {
-        get { return headers["Content-Type"] }
-        set { headers["Content-Type"] = newValue }
-    }
+    public var content: ServiceTaskContent?
 
     open var isRunning: Bool {
         return signature != nil
@@ -137,21 +131,21 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     /// Creates the instance of ServiceTask
     public init(
         session: URLSession = URLSession.shared,
-        endpoint: URLComponents = URLComponents(),
-        method: ServiceTask.Method? = nil,
+        url: URLComponents = URLComponents(),
+        method: HTTPMethod? = nil,
         headers: [String: String] = [:],
-        body: Content? = nil,
-        contentHandler: ServiceTaskResponseHandling? = nil,
+        body: ServiceTaskContent? = nil,
+        responseHandler: ServiceTaskResponseHandling? = nil,
         errorHandler: ServiceTaskErrorHandling? = nil,
         responseQueue: OperationQueue = OperationQueue.main,
         retrofitter: ServiceTaskRetrofitting? = nil) {
         
         self.session = session
-        self.url = endpoint
+        self.url = url
         self.method = method
         self.headers = headers
         self.body = body
-        self.responseHandler = contentHandler
+        self.responseHandler = responseHandler
         self.errorHandler = errorHandler
         self.responseQueue = responseQueue
         self.retrofitter = retrofitter
@@ -193,8 +187,6 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
                 throw ServiceTaskError.invalidFile
             }
             request.httpBodyStream = stream
-        case .stream(let stream):
-            request.httpBodyStream = stream
         }
     }
 
@@ -206,7 +198,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
         }
 
         return session.dataTask(with: request) { (data, response, error) in
-            self.dispatchResponse(signature, Content(data), response, error)
+            self.dispatchResponse(signature, ServiceTaskContent(data), response, error)
         }
     }
 
@@ -221,7 +213,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
             if let url = url {
                 do {
                     try FileManager.default.moveItem(at: url, to: destination)
-                    self.dispatchResponse(signature, Content(destination), response, error)
+                    self.dispatchResponse(signature, ServiceTaskContent(destination), response, error)
                 }
                 catch {
                     self.dispatchResponse(signature, nil, response, ServiceTaskError.invalidDestination)
@@ -253,21 +245,19 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
         switch body {
         case .data(let data):
             return session.uploadTask(with: request, from: data) { (data, response, error) in
-                self.dispatchResponse(signature, Content(data), response, error)
+                self.dispatchResponse(signature, ServiceTaskContent(data), response, error)
             }
         case .file(let url):
             return session.uploadTask(with: request, fromFile: url) { (data, response, error) in
-                self.dispatchResponse(signature, Content(data), response, error)
+                self.dispatchResponse(signature, ServiceTaskContent(data), response, error)
             }
-        case .stream:
-            throw ServiceTaskError.invalidContentType
         }
     }
     
     // MARK: - Actions
     
     /// Perform task with action.
-    open func perform(action: Action) {
+    open func perform(action: ServiceTaskAction) {
         
         do {
             
@@ -306,7 +296,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
             handleError(error)
         }
     }
-    
+
     /// Cancels running task. Captured response blocks and handlers will never be called until task will be performed again or rewound.
     /// Optionally resume data can be produced on cancel in case of download task, otherwise completion will be called with nil data
     @discardableResult
@@ -368,7 +358,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     }
     
     /// Dispatch response received from URLSessionTask, decide how response will be handled
-    open func dispatchResponse(_ signature: UUID, _ content: Content?, _ response: URLResponse?, _ error: Error?) {
+    open func dispatchResponse(_ signature: UUID, _ content: ServiceTaskContent?, _ response: URLResponse?, _ error: Error?) {
         
         // When the response signature is differs from stored signature, that means we got response from abandoned requests and should ignore it
         guard self.signature == signature else {
@@ -412,7 +402,8 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     }
     
     // MARK: - Response handling
-    
+
+    /// Handle general response
     open func handleResponse(_ response: URLResponse?) throws {
 
         // Pass any non-HTTP response or no reponse
@@ -425,8 +416,8 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
         }
     }
 
-    /// Handle content response.
-    open func handleContent(_ content: Content?, _ response: URLResponse?) throws {
+    /// Handle response content
+    open func handleContent(_ content: ServiceTaskContent?, _ response: URLResponse?) throws {
 
         guard let response = response else {
             throw ServiceTaskError.invalidResponse
@@ -440,7 +431,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
         try handler.handle(content: content, response: response)
     }
     
-    /// Handle any error. Response parameter can store service response if received.
+    /// Handle any error
     open func handleError(_ error: Error, _ response: URLResponse? = nil) {
         
         // Run error handler

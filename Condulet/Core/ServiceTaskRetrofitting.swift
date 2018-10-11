@@ -19,7 +19,7 @@ public protocol ServiceTaskRetrofitting {
     func serviceTask(_ task: ServiceTask, intercept response: URLResponse?) throws -> Bool
 
     /// Intercept content handling. By returning true you become responsible to call apropriate responseHandler callbacks. Throwing error will cause the task to fail with provided error
-    func serviceTask(_ task: ServiceTask, intercept content: ServiceTask.Content?) throws -> Bool
+    func serviceTask(_ task: ServiceTask, intercept content: ServiceTaskContent?) throws -> Bool
     
     /// Intercept error handling. By returning true you become responsible to call apropriate errorHandler callbacks
     func serviceTask(_ task: ServiceTask, intercept error: Error) -> Bool

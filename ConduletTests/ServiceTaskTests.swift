@@ -54,7 +54,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil { (done) in
                     
-                    ServiceTask()
+                    ServiceTaskBuilder()
                         .endpoint(.GET, "test.test")
                         .data { (data, response) in
                             done()
@@ -75,7 +75,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil(timeout: 5) { (done) in
                     
-                    let task = ServiceTask()
+                    let task = ServiceTaskBuilder()
                         .endpoint(.GET, "test.cancel")
                         .content { (content, response) in
                             if canceled {
@@ -106,7 +106,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil { (done) in
                     
-                    ServiceTask()
+                    ServiceTaskBuilder()
                         .url("test.test")
                         .method(.GET)
                         .data { (data, response) in
@@ -125,7 +125,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil { (done) in
                     
-                    ServiceTask()
+                    ServiceTaskBuilder()
                         .url("test.test")
                         .method(.GET)
                         .data { (data, response) in
@@ -152,7 +152,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil { (done) in
                     
-                    ServiceTask()
+                    ServiceTaskBuilder()
                         .url("test.test")
                         .method(.GET)
                         .json { (object, response) in
@@ -189,7 +189,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil { (done) in
                     
-                    ServiceTask()
+                    ServiceTaskBuilder()
                         .url("test.download")
                         .method(.GET)
                         .file { (url, response) in
@@ -216,7 +216,7 @@ class ServiceTaskTests: QuickSpec {
             
             it("can send and receive protobuf messages") {
                 
-                func testProto(_ method: HTTPMethod, uri: String, message: Google_Protobuf_SourceContext) -> (_ request: URLRequest) -> Bool {
+                func testProto(_ method: Mockingjay.HTTPMethod, uri: String, message: Google_Protobuf_SourceContext) -> (_ request: URLRequest) -> Bool {
                     return { (request:URLRequest) in
                         
                         if let requestMethod = request.httpMethod, requestMethod == method.description, let stream = request.httpBodyStream {
@@ -246,7 +246,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil { (done) in
                     
-                    ServiceTask()
+                    ServiceTaskBuilder()
                         .url("test.test.com")
                         .method(.PATCH)
                         .body(proto: Google_Protobuf_SourceContext.self) { (message) in
@@ -292,11 +292,11 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil { (done) in
                     
-                    ServiceTask()
+                    ServiceTaskBuilder()
                         .url("test.test")
                         .method(.POST)
                         .body(codable: test)
-                        .response { (response: ServiceTask.Response<Test>) -> Void in
+                        .response { (response: ServiceTaskResponse<Test>) -> Void in
                             switch response {
                             case .success(let object):
                                 expect(object.data).to(equal("Test"))
@@ -332,26 +332,22 @@ class ServiceTaskTests: QuickSpec {
 
                 waitUntil { (done) in
 
-                    let formData = MultipartFormData()
-
-                    formData.boundary = "TEST"
-                    
                     let testFileURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString).appendingPathExtension("test")
-                    
                     try! "Test".data(using: .utf8)!.write(to: testFileURL)
-                    
-                    try! formData.appendMediaItem(.parameter(name: "Param", value: "Value"))
-                    try! formData.appendMediaItem(.data(name: "Data", mimeType: "data", data: "Test".data(using: .utf8)!))
-                    try! formData.appendMediaItem(.file(name: "File", fileName: "filename", mimeType: "file", data: "Test".data(using: .utf8)!))
-                    try! formData.appendMediaItem(.url(name: "URL", fileName: "filename", mimeType: "url", url: testFileURL))
 
-                    let encoded = try! formData.encode()
+                    var builder = FormDataBuilder(boundary: "TEST")
+                    builder.append(.property(name: "Param", value: "Value"))
+                    builder.append(.binary(name: "Data", mimeType: "data", data: "Test".data(using: .utf8)!))
+                    builder.append(.file(name: "File", fileName: "filename", mimeType: "file", data: "Test".data(using: .utf8)!))
+                    builder.append(try! .file(name: "URL", fileName: "filename", mimeType: "url", url: testFileURL))
+
+                    let encoded = try! builder.encode()
                     
                     try? FileManager.default.removeItem(at: testFileURL)
                     
-                    ServiceTask()
+                    ServiceTaskBuilder()
                         .endpoint(.POST, "test.multipart")
-                        .multipart(formData: .data(encoded), boundary: formData.boundary)
+                        .body(data: encoded, contentType: builder.contentType)
                         .content { (content, response) in
                             done()
                         }

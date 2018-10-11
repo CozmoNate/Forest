@@ -1,13 +1,12 @@
 //
-//  URLEncodedContentHandler.swift
+//  ServiceTaskContent.swift
 //  Condulet
 //
-//  Created by Natan Zalkin on 29/09/2018.
+//  Created by Natan Zalkin on 11/10/2018.
 //  Copyright © 2018 Natan Zalkin. All rights reserved.
 //
 
 /*
- *
  * Copyright (c) 2018 Natan Zalkin
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -29,32 +28,28 @@
  * SOFTWARE.
  *
  */
+ 
 
 import Foundation
 
 
-/// A handler that expects and parse response with URL-encoded content. Completion block returns dictionary object on success
-open class URLEncodedContentHandler: ServiceTaskResponseHandling {
+/// Content type used to represent the request body or response data received
+public enum ServiceTaskContent {
     
-    public var completion: (([String: String], URLResponse) -> Void)?
+    case data(Data)
+    case file(URL)
     
-    public init(completion: (([String: String], URLResponse) -> Void)? = nil) {
-        self.completion = completion
+    init?(_ data: Data?) {
+        guard let data = data else {
+            return nil
+        }
+        self = .data(data)
     }
     
-    public func handle(content: ServiceTaskContent?, response: URLResponse) throws {
-        
-        guard let content = content, response.mimeType == "application/x-www-form-urlencoded" else {
-            throw ServiceTaskError.invalidResponseContent
+    init?(_ url: URL?) {
+        guard let url = url else {
+            return nil
         }
-        
-        switch content {
-        case let .data(data):
-            let object = try URLEncodedSerialization.dictionary(with: data)
-            completion?(object, response)
-        default:
-            throw ServiceTaskError.invalidResponseContent
-        }
+        self = .file(url)
     }
-    
 }

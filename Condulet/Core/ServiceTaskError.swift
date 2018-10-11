@@ -37,8 +37,6 @@ public enum ServiceTaskError: Error {
     
     /// You shoud provide endpoint information
     case invalidEndpoint
-    /// The content type povided is not supported
-    case invalidContentType
     /// You shoud specify default session for task
     case noSessionSpecified
     /// You shoud specify HTTP method for action

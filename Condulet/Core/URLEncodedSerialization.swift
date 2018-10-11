@@ -1,5 +1,5 @@
 //
-//  URLSerialization.swift
+//  URLEncodedSerialization.swift
 //  Condulet
 //
 //  Created by Natan Zalkin on 29/09/2018.
@@ -33,7 +33,7 @@
 import Foundation
 
 
-public enum URLSerializationError: Error {
+public enum URLEncodedSerializationError: Error {
     
     case invalidObject
     case invalidData
@@ -43,7 +43,7 @@ public enum URLSerializationError: Error {
 }
 
 /// A class for converting dictionary to URL-encoded data and decode URL-encoded data into dictionary
-open class URLSerialization {
+open class URLEncodedSerialization {
     
     /// Generates URL-encoded data from dictionary
     open class func data(with dictionary: [String: String]) throws -> Data {
@@ -53,13 +53,13 @@ open class URLSerialization {
         components.queryItems = dictionary.map { URLQueryItem(name: $0, value: $1) }
         
         guard let query = components.query else {
-            throw URLSerializationError.invalidObject
+            throw URLEncodedSerializationError.invalidObject
         }
         
         let content = query.trimmingCharacters(in: CharacterSet.newlines)
         
         guard let data = content.data(using: .ascii, allowLossyConversion: true) else {
-            throw URLSerializationError.encodingFailure
+            throw URLEncodedSerializationError.encodingFailure
         }
         
         return data
@@ -71,13 +71,13 @@ open class URLSerialization {
         var components = URLComponents()
         
         guard let query = String(data: data, encoding: .ascii) else {
-            throw URLSerializationError.invalidData
+            throw URLEncodedSerializationError.invalidData
         }
         
         components.query = query
         
         guard let dictionary = components.queryItems?.reduce(into: [String: String](), { $0[$1.name] = $1.value ?? "" }) else {
-            throw URLSerializationError.decodingFailure
+            throw URLEncodedSerializationError.decodingFailure
         }
         
         return dictionary

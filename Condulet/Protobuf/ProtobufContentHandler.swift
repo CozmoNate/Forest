@@ -43,7 +43,7 @@ open class ProtobufContentHandler<T: Message>: ServiceTaskResponseHandling {
         self.completion = completion
     }
     
-    public func handle(content: ServiceTask.Content?, response: URLResponse) throws {
+    public func handle(content: ServiceTaskContent?, response: URLResponse) throws {
         
         guard let httpResponse = response as? HTTPURLResponse else {
             throw ServiceTaskError.invalidResponse

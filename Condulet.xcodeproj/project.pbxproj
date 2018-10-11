@@ -7,33 +7,41 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7E06C83421672593008E4AC6 /* ContentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E06C83321672593008E4AC6 /* ContentType.swift */; };
-		7E0C19E92166C67D00494FCF /* ServiceTask+Body.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E0C19E82166C67D00494FCF /* ServiceTask+Body.swift */; };
+		7E06C83421672593008E4AC6 /* MimeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E06C83321672593008E4AC6 /* MimeType.swift */; };
+		7E0C19E92166C67D00494FCF /* ServiceTaskBuilding+Body.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E0C19E82166C67D00494FCF /* ServiceTaskBuilding+Body.swift */; };
 		7E314CF721628FBE0007DAFE /* ServiceTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBE412F215E6F7A006C882C /* ServiceTask.swift */; };
 		7E8D98B4216736EC002D5F73 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E8D98B3216736EC002D5F73 /* MobileCoreServices.framework */; };
+		7E9818DD216D1A9400B6C78C /* FormDataPart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E9818DC216D1A9400B6C78C /* FormDataPart.swift */; };
 		7EBE411F215E6F71006C882C /* Condulet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EBE4115215E6F71006C882C /* Condulet.framework */; };
 		7EBE4124215E6F71006C882C /* ServiceTaskTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBE4123215E6F71006C882C /* ServiceTaskTests.swift */; };
 		7EBE4126215E6F71006C882C /* Condulet.h in Headers */ = {isa = PBXBuildFile; fileRef = 7EBE4118215E6F71006C882C /* Condulet.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7EBE4136215E715D006C882C /* ServiceTask+Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBE4135215E715D006C882C /* ServiceTask+Request.swift */; };
-		7EBE414A215F1A64006C882C /* ServiceTask+Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBE4149215F1A64006C882C /* ServiceTask+Response.swift */; };
+		7EBE4136215E715D006C882C /* ServiceTaskBuilding+Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBE4135215E715D006C882C /* ServiceTaskBuilding+Request.swift */; };
+		7EBE414A215F1A64006C882C /* ServiceTaskBuilding+Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBE4149215F1A64006C882C /* ServiceTaskBuilding+Response.swift */; };
 		7ED7A56E215FFCFA007657ED /* ProtobufContentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7A56D215FFCFA007657ED /* ProtobufContentHandler.swift */; };
 		7ED7A57221600D1A007657ED /* JSONContentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7A57121600D1A007657ED /* JSONContentHandler.swift */; };
 		7ED7A57421601180007657ED /* ServiceTaskResponseHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7A57321601180007657ED /* ServiceTaskResponseHandling.swift */; };
 		7ED7A57A2160185D007657ED /* URLEncodedContentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7A5792160185D007657ED /* URLEncodedContentHandler.swift */; };
-		7ED7A57C21601AC1007657ED /* URLSerialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7A57B21601AC1007657ED /* URLSerialization.swift */; };
+		7ED7A57C21601AC1007657ED /* URLEncodedSerialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7A57B21601AC1007657ED /* URLEncodedSerialization.swift */; };
 		7ED7A58121608F8B007657ED /* TextContentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7A58021608F8B007657ED /* TextContentHandler.swift */; };
-		7EE281EA2161E60D00019EE5 /* ServiceTask+Actions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE281E92161E60D00019EE5 /* ServiceTask+Actions.swift */; };
+		7EE281EA2161E60D00019EE5 /* ServiceTaskBuilding+Actions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE281E92161E60D00019EE5 /* ServiceTaskBuilding+Actions.swift */; };
 		7EE281F42161FE2A00019EE5 /* ServiceTaskError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE281F32161FE2A00019EE5 /* ServiceTaskError.swift */; };
+		7EEA1110216EF519005E398F /* ServiceTaskBuilding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EEA110F216EF519005E398F /* ServiceTaskBuilding.swift */; };
+		7EEA1112216EF80A005E398F /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EEA1111216EF80A005E398F /* HTTPMethod.swift */; };
+		7EEA1114216EF849005E398F /* ServiceTaskAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EEA1113216EF849005E398F /* ServiceTaskAction.swift */; };
+		7EEA1116216EF865005E398F /* ServiceTaskContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EEA1115216EF865005E398F /* ServiceTaskContent.swift */; };
+		7EEA111D216F0321005E398F /* ServiceTaskBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EEA111C216F0321005E398F /* ServiceTaskBuilder.swift */; };
+		7EEA111F216F03CE005E398F /* BlockErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EEA111E216F03CE005E398F /* BlockErrorHandler.swift */; };
 		7EECC27A2160AAE1008845F4 /* ServiceTaskErrorHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EECC2792160AAE1008845F4 /* ServiceTaskErrorHandling.swift */; };
-		7EECC2822160C596008845F4 /* ServiceTask+Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EECC2812160C596008845F4 /* ServiceTask+Enums.swift */; };
-		7EECC28B21610809008845F4 /* ServiceTask+Protobuf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EECC28A21610809008845F4 /* ServiceTask+Protobuf.swift */; };
+		7EECC28B21610809008845F4 /* ServiceTaskBuilding+Protobuf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EECC28A21610809008845F4 /* ServiceTaskBuilding+Protobuf.swift */; };
 		7EECC2932161326E008845F4 /* DecodableContentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EECC2922161326E008845F4 /* DecodableContentHandler.swift */; };
 		8411B2471340A40A98CF6509 /* Pods_All_Targets_ConduletTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D3BE0FE0480671010AE049E /* Pods_All_Targets_ConduletTests.framework */; };
 		AA045AC121675BC400BD92D4 /* ServiceTaskRetrofitting.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA045AC021675BC400BD92D4 /* ServiceTaskRetrofitting.swift */; };
 		AA045AC32167673600BD92D4 /* ServiceTaskInterceptorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA045AC22167673600BD92D4 /* ServiceTaskInterceptorTests.swift */; };
-		AA15EEA021677C76004F36C1 /* MultipartFormData.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA15EE9F21677C76004F36C1 /* MultipartFormData.swift */; };
 		AA38AB7121639AEB00EC8750 /* URLSerializationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E314CF121625EC80007DAFE /* URLSerializationTests.swift */; };
-		AAD56CAC216397A10086CC50 /* ServiceTask+Handlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD56CAB216397A10086CC50 /* ServiceTask+Handlers.swift */; };
+		AA8516FE216C91EB00152A8C /* FormDataBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8516FD216C91EB00152A8C /* FormDataBuilder.swift */; };
+		AAA198A6216E6666000E5D55 /* FormDataError.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA198A5216E6666000E5D55 /* FormDataError.swift */; };
+		AAA198AA216E788C000E5D55 /* FormDataChunk.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA198A9216E788B000E5D55 /* FormDataChunk.swift */; };
+		AAD56CAC216397A10086CC50 /* BlockContentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD56CAB216397A10086CC50 /* BlockContentHandler.swift */; };
 		EFAA4B81BB537ADE88CEDD14 /* Pods_All_Targets_Condulet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78096D16BF7DAFB2AC3FF2BD /* Pods_All_Targets_Condulet.framework */; };
 /* End PBXBuildFile section */
 
@@ -51,12 +59,13 @@
 		39033723B2AD69B2F87FBE19 /* Pods-All Targets-Condulet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-All Targets-Condulet.debug.xcconfig"; path = "Pods/Target Support Files/Pods-All Targets-Condulet/Pods-All Targets-Condulet.debug.xcconfig"; sourceTree = "<group>"; };
 		6D3BE0FE0480671010AE049E /* Pods_All_Targets_ConduletTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_All_Targets_ConduletTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		78096D16BF7DAFB2AC3FF2BD /* Pods_All_Targets_Condulet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_All_Targets_Condulet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		7E06C83321672593008E4AC6 /* ContentType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentType.swift; sourceTree = "<group>"; };
+		7E06C83321672593008E4AC6 /* MimeType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MimeType.swift; sourceTree = "<group>"; };
 		7E06C83721672998008E4AC6 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
-		7E0C19E82166C67D00494FCF /* ServiceTask+Body.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ServiceTask+Body.swift"; sourceTree = "<group>"; };
+		7E0C19E82166C67D00494FCF /* ServiceTaskBuilding+Body.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ServiceTaskBuilding+Body.swift"; sourceTree = "<group>"; };
 		7E314CF0216255E60007DAFE /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = SOURCE_ROOT; };
 		7E314CF121625EC80007DAFE /* URLSerializationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSerializationTests.swift; sourceTree = "<group>"; };
 		7E8D98B3216736EC002D5F73 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		7E9818DC216D1A9400B6C78C /* FormDataPart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormDataPart.swift; sourceTree = "<group>"; };
 		7EBE4115215E6F71006C882C /* Condulet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Condulet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EBE4118215E6F71006C882C /* Condulet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Condulet.h; sourceTree = "<group>"; };
 		7EBE4119215E6F71006C882C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -64,26 +73,33 @@
 		7EBE4123215E6F71006C882C /* ServiceTaskTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTaskTests.swift; sourceTree = "<group>"; };
 		7EBE4125215E6F71006C882C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7EBE412F215E6F7A006C882C /* ServiceTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServiceTask.swift; sourceTree = "<group>"; };
-		7EBE4135215E715D006C882C /* ServiceTask+Request.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ServiceTask+Request.swift"; sourceTree = "<group>"; };
-		7EBE4149215F1A64006C882C /* ServiceTask+Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ServiceTask+Response.swift"; sourceTree = "<group>"; };
+		7EBE4135215E715D006C882C /* ServiceTaskBuilding+Request.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ServiceTaskBuilding+Request.swift"; sourceTree = "<group>"; };
+		7EBE4149215F1A64006C882C /* ServiceTaskBuilding+Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ServiceTaskBuilding+Response.swift"; sourceTree = "<group>"; };
 		7ED7A565215FDE6C007657ED /* Condulet.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Condulet.podspec; sourceTree = SOURCE_ROOT; };
 		7ED7A56C215FECEE007657ED /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		7ED7A56D215FFCFA007657ED /* ProtobufContentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProtobufContentHandler.swift; sourceTree = "<group>"; };
 		7ED7A57121600D1A007657ED /* JSONContentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONContentHandler.swift; sourceTree = "<group>"; };
 		7ED7A57321601180007657ED /* ServiceTaskResponseHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTaskResponseHandling.swift; sourceTree = "<group>"; };
 		7ED7A5792160185D007657ED /* URLEncodedContentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLEncodedContentHandler.swift; sourceTree = "<group>"; };
-		7ED7A57B21601AC1007657ED /* URLSerialization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSerialization.swift; sourceTree = "<group>"; };
+		7ED7A57B21601AC1007657ED /* URLEncodedSerialization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLEncodedSerialization.swift; sourceTree = "<group>"; };
 		7ED7A58021608F8B007657ED /* TextContentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextContentHandler.swift; sourceTree = "<group>"; };
-		7EE281E92161E60D00019EE5 /* ServiceTask+Actions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ServiceTask+Actions.swift"; sourceTree = "<group>"; };
+		7EE281E92161E60D00019EE5 /* ServiceTaskBuilding+Actions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ServiceTaskBuilding+Actions.swift"; sourceTree = "<group>"; };
 		7EE281F32161FE2A00019EE5 /* ServiceTaskError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTaskError.swift; sourceTree = "<group>"; };
+		7EEA110F216EF519005E398F /* ServiceTaskBuilding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTaskBuilding.swift; sourceTree = "<group>"; };
+		7EEA1111216EF80A005E398F /* HTTPMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
+		7EEA1113216EF849005E398F /* ServiceTaskAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTaskAction.swift; sourceTree = "<group>"; };
+		7EEA1115216EF865005E398F /* ServiceTaskContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTaskContent.swift; sourceTree = "<group>"; };
+		7EEA111C216F0321005E398F /* ServiceTaskBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTaskBuilder.swift; sourceTree = "<group>"; };
+		7EEA111E216F03CE005E398F /* BlockErrorHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockErrorHandler.swift; sourceTree = "<group>"; };
 		7EECC2792160AAE1008845F4 /* ServiceTaskErrorHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTaskErrorHandling.swift; sourceTree = "<group>"; };
-		7EECC2812160C596008845F4 /* ServiceTask+Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ServiceTask+Enums.swift"; sourceTree = "<group>"; };
-		7EECC28A21610809008845F4 /* ServiceTask+Protobuf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ServiceTask+Protobuf.swift"; sourceTree = "<group>"; };
+		7EECC28A21610809008845F4 /* ServiceTaskBuilding+Protobuf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ServiceTaskBuilding+Protobuf.swift"; sourceTree = "<group>"; };
 		7EECC2922161326E008845F4 /* DecodableContentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodableContentHandler.swift; sourceTree = "<group>"; };
 		AA045AC021675BC400BD92D4 /* ServiceTaskRetrofitting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTaskRetrofitting.swift; sourceTree = "<group>"; };
 		AA045AC22167673600BD92D4 /* ServiceTaskInterceptorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTaskInterceptorTests.swift; sourceTree = "<group>"; };
-		AA15EE9F21677C76004F36C1 /* MultipartFormData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultipartFormData.swift; sourceTree = "<group>"; };
-		AAD56CAB216397A10086CC50 /* ServiceTask+Handlers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ServiceTask+Handlers.swift"; sourceTree = "<group>"; };
+		AA8516FD216C91EB00152A8C /* FormDataBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormDataBuilder.swift; sourceTree = "<group>"; };
+		AAA198A5216E6666000E5D55 /* FormDataError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormDataError.swift; sourceTree = "<group>"; };
+		AAA198A9216E788B000E5D55 /* FormDataChunk.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormDataChunk.swift; sourceTree = "<group>"; };
+		AAD56CAB216397A10086CC50 /* BlockContentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockContentHandler.swift; sourceTree = "<group>"; };
 		AF99ECF42507D8C62FCE8973 /* Pods-All Targets-ConduletTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-All Targets-ConduletTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-All Targets-ConduletTests/Pods-All Targets-ConduletTests.debug.xcconfig"; sourceTree = "<group>"; };
 		EF88038FFB1E59F95B6E1397 /* Pods-All Targets-ConduletTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-All Targets-ConduletTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-All Targets-ConduletTests/Pods-All Targets-ConduletTests.release.xcconfig"; sourceTree = "<group>"; };
 		F8E74FC8BC6E7CB77542D987 /* Pods-All Targets-Condulet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-All Targets-Condulet.release.xcconfig"; path = "Pods/Target Support Files/Pods-All Targets-Condulet/Pods-All Targets-Condulet.release.xcconfig"; sourceTree = "<group>"; };
@@ -111,6 +127,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7E9818DE216D1AF700B6C78C /* FormData */ = {
+			isa = PBXGroup;
+			children = (
+				AAA198A5216E6666000E5D55 /* FormDataError.swift */,
+				AA8516FD216C91EB00152A8C /* FormDataBuilder.swift */,
+				7E9818DC216D1A9400B6C78C /* FormDataPart.swift */,
+				AAA198A9216E788B000E5D55 /* FormDataChunk.swift */,
+			);
+			name = FormData;
+			sourceTree = "<group>";
+		};
 		7EBE410B215E6F71006C882C = {
 			isa = PBXGroup;
 			children = (
@@ -160,8 +187,10 @@
 			isa = PBXGroup;
 			children = (
 				7EECC27D2160BEAA008845F4 /* Common */,
+				7E9818DE216D1AF700B6C78C /* FormData */,
 				7EECC29621614B7A008845F4 /* Handlers */,
 				7EE281EB2161FAD800019EE5 /* ServiceTask */,
+				7EEA111B216F02AD005E398F /* ServiceTaskBuilding */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -170,7 +199,7 @@
 			isa = PBXGroup;
 			children = (
 				7EE281F02161FB2600019EE5 /* Handlers */,
-				7EE281F22161FB4600019EE5 /* ServiceTask */,
+				7EE281F22161FB4600019EE5 /* ServiceTaskBuilding */,
 			);
 			path = Protobuf;
 			sourceTree = "<group>";
@@ -182,13 +211,9 @@
 				7EECC2792160AAE1008845F4 /* ServiceTaskErrorHandling.swift */,
 				AA045AC021675BC400BD92D4 /* ServiceTaskRetrofitting.swift */,
 				7EE281F32161FE2A00019EE5 /* ServiceTaskError.swift */,
+				7EEA1113216EF849005E398F /* ServiceTaskAction.swift */,
+				7EEA1115216EF865005E398F /* ServiceTaskContent.swift */,
 				7EBE412F215E6F7A006C882C /* ServiceTask.swift */,
-				7EECC2812160C596008845F4 /* ServiceTask+Enums.swift */,
-				AAD56CAB216397A10086CC50 /* ServiceTask+Handlers.swift */,
-				7EE281E92161E60D00019EE5 /* ServiceTask+Actions.swift */,
-				7EBE4135215E715D006C882C /* ServiceTask+Request.swift */,
-				7E0C19E82166C67D00494FCF /* ServiceTask+Body.swift */,
-				7EBE4149215F1A64006C882C /* ServiceTask+Response.swift */,
 			);
 			name = ServiceTask;
 			sourceTree = "<group>";
@@ -201,20 +226,33 @@
 			name = Handlers;
 			sourceTree = "<group>";
 		};
-		7EE281F22161FB4600019EE5 /* ServiceTask */ = {
+		7EE281F22161FB4600019EE5 /* ServiceTaskBuilding */ = {
 			isa = PBXGroup;
 			children = (
-				7EECC28A21610809008845F4 /* ServiceTask+Protobuf.swift */,
+				7EECC28A21610809008845F4 /* ServiceTaskBuilding+Protobuf.swift */,
 			);
-			name = ServiceTask;
+			name = ServiceTaskBuilding;
+			sourceTree = "<group>";
+		};
+		7EEA111B216F02AD005E398F /* ServiceTaskBuilding */ = {
+			isa = PBXGroup;
+			children = (
+				7EEA110F216EF519005E398F /* ServiceTaskBuilding.swift */,
+				7EE281E92161E60D00019EE5 /* ServiceTaskBuilding+Actions.swift */,
+				7EBE4135215E715D006C882C /* ServiceTaskBuilding+Request.swift */,
+				7E0C19E82166C67D00494FCF /* ServiceTaskBuilding+Body.swift */,
+				7EBE4149215F1A64006C882C /* ServiceTaskBuilding+Response.swift */,
+				7EEA111C216F0321005E398F /* ServiceTaskBuilder.swift */,
+			);
+			name = ServiceTaskBuilding;
 			sourceTree = "<group>";
 		};
 		7EECC27D2160BEAA008845F4 /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				7E06C83321672593008E4AC6 /* ContentType.swift */,
-				AA15EE9F21677C76004F36C1 /* MultipartFormData.swift */,
-				7ED7A57B21601AC1007657ED /* URLSerialization.swift */,
+				7E06C83321672593008E4AC6 /* MimeType.swift */,
+				7EEA1111216EF80A005E398F /* HTTPMethod.swift */,
+				7ED7A57B21601AC1007657ED /* URLEncodedSerialization.swift */,
 			);
 			name = Common;
 			sourceTree = "<group>";
@@ -222,6 +260,8 @@
 		7EECC29621614B7A008845F4 /* Handlers */ = {
 			isa = PBXGroup;
 			children = (
+				AAD56CAB216397A10086CC50 /* BlockContentHandler.swift */,
+				7EEA111E216F03CE005E398F /* BlockErrorHandler.swift */,
 				7ED7A58021608F8B007657ED /* TextContentHandler.swift */,
 				7ED7A57121600D1A007657ED /* JSONContentHandler.swift */,
 				7ED7A5792160185D007657ED /* URLEncodedContentHandler.swift */,
@@ -442,24 +482,32 @@
 			buildActionMask = 2147483647;
 			files = (
 				7E314CF721628FBE0007DAFE /* ServiceTask.swift in Sources */,
+				7E9818DD216D1A9400B6C78C /* FormDataPart.swift in Sources */,
+				7EEA1114216EF849005E398F /* ServiceTaskAction.swift in Sources */,
 				7ED7A57A2160185D007657ED /* URLEncodedContentHandler.swift in Sources */,
-				7EECC2822160C596008845F4 /* ServiceTask+Enums.swift in Sources */,
+				7EEA1112216EF80A005E398F /* HTTPMethod.swift in Sources */,
 				7EECC27A2160AAE1008845F4 /* ServiceTaskErrorHandling.swift in Sources */,
 				7ED7A56E215FFCFA007657ED /* ProtobufContentHandler.swift in Sources */,
-				7EBE414A215F1A64006C882C /* ServiceTask+Response.swift in Sources */,
-				7ED7A57C21601AC1007657ED /* URLSerialization.swift in Sources */,
-				AA15EEA021677C76004F36C1 /* MultipartFormData.swift in Sources */,
-				7EBE4136215E715D006C882C /* ServiceTask+Request.swift in Sources */,
+				7EBE414A215F1A64006C882C /* ServiceTaskBuilding+Response.swift in Sources */,
+				7ED7A57C21601AC1007657ED /* URLEncodedSerialization.swift in Sources */,
+				7EBE4136215E715D006C882C /* ServiceTaskBuilding+Request.swift in Sources */,
+				AA8516FE216C91EB00152A8C /* FormDataBuilder.swift in Sources */,
+				7EEA111D216F0321005E398F /* ServiceTaskBuilder.swift in Sources */,
+				7EEA1110216EF519005E398F /* ServiceTaskBuilding.swift in Sources */,
 				7EECC2932161326E008845F4 /* DecodableContentHandler.swift in Sources */,
+				7EEA111F216F03CE005E398F /* BlockErrorHandler.swift in Sources */,
 				7ED7A58121608F8B007657ED /* TextContentHandler.swift in Sources */,
-				7EE281EA2161E60D00019EE5 /* ServiceTask+Actions.swift in Sources */,
-				7E06C83421672593008E4AC6 /* ContentType.swift in Sources */,
-				AAD56CAC216397A10086CC50 /* ServiceTask+Handlers.swift in Sources */,
+				7EE281EA2161E60D00019EE5 /* ServiceTaskBuilding+Actions.swift in Sources */,
+				7E06C83421672593008E4AC6 /* MimeType.swift in Sources */,
+				7EEA1116216EF865005E398F /* ServiceTaskContent.swift in Sources */,
+				AAD56CAC216397A10086CC50 /* BlockContentHandler.swift in Sources */,
 				AA045AC121675BC400BD92D4 /* ServiceTaskRetrofitting.swift in Sources */,
-				7E0C19E92166C67D00494FCF /* ServiceTask+Body.swift in Sources */,
+				7E0C19E92166C67D00494FCF /* ServiceTaskBuilding+Body.swift in Sources */,
 				7ED7A57221600D1A007657ED /* JSONContentHandler.swift in Sources */,
+				AAA198AA216E788C000E5D55 /* FormDataChunk.swift in Sources */,
 				7ED7A57421601180007657ED /* ServiceTaskResponseHandling.swift in Sources */,
-				7EECC28B21610809008845F4 /* ServiceTask+Protobuf.swift in Sources */,
+				7EECC28B21610809008845F4 /* ServiceTaskBuilding+Protobuf.swift in Sources */,
+				AAA198A6216E6666000E5D55 /* FormDataError.swift in Sources */,
 				7EE281F42161FE2A00019EE5 /* ServiceTaskError.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
