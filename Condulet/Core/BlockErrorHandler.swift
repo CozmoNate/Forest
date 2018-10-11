@@ -1,13 +1,12 @@
 //
-//  URLEncodedContentHandler.swift
+//  BlockErrorHandler.swift
 //  Condulet
 //
-//  Created by Natan Zalkin on 29/09/2018.
+//  Created by Natan Zalkin on 11/10/2018.
 //  Copyright © 2018 Natan Zalkin. All rights reserved.
 //
 
 /*
- *
  * Copyright (c) 2018 Natan Zalkin
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -29,32 +28,22 @@
  * SOFTWARE.
  *
  */
+ 
 
 import Foundation
 
 
-/// A handler that expects and parse response with URL-encoded content. Completion block returns dictionary object on success
-open class URLEncodedContentHandler: ServiceTaskResponseHandling {
+/// Generic error handler with block
+public class BlockErrorHandler: ServiceTaskErrorHandling {
     
-    public var completion: (([String: String], URLResponse) -> Void)?
+    public var handler: ((Error, URLResponse?) -> Void)?
     
-    public init(completion: (([String: String], URLResponse) -> Void)? = nil) {
-        self.completion = completion
+    /// Create an instance of the handler. NOTE: block will be executed on background thread
+    public init(_ block: ((Error, URLResponse?) -> Void)? = nil) {
+        handler = block
     }
     
-    public func handle(content: ServiceTaskContent?, response: URLResponse) throws {
-        
-        guard let content = content, response.mimeType == "application/x-www-form-urlencoded" else {
-            throw ServiceTaskError.invalidResponseContent
-        }
-        
-        switch content {
-        case let .data(data):
-            let object = try URLEncodedSerialization.dictionary(with: data)
-            completion?(object, response)
-        default:
-            throw ServiceTaskError.invalidResponseContent
-        }
+    public func handle(error: Error, response: URLResponse?) {
+        self.handler?(error, response)
     }
-    
 }

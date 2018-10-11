@@ -38,7 +38,7 @@ class ServiceTaskInterceptorTests: QuickSpec, ServiceTaskRetrofitting {
         return try responseHandler?(task) ?? false
     }
 
-    func serviceTask(_ task: ServiceTask, intercept content: ServiceTask.Content?) throws -> Bool {
+    func serviceTask(_ task: ServiceTask, intercept content: ServiceTaskContent?) throws -> Bool {
         if shouldFailContent { throw Errors.test }
         return try contentHandler?(task) ?? false
     }
@@ -67,7 +67,7 @@ class ServiceTaskInterceptorTests: QuickSpec, ServiceTaskRetrofitting {
 
                 waitUntil { (done) in
 
-                    ServiceTask(retrofitter: self)
+                    ServiceTaskBuilder(retrofitter: self)
                         .endpoint(.GET, "test.test")
                         .content { (content, response) in
                             done()
@@ -87,7 +87,7 @@ class ServiceTaskInterceptorTests: QuickSpec, ServiceTaskRetrofitting {
 
                 waitUntil { (done) in
 
-                    ServiceTask(retrofitter: self)
+                    ServiceTaskBuilder(retrofitter: self)
                         .endpoint(.GET, "test.test")
                         .content { (content, response) in
                             fail("Request should return error!")
@@ -116,7 +116,7 @@ class ServiceTaskInterceptorTests: QuickSpec, ServiceTaskRetrofitting {
                         return true
                     }
 
-                    ServiceTask(retrofitter: self)
+                    ServiceTaskBuilder(retrofitter: self)
                         .endpoint(.GET, "test.test")
                         .content { (content, response) in
                             fail("Request should return error!")
@@ -144,7 +144,7 @@ class ServiceTaskInterceptorTests: QuickSpec, ServiceTaskRetrofitting {
                         throw Errors.test
                     }
 
-                    ServiceTask(retrofitter: self)
+                    ServiceTaskBuilder(retrofitter: self)
                         .endpoint(.GET, "test.test")
                         .content { (content, response) in
                             fail("Request should return error!")
@@ -172,7 +172,7 @@ class ServiceTaskInterceptorTests: QuickSpec, ServiceTaskRetrofitting {
                         throw Errors.test
                     }
 
-                    ServiceTask(retrofitter: self)
+                    ServiceTaskBuilder(retrofitter: self)
                         .endpoint(.GET, "test.test")
                         .content { (content, response) in
                             fail("Request should return error!")

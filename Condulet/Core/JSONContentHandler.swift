@@ -42,7 +42,7 @@ open class JSONContentHandler: ServiceTaskResponseHandling {
         self.completion = completion
     }
     
-    public func handle(content: ServiceTask.Content?, response: URLResponse) throws {
+    public func handle(content: ServiceTaskContent?, response: URLResponse) throws {
         
         guard let content = content, response.mimeType == "application/json" else {
             throw ServiceTaskError.invalidResponseContent

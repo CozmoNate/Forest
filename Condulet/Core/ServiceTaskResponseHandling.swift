@@ -36,6 +36,6 @@ import Foundation
 /// A handler for ServiceTask content response
 public protocol ServiceTaskResponseHandling {
     
-    func handle(content: ServiceTask.Content?, response: URLResponse) throws
+    func handle(content: ServiceTaskContent?, response: URLResponse) throws
     
 }

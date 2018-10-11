@@ -1,13 +1,12 @@
 //
-//  URLEncodedContentHandler.swift
+//  FormDataError.swift
 //  Condulet
 //
-//  Created by Natan Zalkin on 29/09/2018.
+//  Created by Natan Zalkin on 10/10/2018.
 //  Copyright © 2018 Natan Zalkin. All rights reserved.
 //
 
 /*
- *
  * Copyright (c) 2018 Natan Zalkin
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -33,28 +32,14 @@
 import Foundation
 
 
-/// A handler that expects and parse response with URL-encoded content. Completion block returns dictionary object on success
-open class URLEncodedContentHandler: ServiceTaskResponseHandling {
-    
-    public var completion: (([String: String], URLResponse) -> Void)?
-    
-    public init(completion: (([String: String], URLResponse) -> Void)? = nil) {
-        self.completion = completion
-    }
-    
-    public func handle(content: ServiceTaskContent?, response: URLResponse) throws {
-        
-        guard let content = content, response.mimeType == "application/x-www-form-urlencoded" else {
-            throw ServiceTaskError.invalidResponseContent
-        }
-        
-        switch content {
-        case let .data(data):
-            let object = try URLEncodedSerialization.dictionary(with: data)
-            completion?(object, response)
-        default:
-            throw ServiceTaskError.invalidResponseContent
-        }
-    }
-    
+public enum FormDataError: Error {
+
+    case emptyData
+    case invalidEncoding
+    case emptyFileOrNoAccess(URL)
+    case fileIsNotReadable(URL)
+    case fileIsNotWriteable(URL)
+    case outputOperationFailure
+    case noOutputSpace
+    case unknown
 }

@@ -116,17 +116,20 @@ Upload multipart form data encoded content:
 
 ```swift
 
-let formData = MultipartFormData()
+// Create new form data builder
+var formDataBuilder = FormDataBuilder()
 
 do {
 
-    try formData.appendMediaItem(.url(name: "image", fileName: nil, mimeType: nil, url: *url*))
+    // Filename and MIME type will be obtained automatically from URL. It can be provided explicitly too
+    formDataBuilder.append(try .file(name: "image", url: *url*))
     
-    let encoded = try formData.encode()
+    // Generate form data in memory. It also can be written directly to disk or stream using encode(to:) method 
+    let formData = try formDataBuilder.encode()
     
     ServiceTask()
             .endpoint(.POST, "https://host.com/upload")
-            .multipart(formData: .data(encoded), boundary: formData.boundary)
+            .body(data: formData, contentType: boundary.contentType)
             .response(content: { (response) in
                 switch response {
                 case .success:

@@ -42,7 +42,7 @@ open class TextContentHandler: ServiceTaskResponseHandling {
         self.completion = completion
     }
     
-    public func handle(content: ServiceTask.Content?, response: URLResponse) throws {
+    public func handle(content: ServiceTaskContent?, response: URLResponse) throws {
         
         guard let content = content, response.mimeType == "text/plain" else {
             throw ServiceTaskError.invalidResponseContent

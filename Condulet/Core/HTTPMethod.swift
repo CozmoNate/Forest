@@ -1,13 +1,12 @@
 //
-//  URLEncodedContentHandler.swift
+//  HTTPMethod.swift
 //  Condulet
 //
-//  Created by Natan Zalkin on 29/09/2018.
+//  Created by Natan Zalkin on 11/10/2018.
 //  Copyright © 2018 Natan Zalkin. All rights reserved.
 //
 
 /*
- *
  * Copyright (c) 2018 Natan Zalkin
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -29,32 +28,38 @@
  * SOFTWARE.
  *
  */
+ 
 
 import Foundation
 
 
-/// A handler that expects and parse response with URL-encoded content. Completion block returns dictionary object on success
-open class URLEncodedContentHandler: ServiceTaskResponseHandling {
+/// An HTTP method. Can be extended to add custom or new methods
+public enum HTTPMethod: String {
     
-    public var completion: (([String: String], URLResponse) -> Void)?
+    /// HTTP Request method "GET"
+    case GET = "GET"
     
-    public init(completion: (([String: String], URLResponse) -> Void)? = nil) {
-        self.completion = completion
-    }
+    /// HTTP Request method "HEAD"
+    case HEAD = "HEAD"
     
-    public func handle(content: ServiceTaskContent?, response: URLResponse) throws {
-        
-        guard let content = content, response.mimeType == "application/x-www-form-urlencoded" else {
-            throw ServiceTaskError.invalidResponseContent
-        }
-        
-        switch content {
-        case let .data(data):
-            let object = try URLEncodedSerialization.dictionary(with: data)
-            completion?(object, response)
-        default:
-            throw ServiceTaskError.invalidResponseContent
-        }
-    }
+    /// HTTP Request method "POST"
+    case POST = "POST"
     
+    /// HTTP Request method "PUT"
+    case PUT = "PUT"
+    
+    /// HTTP Request method "DELETE"
+    case DELETE = "DELETE"
+    
+    /// HTTP Request method "CONNECT"
+    case CONNECT = "CONNECT"
+    
+    /// HTTP Request method "OPTIONS"
+    case OPTIONS = "OPTIONS"
+    
+    /// HTTP Request method "TRACE"
+    case TRACE = "TRACE"
+    
+    /// HTTP Request method "PATCH"
+    case PATCH = "PATCH"
 }

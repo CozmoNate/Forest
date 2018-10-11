@@ -1,5 +1,5 @@
 //
-//  ServiceTask+Request.swift
+//  ServiceTaskBuilding+Request.swift
 //  Condulet
 //
 //  Created by Natan Zalkin on 28/09/2018.
@@ -33,32 +33,26 @@
 import Foundation
 
 
-public extension ServiceTask {
+public extension ServiceTaskBuilding {
     
-    /// Append HTTP headers to request. Set 'merge' parameter to false to override existing headers.
+    /// Set URLSession instance to use when creating URLSessionTask instance
     @discardableResult
-    public func headers(_ headers: [String: String], merge: Bool = true) -> Self {
-        if merge {
-            // Append by overriding existing key with new one in case of collision
-            self.headers.merge(headers, uniquingKeysWith: { return $1 })
-        }
-        else {
-            self.headers = headers
-        }
+    public mutating func session(_ session: URLSession) -> Self {
+        task.session = session
         return self
     }
     
     /// Set HTTP method for request
     @discardableResult
-    public func method(_ method: ServiceTask.Method) -> Self {
-        self.method = method
+    public func method(_ method: HTTPMethod) -> Self {
+        task.method = method
         return self
     }
     
     /// Set HTTP method for request
     @discardableResult
     public func method(_ method: String) -> Self {
-        self.method = Method(rawValue: method)
+        task.method = HTTPMethod(rawValue: method)
         return self
     }
     
@@ -66,7 +60,7 @@ public extension ServiceTask {
     @discardableResult
     public func url(_ string: String) -> Self {
         if let endpoint = URLComponents(string: string) {
-            self.url = endpoint
+            task.url = endpoint
         }
         return self
     }
@@ -75,7 +69,7 @@ public extension ServiceTask {
     @discardableResult
     public func url(_ url: URL) -> Self {
         if let endpoint = URLComponents(url: url, resolvingAgainstBaseURL: false) {
-            self.url = endpoint
+            task.url = endpoint
         }
         return self
     }
@@ -83,27 +77,27 @@ public extension ServiceTask {
     /// Define url as components
     @discardableResult
     public func components(_ components: URLComponents) -> Self {
-        self.url = components
+        task.url = components
         return self
     }
     
     /// Define service API url and method
     @discardableResult
-    public func endpoint(_ method: ServiceTask.Method, _ string: String) -> Self {
+    public func endpoint(_ method: HTTPMethod, _ string: String) -> Self {
         if let endpoint = URLComponents(string: string) {
-            self.url = endpoint
+            task.url = endpoint
         }
-        self.method = method
+        task.method = method
         return self
     }
     
     /// Define service API url and method
     @discardableResult
-    public func endpoint(_ method: ServiceTask.Method, _ url: URL) -> Self {
+    public func endpoint(_ method: HTTPMethod, _ url: URL) -> Self {
         if let endpoint = URLComponents(url: url, resolvingAgainstBaseURL: false) {
-            self.url = endpoint
+            task.url = endpoint
         }
-        self.method = method
+        task.method = method
         return self
     }
 
@@ -111,9 +105,9 @@ public extension ServiceTask {
     @discardableResult
     public func endpoint(_ method: String, _ string: String) -> Self {
         if let endpoint = URLComponents(string: string) {
-            self.url = endpoint
+            task.url = endpoint
         }
-        self.method = Method(rawValue: method)
+        task.method = HTTPMethod(rawValue: method)
         return self
     }
 
@@ -121,80 +115,100 @@ public extension ServiceTask {
     @discardableResult
     public func endpoint(_ method: String, _ url: URL) -> Self {
         if let endpoint = URLComponents(url: url, resolvingAgainstBaseURL: false) {
-            self.url = endpoint
+            task.url = endpoint
         }
-        self.method = Method(rawValue: method)
+        task.method = HTTPMethod(rawValue: method)
         return self
     }
     
     /// Set endpoint sheme
     @discardableResult
     public func scheme(_ scheme: String) -> Self {
-        url.scheme = scheme
+        task.url.scheme = scheme
         return self
     }
     
     /// Set endpoint host
     @discardableResult
     public func host(_ host: String) -> Self {
-        url.host = host
+        task.url.host = host
         return self
     }
     
     /// Set endpoint user
     @discardableResult
     public func user(_ user: String) -> Self {
-        url.user = user
+        task.url.user = user
         return self
     }
     
     /// Set endpoint password
     @discardableResult
     public func password(_ password: String) -> Self {
-        url.password = password
+        task.url.password = password
         return self
     }
     
     /// Set endpoint port
     @discardableResult
     public func port(_ port: Int) -> Self {
-        url.port = port
+        task.url.port = port
         return self
     }
     
     /// Set endpoint relative path
     @discardableResult
     public func path(_ path: String) -> Self {
-        url.path = path
+        task.url.path = path
         return self
     }
     
     /// Set endpoint fragment
     @discardableResult
     public func fragment(_ fragment: String) -> Self {
-        url.fragment = fragment
+        task.url.fragment = fragment
         return self
     }
     
     /// Set endpoint query parameters
     @discardableResult
     public func query(_ query: String) -> Self {
-        url.query = query
+        task.url.query = query
         return self
     }
     
     /// Set endpoint query parameters
     @discardableResult
     public func query(_ query: [String: String]) -> Self {
-        url.queryItems = query.map { URLQueryItem(name: $0.key, value: $0.value) }
+        task.url.queryItems = query.map { URLQueryItem(name: $0.key, value: $0.value) }
         return self
     }
     
     /// Set endpoint query parameters
     @discardableResult
     public func query(_ query: [URLQueryItem]) -> Self {
-        url.queryItems = query
+        task.url.queryItems = query
         return self
     }
     
+    /// Append HTTP headers to request. Set 'merge' parameter to false to override existing headers.
+    @discardableResult
+    public func headers(_ headers: [String: String], merge: Bool = true) -> Self {
+        if merge {
+            // Append by overriding existing key with new one in case of collision
+            task.headers.merge(headers, uniquingKeysWith: { return $1 })
+        }
+        else {
+            task.headers = headers
+        }
+        return self
+    }
+
+    /// Set 'Content-Type' HTTP header value
+    @discardableResult
+    public func contentType(value: String) -> Self {
+        task.headers["Content-Type"] = value
+        return self
+    }
+
 }

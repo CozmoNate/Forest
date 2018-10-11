@@ -1,5 +1,5 @@
 //
-//  ServiceTask+Body.swift
+//  ServiceTaskBuilding+Body.swift
 //  Condulet
 //
 //  Created by Natan Zalkin on 05/10/2018.
@@ -33,69 +33,72 @@
 import Foundation
 
 
-public extension ServiceTask {
-    
-    /// Set HTTP request body as multipart form data
-    @discardableResult
-    public func multipart(formData content: Content, boundary: String) -> Self {
-        contentType = "multipart/form-data; boundary=\(boundary)"
-        body = content
-        return self
-    }
-    
+public extension ServiceTaskBuilding {
+
     /// Set HTTP request body
     @discardableResult
-    public func body(mimeType: String? = nil, data: Data) -> Self {
-        contentType = mimeType
-        body = Content(data)
+    public func body(content: ServiceTaskContent, contentType: String? = nil) -> Self {
+        if let contentType = contentType {
+            self.contentType(value: contentType)
+        }
+        task.body = content
         return self
+    }
+
+    /// Set HTTP request body
+    @discardableResult
+    public func body(data: Data, contentType: String? = nil) -> Self {
+        return body(content: .data(data), contentType: contentType)
     }
     
     /// Set HTTP request body, load data from file
     @discardableResult
-    public func body(url: URL) -> Self {
-        contentType = mimeTypeForFileAtURL(url)
-        body = Content(url)
-        return self
+    public func body(url: URL, contentType: String? = nil) -> Self {
+        return body(content: .file(url), contentType: contentType ?? mimeTypeForFileAtURL(url))
     }
     
     /// Set HTTP request body
     @discardableResult
-    public func body(text: String) -> Self {
-        contentType = "text/plain"
-        body = Content(text.data(using: .utf8))
+    public func body(text: String, encoding: String.Encoding = .utf8, allowLossyConversion: Bool = false) -> Self {
+        if let charset = CFStringConvertEncodingToIANACharSetName(CFStringEncoding(encoding.rawValue)) as String? {
+            contentType(value: "text/plain; charset=\(charset)")
+        }
+        else {
+            contentType(value: "text/plain")
+        }
+        task.body = ServiceTaskContent(text.data(using: encoding, allowLossyConversion: allowLossyConversion))
         return self
     }
     
     /// Set HTTP request body
     @discardableResult
     public func body(json: [AnyHashable: Any]) -> Self {
-        contentType = "application/json"
-        body = Content(try? JSONSerialization.data(withJSONObject: json, options: []))
+        contentType(value: "application/json")
+        task.body = ServiceTaskContent(try? JSONSerialization.data(withJSONObject: json, options: []))
         return self
     }
     
     /// Set HTTP request body
     @discardableResult
     public func body(json: [Any]) -> Self {
-        contentType = "application/json"
-        body = Content(try? JSONSerialization.data(withJSONObject: json, options: []))
+        contentType(value: "application/json")
+        task.body = ServiceTaskContent(try? JSONSerialization.data(withJSONObject: json, options: []))
         return self
     }
     
     /// Set HTTP request body
     @discardableResult
     public func body(urlencoded: [String: String]) -> Self {
-        contentType = "application/x-www-form-urlencoded"
-        body = Content(try? URLSerialization.data(with: urlencoded))
+        contentType(value: "application/x-www-form-urlencoded")
+        task.body = ServiceTaskContent(try? URLEncodedSerialization.data(with: urlencoded))
         return self
     }
     
     /// Set HTTP request body
     @discardableResult
     public func body<T: Encodable>(codable: T) -> Self {
-        contentType = "application/json"
-        body = Content(try? JSONEncoder().encode(codable))
+        contentType(value: "application/json")
+        task.body = ServiceTaskContent(try? JSONEncoder().encode(codable))
         return self
     }
     

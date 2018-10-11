@@ -23,8 +23,8 @@ class URLSerializationTests: QuickSpec {
                 
                 let dictionary = ["key": "value", "key2": "value2"]
                 
-                let data = try! URLSerialization.data(with: dictionary)
-                let decoded = try! URLSerialization.dictionary(with: data)
+                let data = try! URLEncodedSerialization.data(with: dictionary)
+                let decoded = try! URLEncodedSerialization.dictionary(with: data)
                 
                 expect(decoded).to(equal(dictionary))
             }
