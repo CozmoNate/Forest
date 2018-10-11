@@ -4,7 +4,7 @@
 [![Language](https://img.shields.io/badge/swift-4.2-orange.svg)](https://swift.org/blog/swift-4-2-released/)
 [![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/kozlek/Condulet/raw/master/LICENSE)
 
-Condulet is flexible and convenient API client construction framework built on top of `URLSession` and `URLSessionTask`. It can handle plenty of data types including multipart form data generation, sending and receiving json encoded Protobuf messages. Of course you can use your custom response handlers and data parsers with Coundulet. Condulet provides most of the features needed to build robust client for your backend services. The main purpose of it - make your job done. And my job too :) 
+Condulet is flexible and convenient API client construction framework built on top of `URLSession` and `URLSessionTask`. It can handle plenty of data types including multipart form data generation, sending and receiving JSON encoded Protobuf messages. Of course, you can use your custom response handlers and data parsers with Coundulet. Condulet provides most of the features needed to build robust client for your backend services. The main purpose of it — make your job done. And my job too :) 
 
 ## Installation
 
@@ -129,7 +129,7 @@ do {
     
     ServiceTaskBuilder()
             .endpoint(.POST, "https://host.com/upload")
-            .body(data: formData, contentType: boundary.contentType)
+            .body(data: formData, contentType: formDataBuilder.contentType)
             .response(content: { (response) in
                 switch response {
                 case .success:
