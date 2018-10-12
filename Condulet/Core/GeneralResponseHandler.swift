@@ -1,13 +1,11 @@
-//
-//  ServiceTaskResponseHandling.swift
+//  GeneralResponseHandler.swift
 //  Condulet
 //
-//  Created by Natan Zalkin on 29/09/2018.
+//  Created by Natan Zalkin on 12/10/2018.
 //  Copyright © 2018 Natan Zalkin. All rights reserved.
 //
 
 /*
- *
  * Copyright (c) 2018 Natan Zalkin
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -29,13 +27,23 @@
  * SOFTWARE.
  *
  */
+ 
 
 import Foundation
 
 
-/// A handler for ServiceTask content response
-public protocol ServiceTaskResponseHandling {
+/// General response handler. Pass any non-HTTP response. In case of HTTP response pass only response with "valid" status code (200...299)
+open class GeneralResponseHandler: ServiceTaskResponseHandling {
     
-    func handle(content: ServiceTaskContent, response: URLResponse) throws
-    
+    open func handle(content: ServiceTaskContent, response: URLResponse) throws {
+        
+        // Pass any non-HTTP response
+        if let response = response as? HTTPURLResponse {
+            
+            // In case of HTTP response, pass only response with valid status code
+            guard 200...299 ~= response.statusCode else {
+                throw ServiceTaskError.statusCode(response.statusCode)
+            }
+        }
+    }
 }

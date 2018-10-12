@@ -37,16 +37,16 @@ public extension Notification.Name {
 
     public enum Condulet {
 
-        /// Posted when a ServiceTask is performed. The notification `object` contains an instance of ServiceTask.
+        /// Posted when a ServiceTask is performed. The notification `object` contains an instance of a ServiceTask.
         public static let TaskPerformed = Notification.Name(rawValue: "Condulet.TaskPerformed")
 
-        /// Posted when a ServiceTask is received response. The notification `object` contains an instance of ServiceTask.
+        /// Posted when a ServiceTask is received response. The notification `object` contains an instance of a ServiceTask.
         public static let TaskCompleted = Notification.Name(rawValue: "Condulet.TaskCompleted")
     }
 
 }
 
-/// URLSessionTask wrapping class allowing to build, send, cancel and rewind network requests. Built for subclassing
+/// URLSessionTask wrapping class allowing to build, send, cancel and rewind network requests.
 open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, Hashable {
     
     // MARK: - CustomStringConvertible
@@ -377,14 +377,12 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
             if let error = error {
                 throw error
             }
-
-            guard !(try retrofitter?.serviceTask(self, intercept: response) ?? false) else {
-                return
+            
+            guard let content = content, let response = response else {
+                throw ServiceTaskError.invalidResponse
             }
 
-            try handleResponse(response)
-
-            guard !(try retrofitter?.serviceTask(self, intercept: content) ?? false) else {
+            guard !(try retrofitter?.serviceTask(self, intercept: content, response: response) ?? false) else {
                 return
             }
 
@@ -392,11 +390,11 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
             
         } catch {
 
-            guard !(retrofitter?.serviceTask(self, intercept: error) ?? false) else {
+            guard !(retrofitter?.serviceTask(self, intercept: error, response: response) ?? false) else {
                 return
             }
 
-            handleError(error, underlayingTask?.response)
+            handleError(error, response)
         }
 
     }
@@ -406,29 +404,13 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     /// Handle general response
     open func handleResponse(_ response: URLResponse?) throws {
 
-        // Pass any non-HTTP response or no reponse
-        if let response = response as? HTTPURLResponse {
-            
-            // In case of HTTP response, pass only response with valid status code
-            guard 200..<300 ~= response.statusCode else {
-                throw ServiceTaskError.statusCode(response.statusCode)
-            }
-        }
     }
 
     /// Handle response content
-    open func handleContent(_ content: ServiceTaskContent?, _ response: URLResponse?) throws {
+    open func handleContent(_ content: ServiceTaskContent, _ response: URLResponse) throws {
 
-        guard let response = response else {
-            throw ServiceTaskError.invalidResponse
-        }
-        
-        guard let handler = responseHandler else {
-            throw ServiceTaskError.noResponseHandler
-        }
-        
         // Run response handler
-        try handler.handle(content: content, response: response)
+        try responseHandler?.handle(content: content, response: response)
     }
     
     /// Handle any error

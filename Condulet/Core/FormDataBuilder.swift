@@ -111,7 +111,7 @@ public struct FormDataBuilder {
     /// Generate form data content in memory
     ///
     /// - Parameter buffer: The size in bytes of a memory buffer to be used to transfer data from part source to memory while encoding content. Default value is 1Mb
-    /// - Returns: Returns an instance of Data with encoded boundary content ready to use as a body for URLRequest
+    /// - Returns: Returns an instance of a Data object with encoded boundary content ready to use as a body for URLRequest
     public func encode(bufferSize: Int = 1_000_000) throws -> Data {
 
         let memoryStream = OutputStream.toMemory()

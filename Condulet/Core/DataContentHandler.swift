@@ -1,8 +1,7 @@
-//
-//  BlockContentHandler.swift
+//  DataContentHandler.swift
 //  Condulet
 //
-//  Created by Natan Zalkin on 02/10/2018.
+//  Created by Natan Zalkin on 12/10/2018.
 //  Copyright © 2018 Natan Zalkin. All rights reserved.
 //
 
@@ -28,26 +27,28 @@
  * SOFTWARE.
  *
  */
+ 
 
 import Foundation
 
 
-/// Generic content handler with block
-public class BlockContentHandler: ServiceTaskResponseHandling {
-
-    public var handler: ((ServiceTaskContent, URLResponse) throws -> Void)?
-
-    /// Create an instance of the handler. NOTE: throwing block will be executed on background thread.
-    public init(_ block: ((ServiceTaskContent, URLResponse) throws -> Void)? = nil) {
-        handler = block
-    }
-
-    public func handle(content: ServiceTaskContent?, response: URLResponse) throws {
-
-        guard let content = content else {
-            throw ServiceTaskError.invalidResponseContent
+/// Handle content as a data. If the task was performed using Download action the file received will be converted and handled as Data 
+open class DataContentHandler: GeneralResponseHandler {
+    
+    open override func handle(content: ServiceTaskContent, response: URLResponse) throws {
+        try super.handle(content: content, response: response)
+        
+        switch content {
+        case .data(let data):
+            try handle(data: data, response: response)
+        case .file(let url):
+            try handle(data: try Data(contentsOf: url, options: .mappedIfSafe), response: response)
         }
-
-        try self.handler?(content, response)
     }
+    
+    /// Handle data response. Default implementation do nothing
+    open func handle(data: Data, response: URLResponse) throws {
+        // Abstract
+    }
+    
 }

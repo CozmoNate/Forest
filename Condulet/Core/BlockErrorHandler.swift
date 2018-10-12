@@ -38,7 +38,7 @@ public class BlockErrorHandler: ServiceTaskErrorHandling {
     
     public var handler: ((Error, URLResponse?) -> Void)?
     
-    /// Create an instance of the handler. NOTE: block will be executed on background thread
+    /// Create an instance of a handler. NOTE: block will be executed on background thread
     public init(_ block: ((Error, URLResponse?) -> Void)? = nil) {
         handler = block
     }

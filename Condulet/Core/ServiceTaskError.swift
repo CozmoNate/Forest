@@ -45,8 +45,6 @@ public enum ServiceTaskError: Error {
     case noDataProvided
     /// No data provided for request
     case noRequestBody
-    /// Response does not handled
-    case noResponseHandler
     /// Task is already executed
     case alreadyRunning
     /// Task received unsupported response server response

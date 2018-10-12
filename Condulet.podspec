@@ -1,10 +1,10 @@
 Pod::Spec.new do |s|
   s.name             = 'Condulet'
-  s.version          = '1.8'
+  s.version          = '1.9'
   s.summary          = 'Condulet makes it simple to send requests to web services'
   s.description      = <<-DESC
-Condulet is a simple wrapper built on top of URLSession and URLSessionTask. Condulet provides most of the features you'll need in your day-by-day work, without stressing you with overcomplicated abstractions.
-                       DESC
+Condulet is flexible and convenient API client construction framework built on top of URLSession and URLSessionTask. It can handle plenty of data types including multipart form data generation, sending and receiving JSON encoded Protobuf messages.
+DESC
   s.homepage         = 'https://github.com/kozlek/Condulet'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Natan Zalkin' => 'natan.zalkin@me.com' }

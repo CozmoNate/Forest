@@ -20,12 +20,10 @@ class ServiceTaskInterceptorTests: QuickSpec, ServiceTaskRetrofitting {
     }
 
     var responseHandler: ((ServiceTask) throws -> Bool)?
-    var contentHandler: ((ServiceTask) throws -> Bool)?
     var errorHandler: ((ServiceTask) -> Bool)?
 
     var shouldFailRequest = false
     var shouldFailResponse = false
-    var shouldFailContent = false
 
 
     func serviceTask(_ task: ServiceTask, modify request: inout URLRequest) throws {
@@ -33,17 +31,12 @@ class ServiceTaskInterceptorTests: QuickSpec, ServiceTaskRetrofitting {
         if shouldFailRequest { throw Errors.test }
     }
 
-    func serviceTask(_ task: ServiceTask, intercept response: URLResponse?) throws -> Bool {
+    func serviceTask(_ task: ServiceTask, intercept content: ServiceTaskContent, response: URLResponse) throws -> Bool {
         if shouldFailResponse { throw Errors.test }
         return try responseHandler?(task) ?? false
     }
 
-    func serviceTask(_ task: ServiceTask, intercept content: ServiceTaskContent?) throws -> Bool {
-        if shouldFailContent { throw Errors.test }
-        return try contentHandler?(task) ?? false
-    }
-
-    func serviceTask(_ task: ServiceTask, intercept error: Error) -> Bool {
+    func serviceTask(_ task: ServiceTask, intercept error: Error, response: URLResponse?) -> Bool {
         return errorHandler?(task) ?? false
     }
 
@@ -54,9 +47,7 @@ class ServiceTaskInterceptorTests: QuickSpec, ServiceTaskRetrofitting {
             afterEach {
                 self.shouldFailRequest = false
                 self.shouldFailResponse = false
-                self.shouldFailContent = false
                 self.responseHandler = nil
-                self.contentHandler = nil
                 self.errorHandler = nil
                 self.removeAllStubs()
             }
@@ -141,34 +132,6 @@ class ServiceTaskInterceptorTests: QuickSpec, ServiceTaskRetrofitting {
                 waitUntil { (done) in
 
                     self.responseHandler = { (task) in
-                        throw Errors.test
-                    }
-
-                    ServiceTaskBuilder(retrofitter: self)
-                        .endpoint(.GET, "test.test")
-                        .content { (content, response) in
-                            fail("Request should return error!")
-                        }
-                        .error { (error, response) in
-                            switch error {
-                            case Errors.test:
-                                done()
-                            default:
-                                fail("Request should return test error!")
-                            }
-                        }
-                        .perform()
-
-                }
-            }
-
-            it("can intercept content") {
-
-                self.stub(http(.get, uri: "test.modified"), json(["test": "ok"]))
-
-                waitUntil { (done) in
-
-                    self.contentHandler = { (task) in
                         throw Errors.test
                     }
 

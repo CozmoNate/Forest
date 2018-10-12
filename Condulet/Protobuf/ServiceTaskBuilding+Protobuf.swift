@@ -45,7 +45,7 @@ public extension ServiceTaskBuilding {
         return self
     }
     
-    /// Send body with protobuf messsage. This method creates an instance of type specified and passes it to configuration block
+    /// Send body with protobuf messsage. This method creates an instance of the type specified and passes it to configuration block
     @discardableResult
     public func body<T: Message>(proto configure: (inout T) -> Void) -> Self {
         contentType(value: "application/x-www-form-urlencoded")
@@ -56,7 +56,7 @@ public extension ServiceTaskBuilding {
         return self
     }
 
-    /// Send body with protobuf messsage. This method creates an instance of type specified and passes it to configuration block
+    /// Send body with protobuf messsage. This method creates an instance of the type specified and passes it to configuration block
     @discardableResult
     public func body<T: Message>(proto type: T.Type, configure: (inout T) -> Void) -> Self {
         contentType(value: "application/x-www-form-urlencoded")
@@ -67,7 +67,7 @@ public extension ServiceTaskBuilding {
         return self
     }
 
-    /// Handle protobuf message response. If received response of other type task will fail with ConduletError.invalidResponse
+    /// Handle protobuf message response. If received response of other type task will fail with ServiceTaskError.invalidResponse
     @discardableResult
     public func proto<T: Message>(_ handler: @escaping (T, URLResponse) -> Void) -> Self {
         task.responseHandler = ProtobufContentHandler { [unowned queue = task.responseQueue] (message: T, response) in
@@ -78,7 +78,7 @@ public extension ServiceTaskBuilding {
         return self
     }
 
-    /// Handle protobuf message response. If received response of other type task will fail with ConduletError.invalidResponse
+    /// Handle protobuf message response. If received response of other type task will fail with ServiceTaskError.invalidResponse
     @discardableResult
     public func proto<T: Message>(_ type: T.Type, handler: @escaping (T, URLResponse) -> Void) -> Self {
         task.responseHandler = ProtobufContentHandler { [unowned queue = task.responseQueue] (message: T, response) in
@@ -89,7 +89,7 @@ public extension ServiceTaskBuilding {
         return self
     }
 
-    /// Handle protobuf message response. If received response of other type task will fail with ConduletError.invalidResponse
+    /// Handle protobuf message response. If received response of other type task will fail with ServiceTaskError.invalidResponse
     @discardableResult
     public func response<T: Message>(proto type: T.Type, handler: @escaping (ServiceTaskResponse<T>) -> Void) -> Self {
         proto { (message, response) in
@@ -101,7 +101,7 @@ public extension ServiceTaskBuilding {
         return self
     }
 
-    /// Handle protobuf message response. If received response of other type task will fail with ConduletError.invalidResponse
+    /// Handle protobuf message response. If received response of other type task will fail with ServiceTaskError.invalidResponse
     @discardableResult
     public func response<T: Message>(proto handler: @escaping (ServiceTaskResponse<T>) -> Void) -> Self {
         proto { (message, response) in

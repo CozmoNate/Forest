@@ -15,13 +15,13 @@ public protocol ServiceTaskRetrofitting {
     /// Modify request before assigning it to URLSessionTask. Throwing error will cause the task to fail with provided error
     func serviceTask(_ task: ServiceTask, modify request: inout URLRequest) throws
 
-    /// Intercept response handling. Return true to disable checking of valid HTTP status. Throwing error will cause the task to fail with provided error
-    func serviceTask(_ task: ServiceTask, intercept response: URLResponse?) throws -> Bool
+    /// Intercept response handler.
+    /// Return true to indicate that response is intercepted and no further handling should be peformed by ServiceTask when returned from this method.
+    /// Throwing error will cause the task to fail with provided error
+    func serviceTask(_ task: ServiceTask, intercept content: ServiceTaskContent, response: URLResponse) throws -> Bool
 
-    /// Intercept content handling. By returning true you become responsible to call apropriate responseHandler callbacks. Throwing error will cause the task to fail with provided error
-    func serviceTask(_ task: ServiceTask, intercept content: ServiceTaskContent?) throws -> Bool
-    
-    /// Intercept error handling. By returning true you become responsible to call apropriate errorHandler callbacks
-    func serviceTask(_ task: ServiceTask, intercept error: Error) -> Bool
+    /// Intercept error handler.
+    /// Return true to indicate that error is intercepted and no further handling should be peformed by ServiceTask when returned from this method.
+    func serviceTask(_ task: ServiceTask, intercept error: Error, response: URLResponse?) -> Bool
 
 }

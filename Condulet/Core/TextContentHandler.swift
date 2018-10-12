@@ -34,7 +34,7 @@ import Foundation
 
 
 /// A handler that expects and parse response with plain text content. Completion block returns string object on success
-open class TextContentHandler: ServiceTaskResponseHandling {
+public class TextContentHandler: DataContentHandler {
     
     public var completion: ((String, URLResponse) -> Void)?
     
@@ -42,25 +42,23 @@ open class TextContentHandler: ServiceTaskResponseHandling {
         self.completion = completion
     }
     
-    public func handle(content: ServiceTaskContent?, response: URLResponse) throws {
+    public override func handle(data: Data, response: URLResponse) throws {
         
-        guard let content = content, response.mimeType == "text/plain" else {
+        guard response.mimeType == "text/plain" else {
             throw ServiceTaskError.invalidResponseContent
         }
         
-        switch content {
-        case let .data(data):
-            var encoding: String.Encoding = .utf8
-            if let textEncodingName = response.textEncodingName {
-                encoding = String.Encoding(rawValue: UInt(CFStringConvertIANACharSetNameToEncoding(textEncodingName as NSString)))
-            }
-            guard let string = String(data: data, encoding: encoding) else {
-                throw ServiceTaskError.decodingFailure
-            }
-            completion?(string, response)
-        default:
-            throw ServiceTaskError.invalidResponseContent
+        var encoding: String.Encoding = .utf8
+        
+        if let textEncodingName = response.textEncodingName {
+            encoding = String.Encoding(rawValue: UInt(CFStringConvertIANACharSetNameToEncoding(textEncodingName as NSString)))
         }
+        
+        guard let string = String(data: data, encoding: encoding) else {
+            throw ServiceTaskError.decodingFailure
+        }
+        
+        completion?(string, response)
     }
     
 }

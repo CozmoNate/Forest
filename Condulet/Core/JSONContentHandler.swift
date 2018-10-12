@@ -34,7 +34,7 @@ import Foundation
 
 
 /// A handler that expects and parse response with JSON content. Completion block returns valid JSON object on success
-open class JSONContentHandler: ServiceTaskResponseHandling {
+public class JSONContentHandler: DataContentHandler {
 
     public var completion: ((Any, URLResponse) -> Void)?
     
@@ -42,19 +42,15 @@ open class JSONContentHandler: ServiceTaskResponseHandling {
         self.completion = completion
     }
     
-    public func handle(content: ServiceTaskContent?, response: URLResponse) throws {
+    public override func handle(data: Data, response: URLResponse) throws {
         
-        guard let content = content, response.mimeType == "application/json" else {
+        guard response.mimeType == "application/json" else {
             throw ServiceTaskError.invalidResponseContent
         }
         
-        switch content {
-        case let .data(data):
-            let object = try JSONSerialization.jsonObject(with: data, options: [.allowFragments])
-            completion?(object, response)
-        default:
-            throw ServiceTaskError.invalidResponseContent
-        }
+        let object = try JSONSerialization.jsonObject(with: data, options: [.allowFragments])
+        
+        completion?(object, response)
     }
     
 }
