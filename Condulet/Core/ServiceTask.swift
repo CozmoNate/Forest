@@ -401,11 +401,6 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     
     // MARK: - Response handling
 
-    /// Handle general response
-    open func handleResponse(_ response: URLResponse?) throws {
-
-    }
-
     /// Handle response content
     open func handleContent(_ content: ServiceTaskContent, _ response: URLResponse) throws {
 
