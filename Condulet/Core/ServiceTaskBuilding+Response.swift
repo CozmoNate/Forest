@@ -54,13 +54,7 @@ public extension ServiceTaskBuilding {
         }
         return self
     }
-    
-    /// Handle failure error with block
-    @discardableResult
-    public func failure(_ handler: @escaping (Error, URLResponse?) -> Void) -> Self {
-        error(handler)
-        return self
-    }
+
 }
 
 // MARK: - Response handlers expecting specific type of response data
