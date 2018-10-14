@@ -70,7 +70,7 @@ public extension ServiceTaskBuilding {
     /// Handle protobuf message response. If received response of other type task will fail with ServiceTaskError.invalidResponse
     @discardableResult
     public func proto<T: Message>(_ handler: @escaping (T, URLResponse) -> Void) -> Self {
-        task.responseHandler = ProtobufContentHandler { [unowned queue = task.responseQueue] (message: T, response) in
+        task.responseHandler = ProtobufContentHandler { [queue = responseQueue] (message: T, response) in
             queue.addOperation {
                 handler(message, response)
             }
@@ -81,7 +81,7 @@ public extension ServiceTaskBuilding {
     /// Handle protobuf message response. If received response of other type task will fail with ServiceTaskError.invalidResponse
     @discardableResult
     public func proto<T: Message>(_ type: T.Type, handler: @escaping (T, URLResponse) -> Void) -> Self {
-        task.responseHandler = ProtobufContentHandler { [unowned queue = task.responseQueue] (message: T, response) in
+        task.responseHandler = ProtobufContentHandler { [queue = responseQueue] (message: T, response) in
             queue.addOperation {
                 handler(message, response)
             }

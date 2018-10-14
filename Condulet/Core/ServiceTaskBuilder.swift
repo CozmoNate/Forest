@@ -33,14 +33,17 @@
 import Foundation
 
 
-open class ServiceTaskBuilder: ServiceTaskBuilding {
+/// Default builder for ServiceTask. Uses main OperationQueue to dispatch response blocks
+public struct ServiceTaskBuilder: ServiceTaskBuilding {
     
     public typealias Task = ServiceTask
     
     public var task: Task
-    
-    public init(task: Task = ServiceTask()) {
+    public var responseQueue: OperationQueue
+
+    public init(task: Task = ServiceTask(), responseQueue: OperationQueue = OperationQueue.main) {
         self.task = task
+        self.responseQueue = responseQueue
     }
     
     public init(session: URLSession = URLSession.shared,
@@ -50,8 +53,8 @@ open class ServiceTaskBuilder: ServiceTaskBuilding {
                 body: ServiceTaskContent? = nil,
                 responseHandler: ServiceTaskResponseHandling? = nil,
                 errorHandler: ServiceTaskErrorHandling? = nil,
-                responseQueue: OperationQueue = OperationQueue.main,
-                retrofitter: ServiceTaskRetrofitting? = nil) {
+                retrofitter: ServiceTaskRetrofitting? = nil,
+                responseQueue: OperationQueue = OperationQueue.main) {
         
         self.task = ServiceTask(
             session: session,
@@ -61,7 +64,8 @@ open class ServiceTaskBuilder: ServiceTaskBuilding {
             body: body,
             responseHandler: responseHandler,
             errorHandler: errorHandler,
-            responseQueue: responseQueue,
             retrofitter: retrofitter)
+        
+        self.responseQueue = responseQueue
     }
 }

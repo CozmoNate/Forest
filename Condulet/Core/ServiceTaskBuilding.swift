@@ -33,10 +33,16 @@
 import Foundation
 
 
+/// The protocol providing helper methods to configure and perform ServiceTask or its subclass instance
 public protocol ServiceTaskBuilding {
-    
+
+    /// A ServiceTask type or its subclass will be produced and configured by conforming builder
     associatedtype Task: ServiceTask
-    
+
+    /// The instance of Task produced and configured with the bulder
     var task: Task { get set }
+
+    /// The queue will be used to dispatch response blocks
+    var responseQueue: OperationQueue { get set }
     
 }

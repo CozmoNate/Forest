@@ -47,7 +47,7 @@ public extension ServiceTaskBuilding {
     /// Handle error with block
     @discardableResult
     public func error(_ handler: @escaping (Error, URLResponse?) -> Void) -> Self {
-        task.errorHandler = BlockErrorHandler { [unowned queue = task.responseQueue] (error, response) in
+        task.errorHandler = BlockErrorHandler { [queue = responseQueue] (error, response) in
             queue.addOperation {
                 handler(error, response)
             }
@@ -71,7 +71,7 @@ public extension ServiceTaskBuilding {
     /// Handle HTTP status response
     @discardableResult
     public func success(_ handler: @escaping (Int) -> Void) -> Self {
-        task.responseHandler = BlockResponseHandler { [unowned queue = task.responseQueue] (content, response) in
+        task.responseHandler = BlockResponseHandler { [queue = responseQueue] (content, response) in
             
             guard let response = response as? HTTPURLResponse else {
                 throw ServiceTaskError.invalidResponse
@@ -87,7 +87,7 @@ public extension ServiceTaskBuilding {
     /// Handle response with block
     @discardableResult
     public func content(_ handler: @escaping (ServiceTaskContent, URLResponse) -> Void) -> Self {
-        task.responseHandler = BlockResponseHandler { [unowned queue = task.responseQueue] (content, response) in
+        task.responseHandler = BlockResponseHandler { [queue = responseQueue] (content, response) in
             queue.addOperation {
                 handler(content, response)
             }
@@ -98,7 +98,7 @@ public extension ServiceTaskBuilding {
     /// Handle file response for tasks performed via Download action. Returned file should be removed manually after use. When received response of other type task will fail with ServiceTaskError.invalidResponse
     @discardableResult
     public func file(_ handler: @escaping (URL, URLResponse) -> Void) -> Self {
-        task.responseHandler = BlockResponseHandler { [unowned queue = task.responseQueue] (content, response) in
+        task.responseHandler = BlockResponseHandler { [queue = responseQueue] (content, response) in
             switch content {
             case let .file(url):
                 queue.addOperation {
@@ -114,7 +114,7 @@ public extension ServiceTaskBuilding {
     /// Handle data response. When task is performed via Download action, received file content will be handled as data response
     @discardableResult
     public func data(_ handler: @escaping (Data, URLResponse) -> Void) -> Self {
-        task.responseHandler = BlockResponseHandler { [unowned queue = task.responseQueue] (content, response) in
+        task.responseHandler = BlockResponseHandler { [queue = responseQueue] (content, response) in
             switch content {
             case .data(let data):
                 queue.addOperation {
@@ -135,7 +135,7 @@ public extension ServiceTaskBuilding {
     /// Handle text response. When received response of other type task will fail with ServiceTaskError.invalidResponse
     @discardableResult
     public func text(_ handler: @escaping (String, URLResponse) -> Void) -> Self {
-        task.responseHandler = TextContentHandler { [unowned queue = task.responseQueue] (string, response) in
+        task.responseHandler = TextContentHandler { [queue = responseQueue] (string, response) in
             queue.addOperation {
                 handler(string, response)
             }
@@ -146,7 +146,7 @@ public extension ServiceTaskBuilding {
     /// Handle json response. When received response of other type task will fail with ServiceTaskError.invalidResponse
     @discardableResult
     public func json(_ handler: @escaping (Any, URLResponse) -> Void) -> Self {
-        task.responseHandler = JSONContentHandler { [unowned queue = task.responseQueue] (object, response) in
+        task.responseHandler = JSONContentHandler { [queue = responseQueue] (object, response) in
             queue.addOperation {
                 handler(object, response)
             }
@@ -157,7 +157,7 @@ public extension ServiceTaskBuilding {
     /// Handle url-encoded response. When received response of other type task will fail with ServiceTaskError.invalidResponse
     @discardableResult
     public func urlencoded(_ handler: @escaping ([String: String], URLResponse) -> Void) -> Self {
-        task.responseHandler = URLEncodedContentHandler { [unowned queue = task.responseQueue] (dictionary, response) in
+        task.responseHandler = URLEncodedContentHandler { [queue = responseQueue] (dictionary, response) in
             queue.addOperation {
                 handler(dictionary, response)
             }
@@ -168,7 +168,7 @@ public extension ServiceTaskBuilding {
     /// Handle json response with serialized Decodable object of infered type. When received response of other type task will fail with ServiceTaskError.invalidResponse
     @discardableResult
     public func codable<T: Decodable>(_ handler: @escaping (T, URLResponse) -> Void) -> Self {
-        task.responseHandler = DecodableContentHandler { [unowned queue = task.responseQueue] (object: T, response) in
+        task.responseHandler = DecodableContentHandler { [queue = responseQueue] (object: T, response) in
             queue.addOperation {
                 handler(object, response)
             }
@@ -179,7 +179,7 @@ public extension ServiceTaskBuilding {
     /// Handle json response with serialized Decodable object of infered type. When received response of other type task will fail with ServiceTaskError.invalidResponse
     @discardableResult
     public func codable<T: Decodable>(_ type: T.Type, handler: @escaping (T, URLResponse) -> Void) -> Self {
-        task.responseHandler = DecodableContentHandler { [unowned queue = task.responseQueue] (object: T, response) in
+        task.responseHandler = DecodableContentHandler { [queue = responseQueue] (object: T, response) in
             queue.addOperation {
                 handler(object, response)
             }

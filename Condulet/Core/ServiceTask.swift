@@ -80,7 +80,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     
     // MARK: - Hashable
     
-    public var hashValue: Int = UUID().hashValue // Every task is unique
+    public let hashValue: Int = UUID().hashValue // Every task is unique
     
     // MARK: - Equatable
     
@@ -104,8 +104,6 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     public var responseHandler: ServiceTaskResponseHandling?
     /// Failure handler
     public var errorHandler: ServiceTaskErrorHandling?
-    // The queue will be used to dispatch response
-    public var responseQueue: OperationQueue
     
     // MARK: - ServiceTaskRetrofitting
     
@@ -137,7 +135,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
         body: ServiceTaskContent? = nil,
         responseHandler: ServiceTaskResponseHandling? = nil,
         errorHandler: ServiceTaskErrorHandling? = nil,
-        responseQueue: OperationQueue = OperationQueue.main,
+        //responseQueue: OperationQueue = OperationQueue.main,
         retrofitter: ServiceTaskRetrofitting? = nil) {
         
         self.session = session
@@ -147,7 +145,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
         self.body = body
         self.responseHandler = responseHandler
         self.errorHandler = errorHandler
-        self.responseQueue = responseQueue
+        //self.responseQueue = responseQueue
         self.retrofitter = retrofitter
     }
     
@@ -197,6 +195,10 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
             throw ServiceTaskError.noSessionSpecified
         }
 
+        try prepareContent(for: &request)
+
+        try retrofitter?.serviceTask(self, modify: &request)
+
         return session.dataTask(with: request) { (data, response, error) in
             self.dispatchResponse(signature, ServiceTaskContent(data), response, error)
         }
@@ -223,6 +225,11 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
                 self.dispatchResponse(signature, nil, response, error)
             }
         }
+
+        try prepareContent(for: &request)
+
+        try retrofitter?.serviceTask(self, modify: &request)
+
         if let data = data {
             return session.downloadTask(withResumeData: data, completionHandler: completion)
         }
@@ -241,6 +248,8 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
         guard let body = body else {
             throw ServiceTaskError.noRequestBody
         }
+
+        try retrofitter?.serviceTask(self, modify: &request)
 
         switch body {
         case .data(let data):
@@ -273,20 +282,14 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
             let task: URLSessionTask
 
             switch action {
-            // Perform
             case .perform:
-                try prepareContent(for: &request)
-                try retrofitter?.serviceTask(self, modify: &request)
+                // Perform data task
                 task = try prepareDataTask(for: &request, with: signature)
-            // Download
             case .download(let path, let data):
-                try prepareContent(for: &request)
-                try retrofitter?.serviceTask(self, modify: &request)
+                // Download to file task
                 task = try prepareDownloadTask(for: &request, with: signature, destination: path, resume: data)
-            // Upload
             case .upload:
-                try retrofitter?.serviceTask(self, modify: &request)
-                // Upload tasks ignore request body, so handle body type manually
+                // Upload task ignores request body
                 task = try prepareUploadTask(for: &request, with: signature)
             }
             
