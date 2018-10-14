@@ -108,23 +108,23 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     // MARK: - ServiceTaskRetrofitting
     
     public var retrofitter: ServiceTaskRetrofitting?
-    
-    // MARK: - Properties
-
-    /// Last action performed
-    public var action: ServiceTaskAction?
-    /// Signature is used to determine if response from URLSessionTask still relevant and should be handled
-    public var signature: UUID?
-    /// The underlying URLSessionTask that has been performed
-    public var underlayingTask: URLSessionTask?
-    /// The content received with the last response
-    public var content: ServiceTaskContent?
-
-    open var isRunning: Bool {
-        return signature != nil
-    }
 
     // MARK: - Lifecycle
+    
+    /// Last action performed
+    public private(set) var action: ServiceTaskAction?
+    /// The underlying URLSessionTask that has been performed
+    public private(set) var underlayingTask: URLSessionTask?
+    /// The content received with the last response
+    public private(set) var content: ServiceTaskContent?
+    
+    /// True when the task is performed but the response still not received
+    public var isRunning: Bool {
+        return signature != nil
+    }
+    
+    /// Signature is used to determine if response received from URLSessionTask still relevant and should be handled
+    private var signature: UUID?
     
     /// Creates the instance of ServiceTask
     public init(
@@ -135,7 +135,6 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
         body: ServiceTaskContent? = nil,
         responseHandler: ServiceTaskResponseHandling? = nil,
         errorHandler: ServiceTaskErrorHandling? = nil,
-        //responseQueue: OperationQueue = OperationQueue.main,
         retrofitter: ServiceTaskRetrofitting? = nil) {
         
         self.session = session
@@ -145,11 +144,149 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
         self.body = body
         self.responseHandler = responseHandler
         self.errorHandler = errorHandler
-        //self.responseQueue = responseQueue
         self.retrofitter = retrofitter
     }
     
-    // MARK: - Builder
+    
+    /// Perform task with action.
+    public func perform(action: ServiceTaskAction) {
+        
+        do {
+            
+            guard !isRunning else {
+                throw ServiceTaskError.alreadyRunning
+            }
+            
+            // Save the action to use if will need to rewind
+            self.action = action
+            
+            var request = try makeRequest()
+            
+            /// Make signature to sign URLSessionTask response block
+            let signature = UUID()
+            
+            switch action {
+            case .perform:
+                // Data task
+                underlayingTask = try makeDataTask(for: &request, with: signature)
+            case .download(let path, let data):
+                // Download task, will download data to file
+                underlayingTask = try makeDownloadTask(for: &request, with: signature, destination: path, resume: data)
+            case .upload:
+                // Upload task
+                underlayingTask = try makeUploadTask(for: &request, with: signature)
+            }
+            
+            // Save the signature to check validity of URLSessionTask response later
+            self.signature = signature
+            
+            // Start task
+            underlayingTask?.resume()
+            
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(name: Notification.Name.Condulet.TaskPerformed, object: self)
+            }
+            
+        } catch {
+            handleError(error)
+        }
+    }
+    
+    /// Cancels running task. Captured response blocks and handlers will never be called until task will be performed again or rewound.
+    /// Optionally resume data can be produced on cancel in case of download task, otherwise completion will be called with nil data
+    @discardableResult
+    public func cancel(byProducingResumeData resumeDataHandler: ((Data?) -> Void)? = nil) -> Bool {
+        
+        guard isRunning else {
+            return false
+        }
+        
+        // Invalidate response of current URLSessionTask 
+        signature = nil
+        
+        // Cancel with resume data
+        if let resumeDataHandler = resumeDataHandler {
+            if let downloadTask = underlayingTask as? URLSessionDownloadTask {
+                downloadTask.cancel(byProducingResumeData: resumeDataHandler)
+                return true
+            }
+            else {
+                resumeDataHandler(nil)
+            }
+        }
+        
+        underlayingTask?.cancel()
+        
+        return true
+    }
+    
+    /// Rewind task with lastest action performed. This will cancel running task. If action is not specified this method will return false, running task will not be canceled and no action will be performed
+    @discardableResult
+    public func rewind() -> Bool {
+        
+        guard let action = action else {
+            return false
+        }
+        
+        // Invalidate response of current URLSessionTask, if one is running
+        signature = nil
+        
+        // Cancel URLSessionTask, if one is active
+        underlayingTask?.cancel()
+        
+        // Perform new URLSessionTask with actual configuration
+        perform(action: action)
+        
+        return true
+    }
+    
+    // MARK: - URLSessionTask backing
+    
+    /// Decide how the response from URLSessionTask will be handled
+    public func dispatchResponse(_ signature: UUID, _ content: ServiceTaskContent?, _ response: URLResponse?, _ error: Error?) {
+        
+        // The response signature is differs from stored signature. That means the response is received from from abandoned task and should be ignored
+        guard self.signature == signature else {
+            return // Response is no longer relevant
+        }
+        
+        // No signature will indicate that task is completed
+        self.signature = nil
+        
+        // Save response content
+        self.content = content
+        
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: Notification.Name.Condulet.TaskCompleted, object: self)
+        }
+        
+        do {
+            
+            if let error = error {
+                throw error
+            }
+            
+            guard let content = content, let response = response else {
+                throw ServiceTaskError.invalidResponse
+            }
+            
+            guard !(try retrofitter?.serviceTask(self, intercept: content, response: response) ?? false) else {
+                return
+            }
+            
+            try handleContent(content, response)
+            
+        } catch {
+            
+            guard !(retrofitter?.serviceTask(self, intercept: error, response: response) ?? false) else {
+                return
+            }
+            
+            handleError(error, response)
+        }
+    }
+    
+    // MARK: - Builder methods
     
     /// Produces a request built from ServiceTask parameters. When have invalid parameters an error will be thrown.
     open func makeRequest() throws -> URLRequest {
@@ -171,7 +308,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     }
 
     /// Fills request HTTP body with the data
-    open func prepareContent(for request: inout URLRequest) throws {
+    open func prepareBody(for request: inout URLRequest) throws {
         
         guard let body = body else {
             return
@@ -189,13 +326,13 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     }
 
     /// Produces data task
-    open func prepareDataTask(for request: inout URLRequest, with signature: UUID) throws -> URLSessionDataTask {
+    open func makeDataTask(for request: inout URLRequest, with signature: UUID) throws -> URLSessionDataTask {
 
         guard let session = session else {
             throw ServiceTaskError.noSessionSpecified
         }
 
-        try prepareContent(for: &request)
+        try prepareBody(for: &request)
 
         try retrofitter?.serviceTask(self, modify: &request)
 
@@ -205,7 +342,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     }
 
     /// Produces download task
-    open func prepareDownloadTask(for request: inout URLRequest, with signature: UUID, destination: URL, resume data: Data?) throws -> URLSessionDownloadTask {
+    open func makeDownloadTask(for request: inout URLRequest, with signature: UUID, destination: URL, resume data: Data?) throws -> URLSessionDownloadTask {
 
         guard let session = session else {
             throw ServiceTaskError.noSessionSpecified
@@ -214,6 +351,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
         let completion = { (url: URL?, response: URLResponse?, error: Error?) -> Void in
             if let url = url {
                 do {
+                    // Move received file to desired location
                     try FileManager.default.moveItem(at: url, to: destination)
                     self.dispatchResponse(signature, ServiceTaskContent(destination), response, error)
                 }
@@ -226,7 +364,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
             }
         }
 
-        try prepareContent(for: &request)
+        try prepareBody(for: &request)
 
         try retrofitter?.serviceTask(self, modify: &request)
 
@@ -239,7 +377,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     }
 
     /// Produces upload task
-    open func prepareUploadTask(for request: inout URLRequest, with signature: UUID) throws -> URLSessionUploadTask {
+    open func makeUploadTask(for request: inout URLRequest, with signature: UUID) throws -> URLSessionUploadTask {
 
         guard let session = session else {
             throw ServiceTaskError.noSessionSpecified
@@ -263,146 +401,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
         }
     }
     
-    // MARK: - Actions
-    
-    /// Perform task with action.
-    open func perform(action: ServiceTaskAction) {
-        
-        do {
-            
-            guard !isRunning else {
-                throw ServiceTaskError.alreadyRunning
-            }
-
-            self.action = action
-
-            var request = try makeRequest()
-            let signature = UUID()
-            
-            let task: URLSessionTask
-
-            switch action {
-            case .perform:
-                // Perform data task
-                task = try prepareDataTask(for: &request, with: signature)
-            case .download(let path, let data):
-                // Download to file task
-                task = try prepareDownloadTask(for: &request, with: signature, destination: path, resume: data)
-            case .upload:
-                // Upload task ignores request body
-                task = try prepareUploadTask(for: &request, with: signature)
-            }
-            
-            perform(task: task, with: signature)
-            
-        } catch {
-            handleError(error)
-        }
-    }
-
-    /// Cancels running task. Captured response blocks and handlers will never be called until task will be performed again or rewound.
-    /// Optionally resume data can be produced on cancel in case of download task, otherwise completion will be called with nil data
-    @discardableResult
-    open func cancel(byProducingResumeData resumeDataHandler: ((Data?) -> Void)? = nil) -> Bool {
-
-        guard isRunning else {
-            return false
-        }
-
-        // Invalidate URLSessionTask completion handler
-        signature = nil
-
-        // Cancel with resume data
-        if let resumeDataHandler = resumeDataHandler {
-            if let downloadTask = underlayingTask as? URLSessionDownloadTask {
-                downloadTask.cancel(byProducingResumeData: resumeDataHandler)
-                return true
-            }
-            else {
-                resumeDataHandler(nil)
-            }
-        }
-
-        underlayingTask?.cancel()
-
-        return true
-    }
-    
-    /// Rewind task with lastest action performed. This will cancel running task. If action is not specified this method will return false, running task will not be canceled and no action will be performed
-    @discardableResult
-    open func rewind() -> Bool {
-        
-        guard let action = action else {
-            return false
-        }
-        
-        if isRunning {
-            cancel()
-        }
-        
-        perform(action: action)
-        
-        return true
-    }
-    
-    // MARK: - URLSessionTask backing
-    
-    /// Sign and perform URLSessionTask
-    open func perform(task: URLSessionTask, with signature: UUID) {
-        
-        self.underlayingTask = task
-        self.signature = signature
-        
-        task.resume()
-        
-        DispatchQueue.main.async {
-            NotificationCenter.default.post(name: Notification.Name.Condulet.TaskPerformed, object: self)
-        }
-    }
-    
-    /// Dispatch response received from URLSessionTask, decide how response will be handled
-    open func dispatchResponse(_ signature: UUID, _ content: ServiceTaskContent?, _ response: URLResponse?, _ error: Error?) {
-        
-        // When the response signature is differs from stored signature, that means we got response from abandoned requests and should ignore it
-        guard self.signature == signature else {
-            return // Response is no longer relevant
-        }
-        
-        self.signature = nil
-        self.content = content
-
-        DispatchQueue.main.async {
-            NotificationCenter.default.post(name: Notification.Name.Condulet.TaskCompleted, object: self)
-        }
-        
-        do {
-
-            if let error = error {
-                throw error
-            }
-            
-            guard let content = content, let response = response else {
-                throw ServiceTaskError.invalidResponse
-            }
-
-            guard !(try retrofitter?.serviceTask(self, intercept: content, response: response) ?? false) else {
-                return
-            }
-
-            try handleContent(content, response)
-            
-        } catch {
-
-            guard !(retrofitter?.serviceTask(self, intercept: error, response: response) ?? false) else {
-                return
-            }
-
-            handleError(error, response)
-        }
-
-    }
-    
-    // MARK: - Response handling
+    // MARK: - Response handling methods
 
     /// Handle response content
     open func handleContent(_ content: ServiceTaskContent, _ response: URLResponse) throws {

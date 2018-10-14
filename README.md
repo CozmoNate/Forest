@@ -8,7 +8,20 @@
 [![Language](https://img.shields.io/badge/swift-4.2-orange.svg)](https://swift.org/blog/swift-4-2-released/)
 [![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/kozlek/Condulet/raw/master/LICENSE)
 
-Condulet is flexible and convenient API client construction framework built on top of `URLSession` and `URLSessionTask`. It can handle plenty of data types including multipart form data generation, sending and receiving JSON encoded Protobuf messages. Of course, you can use your custom response handlers and data parsers with Coundulet. Condulet provides most of the features needed to build robust client for your backend services. The main purpose of it — make your job done. And my job too :) 
+Condulet is flexible and extensible API client construction framework built on top of `URLSession` and `URLSessionTask`. It integrates simple parsing approach and can send and receive plenty of data types out of the box. Condulet provides most of the features needed to build robust client for your backend services. The main purpose of it — make your job done.
+
+You could ask why Condulet and not any other networking framework already available? Sure, you’ll get one best suitable for your needs and style preference. What I was looking for: 
+
+* Promise like style request building without needing to make any enums or classes describing endponts 
+* Promise like style body configuration, simple network objects encoding  
+* Promise like style response handling and simple network objects mapping 
+* Handle response in the same place as the request and body configuration 
+* Transparent, asynchronous, and completely customizable response interception and rewind/retry. Mainly to map errors and handle expired token when making OAuth like secured requests 
+* Extensibility. Easily add custom response mappers and body data encoders using closures, or protocols, or subclassing whichever will be more convenient for specific need. Use this with default framework’s classes or extend them or subclass, but it should be easy. 
+* Download and keep files where I need them
+* Protobufs and multipart form data support as a bonus 
+
+So, I ended up building my own solution partially by real need, partially for fun ;)
 
 ## Installation
 
