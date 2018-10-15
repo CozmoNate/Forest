@@ -1,6 +1,15 @@
+
+language: swift
+
+osx_image: xcode10
+
 branches:
  only:
  - master
+
+cache: 
+  - bundler
+  - cocoapods
 
 env:
   global:
@@ -8,17 +17,16 @@ env:
   matrix:
     - DESTINATION="OS=12.0,name=iPhone 8" SCHEME="Condulet" SDK="iphonesimulator10.0" RUN_TESTS="YES"
 
-language: swift
-osx_image: xcode10
-
 before_install:
-  - gem install cocoapods-acknowledgements
-  - gem install cocoapods
-  - pod repo update
+  - bundle install
+  - bundle exec pod install --repo-update
 
 script:
   - if [ $RUN_TESTS == "YES" ]; then
-      xcodebuild clean test -workspace "$WORKSPACE" -scheme "$SCHEME" -destination "$DESTINATION" -configuration Release ONLY_ACTIVE_ARCH=NO ENABLE_TESTABILITY=YES | xcpretty;
+      xcodebuild clean test -workspace "$WORKSPACE" -scheme "$SCHEME" -destination "$DESTINATION" -configuration Debug ONLY_ACTIVE_ARCH=YES ENABLE_TESTABILITY=YES | xcpretty;
     else
       xcodebuild clean build -workspace "$WORKSPACE" -scheme "$SCHEME" -destination "$DESTINATION" -configuration Release ONLY_ACTIVE_ARCH=NO | xcpretty;
     fi
+  
+after_success:
+  - bundle exec xcov --coveralls_service_name "tavis-ci" --coveralls_service_job_id "$TRAVIS_JOB_ID"

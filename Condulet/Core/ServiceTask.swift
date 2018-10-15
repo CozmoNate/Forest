@@ -244,44 +244,6 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
         return true
     }
     
-    // MARK: - URLSessionTask backing
-    
-    /// Decide how the response from URLSessionTask will be handled
-    public func dispatchResponse(_ signature: UUID, _ content: ServiceTaskContent?, _ response: URLResponse?, _ error: Error?) {
-        
-        // The response signature is differs from stored signature. That means the response is received from from abandoned task and should be ignored
-        guard self.signature == signature else {
-            return // Response is no longer relevant
-        }
-        
-        // No signature will indicate that task is completed
-        self.signature = nil
-        
-        // Save response content
-        self.content = content
-        
-        DispatchQueue.main.async {
-            NotificationCenter.default.post(name: Notification.Name.Condulet.TaskCompleted, object: self)
-        }
-        
-        do {
-            
-            if let error = error {
-                throw error
-            }
-            
-            guard let content = content, let response = response else {
-                throw ServiceTaskError.invalidResponse
-            }
-            
-            try handleContent(content, response)
-            
-        } catch {
-            
-            handleError(error, response)
-        }
-    }
-    
     // MARK: - Builder methods
     
     /// Produces a request built from ServiceTask parameters. When have invalid parameters an error will be thrown.
@@ -398,6 +360,42 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     }
     
     // MARK: - Response handling methods
+
+    /// Decide how the response from URLSessionTask will be handled
+    public func dispatchResponse(_ signature: UUID, _ content: ServiceTaskContent?, _ response: URLResponse?, _ error: Error?) {
+
+        // The response signature is differs from stored signature. That means the response is received from from abandoned task and should be ignored
+        guard self.signature == signature else {
+            return // Response is no longer relevant
+        }
+
+        // No signature will indicate that task is completed
+        self.signature = nil
+
+        // Save response content
+        self.content = content
+
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: Notification.Name.Condulet.TaskCompleted, object: self)
+        }
+
+        do {
+
+            if let error = error {
+                throw error
+            }
+
+            guard let content = content, let response = response else {
+                throw ServiceTaskError.invalidResponse
+            }
+
+            try handleContent(content, response)
+
+        } catch {
+
+            handleError(error, response)
+        }
+    }
 
     /// Handle response content
     public func handleContent(_ content: ServiceTaskContent, _ response: URLResponse) throws {

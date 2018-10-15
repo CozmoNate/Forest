@@ -4,9 +4,10 @@
 
 # Condulet 
 
-[![Build Status](https://travis-ci.com/kozlek/Condulet.svg?branch=master)](https://travis-ci.com/kozlek/Condulet)
-[![Language](https://img.shields.io/badge/swift-4.2-orange.svg)](https://swift.org/blog/swift-4-2-released/)
 [![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/kozlek/Condulet/raw/master/LICENSE)
+[![Language](https://img.shields.io/badge/swift-4.2-orange.svg)](https://swift.org/blog/swift-4-2-released/)
+[![Build Status](https://travis-ci.com/kozlek/Condulet.svg?branch=master)](https://travis-ci.com/kozlek/Condulet)
+[![Coverage Status](https://coveralls.io/repos/github/kozlek/Condulet/badge.svg?branch=master)](https://coveralls.io/github/kozlek/Condulet?branch=master)
 
 Condulet is flexible and extensible API client construction framework built on top of `URLSession` and `URLSessionTask`. It integrates simple parsing approach and can send and receive plenty of data types out of the box. Condulet provides most of the features needed to build robust client for your backend services. The main purpose of it — make your job done.
 
