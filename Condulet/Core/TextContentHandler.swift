@@ -36,16 +36,16 @@ import Foundation
 /// A handler that expects and parse response with plain text content. Completion block returns string object on success
 public class TextContentHandler: DataContentHandler {
     
-    public var completion: ((String, URLResponse) -> Void)?
+    public var completion: ((String, URLResponse) throws -> Void)?
     
-    public init(completion: ((String, URLResponse) -> Void)? = nil) {
+    public init(completion: ((String, URLResponse) throws -> Void)? = nil) {
         self.completion = completion
     }
     
     public override func handle(data: Data, response: URLResponse) throws {
         
         guard response.mimeType == "text/plain" else {
-            throw ServiceTaskError.invalidResponseContent
+            throw ServiceTaskError.invalidResponseData
         }
         
         var encoding: String.Encoding = .utf8
@@ -58,7 +58,7 @@ public class TextContentHandler: DataContentHandler {
             throw ServiceTaskError.decodingFailure
         }
         
-        completion?(string, response)
+        try completion?(string, response)
     }
     
 }

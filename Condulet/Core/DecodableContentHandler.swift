@@ -37,21 +37,21 @@ import Foundation
 public class DecodableContentHandler<T: Decodable>: DataContentHandler {
     
     public var decoder = JSONDecoder()
-    public var completion: ((T, URLResponse) -> Void)?
+    public var completion: ((T, URLResponse) throws -> Void)?
     
-    public init(completion: ((T, URLResponse) -> Void)? = nil) {
+    public init(completion: ((T, URLResponse) throws -> Void)? = nil) {
         self.completion = completion
     }
     
     public override func handle(data: Data, response: URLResponse) throws {
         
         guard response.mimeType == "application/json" else {
-            throw ServiceTaskError.invalidResponseContent
+            throw ServiceTaskError.invalidResponseData
         }
         
         let object = try decoder.decode(T.self, from: data)
         
-        completion?(object, response)
+        try completion?(object, response)
     }
     
 }

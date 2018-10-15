@@ -154,6 +154,34 @@ public extension ServiceTaskBuilding {
         return self
     }
     
+    /// Handle json dictionary response. When received response of other type task will fail with ServiceTaskError.invalidResponse
+    @discardableResult
+    public func array(_ handler: @escaping ([Any], URLResponse) -> Void) -> Self {
+        task.responseHandler = JSONContentHandler { [queue = responseQueue] (object, response) in
+            guard let array = object as? [Any] else {
+                throw ServiceTaskError.invalidResponseData
+            }
+            queue.addOperation {
+                handler(array, response)
+            }
+        }
+        return self
+    }
+    
+    /// Handle json dictionary response. When received response of other type task will fail with ServiceTaskError.invalidResponse
+    @discardableResult
+    public func dictionary(_ handler: @escaping ([AnyHashable: Any], URLResponse) -> Void) -> Self {
+        task.responseHandler = JSONContentHandler { [queue = responseQueue] (object, response) in
+            guard let dictionary = object as? [AnyHashable: Any] else {
+                throw ServiceTaskError.invalidResponseData
+            }
+            queue.addOperation {
+                handler(dictionary, response)
+            }
+        }
+        return self
+    }
+    
     /// Handle url-encoded response. When received response of other type task will fail with ServiceTaskError.invalidResponse
     @discardableResult
     public func urlencoded(_ handler: @escaping ([String: String], URLResponse) -> Void) -> Self {
@@ -272,6 +300,30 @@ public extension ServiceTaskBuilding {
         return self
     }
 
+    /// Handle array json response. When received response of other type task will fail with ServiceTaskError.invalidResponse
+    @discardableResult
+    public func response(array handler: @escaping (ServiceTaskResponse<[Any]>) -> Void) -> Self {
+        array { (object, response) in
+            handler(ServiceTaskResponse.success(object))
+        }
+        error { (error, response) in
+            handler(ServiceTaskResponse.failure(error))
+        }
+        return self
+    }
+    
+    /// Handle dictionary json response. When received response of other type task will fail with ServiceTaskError.invalidResponse
+    @discardableResult
+    public func response(dictionary handler: @escaping (ServiceTaskResponse<[AnyHashable: Any]>) -> Void) -> Self {
+        dictionary { (object, response) in
+            handler(ServiceTaskResponse.success(object))
+        }
+        error { (error, response) in
+            handler(ServiceTaskResponse.failure(error))
+        }
+        return self
+    }
+    
     /// Handle url-encoded response. When received response of other type task will fail with ServiceTaskError.invalidResponse
     @discardableResult
     public func response(urlencoded handler: @escaping (ServiceTaskResponse<[String: String]>) -> Void) -> Self {

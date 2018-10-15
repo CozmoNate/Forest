@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'Condulet'
-  s.version          = '1.11'
+  s.version          = '1.12'
   s.summary          = 'Condulet makes it simple to send requests to web services'
   s.description      = <<-DESC
 Condulet is flexible and extensible API client construction framework built on top of URLSession and URLSessionTask. It can handle plenty of data types including multipart form data generation, sending and receiving JSON encoded Protobuf messages.

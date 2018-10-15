@@ -148,6 +148,10 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     }
     
     
+    deinit {
+        print("Disposed: \(self)")
+    }
+    
     /// Perform task with action.
     public func perform(action: ServiceTaskAction) {
         
@@ -270,17 +274,9 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
                 throw ServiceTaskError.invalidResponse
             }
             
-            guard !(try retrofitter?.serviceTask(self, intercept: content, response: response) ?? false) else {
-                return
-            }
-            
             try handleContent(content, response)
             
         } catch {
-            
-            guard !(retrofitter?.serviceTask(self, intercept: error, response: response) ?? false) else {
-                return
-            }
             
             handleError(error, response)
         }
@@ -404,17 +400,34 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
     // MARK: - Response handling methods
 
     /// Handle response content
-    open func handleContent(_ content: ServiceTaskContent, _ response: URLResponse) throws {
+    public func handleContent(_ content: ServiceTaskContent, _ response: URLResponse) throws {
 
+        // Intercept data response
+        if try retrofitter?.serviceTask(self, intercept: content, response: response) ?? false {
+            return
+        }
+        
         // Run response handler
         try responseHandler?.handle(content: content, response: response)
     }
     
     /// Handle any error
-    open func handleError(_ error: Error, _ response: URLResponse? = nil) {
+    public func handleError(_ error: Error, _ response: URLResponse? = nil) {
         
-        // Run error handler
-        errorHandler?.handle(error: error, response: response)
+        do {
+            // Intercept error
+            if try retrofitter?.serviceTask(self, intercept: error, response: response) ?? false {
+                return
+            }
+        
+            // Run error handler
+            errorHandler?.handle(error: error, response: response)
+        }
+        catch {
+            
+            // Run error handler
+            errorHandler?.handle(error: error, response: response)
+        }
     }
     
 }

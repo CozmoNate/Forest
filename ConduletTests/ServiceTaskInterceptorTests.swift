@@ -20,7 +20,7 @@ class ServiceTaskInterceptorTests: QuickSpec, ServiceTaskRetrofitting {
     }
 
     var responseHandler: ((ServiceTask) throws -> Bool)?
-    var errorHandler: ((ServiceTask) -> Bool)?
+    var errorHandler: ((ServiceTask) throws -> Bool)?
 
     var shouldFailRequest = false
     var shouldFailResponse = false
@@ -36,8 +36,8 @@ class ServiceTaskInterceptorTests: QuickSpec, ServiceTaskRetrofitting {
         return try responseHandler?(task) ?? false
     }
 
-    func serviceTask(_ task: ServiceTask, intercept error: Error, response: URLResponse?) -> Bool {
-        return errorHandler?(task) ?? false
+    func serviceTask(_ task: ServiceTask, intercept error: Error, response: URLResponse?) throws -> Bool {
+        return try errorHandler?(task) ?? false
     }
 
     override func spec() {
@@ -103,8 +103,7 @@ class ServiceTaskInterceptorTests: QuickSpec, ServiceTaskRetrofitting {
                 waitUntil { (done) in
 
                     self.errorHandler = { (task) in
-                        task.handleError(Errors.test)
-                        return true
+                        throw Errors.test
                     }
 
                     ServiceTaskBuilder(retrofitter: self)

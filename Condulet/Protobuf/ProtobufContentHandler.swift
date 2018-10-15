@@ -37,9 +37,9 @@ import SwiftProtobuf
 /// A handler that expects and parse response with protobuf message. Completion block returns deserialized message of expected type on success
 public class ProtobufContentHandler<T: Message>: DataContentHandler {
     
-    public var completion: ((T, URLResponse) -> Void)?
+    public var completion: ((T, URLResponse) throws -> Void)?
     
-    public init(completion: ((T, URLResponse) -> Void)? = nil) {
+    public init(completion: ((T, URLResponse) throws -> Void)? = nil) {
         self.completion = completion
     }
     
@@ -50,20 +50,20 @@ public class ProtobufContentHandler<T: Message>: DataContentHandler {
         }
         
         guard httpResponse.mimeType == "application/json" else {
-            throw ServiceTaskError.invalidResponseContent
+            throw ServiceTaskError.invalidResponseData
         }
         
         guard let metadataContentType = httpResponse.allHeaderFields["grpc-metadata-content-type"] as? String else {
-            throw ServiceTaskError.invalidResponseContent
+            throw ServiceTaskError.invalidResponseData
         }
         
         guard metadataContentType == "application/grpc" else {
-            throw ServiceTaskError.invalidResponseContent
+            throw ServiceTaskError.invalidResponseData
         }
         
         let message = try T(jsonUTF8Data: data)
         
-        completion?(message, response)
+        try completion?(message, response)
     }
     
 }

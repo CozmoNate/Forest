@@ -67,6 +67,95 @@ class ServiceTaskTests: QuickSpec {
                 }
             }
             
+            it("can handle json array response") {
+                
+                let array: [Any] = [["one": "ok"], ["two": "ok"]]
+                
+                self.stub(http(.get, uri: "test.test"), json(array))
+                
+                waitUntil { (done) in
+                    
+                    ServiceTaskBuilder()
+                        .endpoint(.GET, "test.test")
+                        .array { (data, response) in
+                            expect(data.count).to(equal(2))
+                            done()
+                        }
+                        .error { (error, response) in
+                            fail("\(error)")
+                        }
+                        .perform()
+                    
+                }
+            }
+            
+            it("can fail json array response") {
+                
+                let dict: [AnyHashable: Any] = ["test": "ok"]
+                
+                self.stub(http(.get, uri: "test.test"), json(dict))
+                
+                waitUntil { (done) in
+                    
+                    ServiceTaskBuilder()
+                        .endpoint(.GET, "test.test")
+                        .array { (data, response) in
+                            fail("Request should fail!")
+                        }
+                        .error { (error, response) in
+                            expect(error).to(matchError(ServiceTaskError.invalidResponseData))
+                            done()
+                        }
+                        .perform()
+                    
+                }
+            }
+            
+            it("can handle json dictionary response") {
+                
+                let dict: [AnyHashable: Any] = ["test": "ok"]
+                
+                self.stub(http(.get, uri: "test.test"), json(dict))
+                
+                waitUntil { (done) in
+                    
+                    ServiceTaskBuilder()
+                        .endpoint(.GET, "test.test")
+                        .dictionary { (data, response) in
+                            let value = data["test"] as? String
+                            expect(value).to(equal("ok"))
+                            done()
+                        }
+                        .error { (error, response) in
+                            fail("\(error)")
+                        }
+                        .perform()
+                    
+                }
+            }
+            
+            it("can fail json dictionary response") {
+                
+                let array: [Any] = [["test": "ok"]]
+                
+                self.stub(http(.get, uri: "test.test"), json(array))
+                
+                waitUntil { (done) in
+                    
+                    ServiceTaskBuilder()
+                        .endpoint(.GET, "test.test")
+                        .dictionary { (data, response) in
+                            fail("Request should fail!")
+                        }
+                        .error { (error, response) in
+                            expect(error).to(matchError(ServiceTaskError.invalidResponseData))
+                            done()
+                        }
+                        .perform()
+                    
+                }
+            }
+            
             it("can cancel request") {
                 
                 self.stub(http(.get, uri: "test.cancel"), delay: 2, http(200))

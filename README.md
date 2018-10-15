@@ -19,7 +19,9 @@ You could ask why Condulet and not any other networking framework already availa
 * Transparent, asynchronous, and completely customizable response interception and rewind/retry. Mainly to map errors and handle expired token when making OAuth like secured requests 
 * Extensibility. Easily add custom response mappers and body data encoders using closures, or protocols, or subclassing whichever will be more convenient for specific need. Use this with default framework’s classes or extend them or subclass, but it should be easy. 
 * Download and keep files where I need them
-* Protobufs and multipart form data support as a bonus 
+* Deserialization of JSON body. Map with codable, to array or dictionary
+* Serialization and deserialization of Protobufs messages from JSON body
+* Multipart form data support as a bonus 
 
 So, I ended up building my own solution partially by real need, partially for fun ;)
 

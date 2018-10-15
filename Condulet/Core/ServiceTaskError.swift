@@ -50,7 +50,7 @@ public enum ServiceTaskError: Error {
     /// Task received unsupported response server response
     case invalidResponse
     /// Task received unsupported response content
-    case invalidResponseContent
+    case invalidResponseData
     /// Task response handler have decoding issues
     case decodingFailure
     /// Failed to encode request body

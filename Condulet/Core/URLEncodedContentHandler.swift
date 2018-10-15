@@ -36,21 +36,21 @@ import Foundation
 /// A handler that expects and parse response with URL-encoded content. Completion block returns dictionary object on success
 public class URLEncodedContentHandler: DataContentHandler {
     
-    public var completion: (([String: String], URLResponse) -> Void)?
+    public var completion: (([String: String], URLResponse) throws -> Void)?
     
-    public init(completion: (([String: String], URLResponse) -> Void)? = nil) {
+    public init(completion: (([String: String], URLResponse) throws -> Void)? = nil) {
         self.completion = completion
     }
     
     public override func handle(data: Data, response: URLResponse) throws {
         
         guard response.mimeType == "application/x-www-form-urlencoded" else {
-            throw ServiceTaskError.invalidResponseContent
+            throw ServiceTaskError.invalidResponseData
         }
         
         let object = try URLEncodedSerialization.dictionary(with: data)
         
-        completion?(object, response)
+        try completion?(object, response)
     }
     
 }
