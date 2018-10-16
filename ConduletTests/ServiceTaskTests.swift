@@ -400,6 +400,8 @@ class ServiceTaskTests: QuickSpec {
 
             it("can perform request with multipart form data") {
 
+                let sampleData = "--TEST\r\nContent-Disposition: form-data; name=\"Param\"\r\n\r\nValue\r\n--TEST\r\nContent-Disposition: form-data; name=\"Data\"\r\nContent-Type: data\r\n\r\nTest\r\n--TEST\r\nContent-Disposition: form-data; name=\"File\"; filename=\"filename\"\r\nContent-Type: file\r\n\r\nTest\r\n--TEST\r\nContent-Disposition: form-data; name=\"Text\"\r\nContent-Type: text/plain; charset=us-ascii\r\n\r\nText text test\r\n--TEST\r\nContent-Disposition: form-data; name=\"URL\"; filename=\"filename\"\r\nContent-Type: url\r\n\r\nTest\r\n--TEST--\r\n"
+
                 func testMultipartData() -> (_ request: URLRequest) -> Response {
                     return { (request:URLRequest) in
                         if let stream = request.httpBodyStream {
@@ -407,7 +409,7 @@ class ServiceTaskTests: QuickSpec {
                             let data = self.readData(from: stream)
                             let result = String(data: data, encoding: .utf8)
                             
-                            expect(result).to(equal("--TEST\r\nContent-Disposition: form-data; name=\"Param\"\r\n\r\nValue\r\n--TEST\r\nContent-Disposition: form-data; name=\"Data\"\r\nContent-Type: data\r\n\r\nTest\r\n--TEST\r\nContent-Disposition: form-data; name=\"File\"; filename=\"filename\"\r\nContent-Type: file\r\n\r\nTest\r\n--TEST\r\nContent-Disposition: form-data; name=\"URL\"; filename=\"filename\"\r\nContent-Type: url\r\n\r\nTest\r\n--TEST--\r\n"))
+                            expect(result).to(equal(sampleData))
                             
                             let response = HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)
                             return Mockingjay.Response.success(response!, .content(Data()))
@@ -428,23 +430,30 @@ class ServiceTaskTests: QuickSpec {
                     builder.append(.property(name: "Param", value: "Value"))
                     builder.append(.binary(name: "Data", mimeType: "data", data: "Test".data(using: .utf8)!))
                     builder.append(.file(name: "File", fileName: "filename", mimeType: "file", data: "Test".data(using: .utf8)!))
+                    builder.append(try! .text(name: "Text", encoding: .ascii, value: "Text text test"))
                     builder.append(try! .file(name: "URL", fileName: "filename", mimeType: "url", url: testFileURL))
 
-                    let encoded = try! builder.encode()
-                    
+                    expect(builder.calculateContentSize()).to(equal(471))
+
+                    let formDataURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString).appendingPathExtension("formdata")
+                    try! builder.encode(to: formDataURL)
+
                     try? FileManager.default.removeItem(at: testFileURL)
                     
                     ServiceTaskBuilder()
                         .endpoint(.POST, "test.multipart")
-                        .body(data: encoded, contentType: builder.contentType)
-                        .content { (content, response) in
+                        .body(url: formDataURL, contentType: builder.contentType)
+                        .response(status: { (response) in
+                            switch response {
+                            case .success:
+                                break
+                            case .failure(let error):
+                                fail("Failed to upload form data: \(error)")
+                            }
+                            try? FileManager.default.removeItem(at: testFileURL)
                             done()
-                        }
-                        .error { (error, response) in
-                            fail("\(error)")
-                        }
-                        .perform()
-
+                        })
+                        .upload()
                 }
             }
         }

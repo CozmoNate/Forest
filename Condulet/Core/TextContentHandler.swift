@@ -49,9 +49,9 @@ public class TextContentHandler: DataContentHandler {
         }
         
         var encoding: String.Encoding = .utf8
-        
-        if let textEncodingName = response.textEncodingName {
-            encoding = String.Encoding(rawValue: UInt(CFStringConvertIANACharSetNameToEncoding(textEncodingName as NSString)))
+
+        if let charset = response.textEncodingName, let textEncoding = textEncodingNameToStringEncoding(charset) {
+            encoding = textEncoding
         }
         
         guard let string = String(data: data, encoding: encoding) else {

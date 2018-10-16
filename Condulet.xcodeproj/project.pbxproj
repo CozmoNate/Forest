@@ -40,6 +40,7 @@
 		AA045AC121675BC400BD92D4 /* ServiceTaskRetrofitting.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA045AC021675BC400BD92D4 /* ServiceTaskRetrofitting.swift */; };
 		AA045AC32167673600BD92D4 /* ServiceTaskInterceptorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA045AC22167673600BD92D4 /* ServiceTaskInterceptorTests.swift */; };
 		AA38AB7121639AEB00EC8750 /* URLSerializationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E314CF121625EC80007DAFE /* URLSerializationTests.swift */; };
+		AA6418E42175C04E0021BC2F /* ResponseHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6418E32175C04E0021BC2F /* ResponseHandlerTests.swift */; };
 		AA8516FE216C91EB00152A8C /* FormDataBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8516FD216C91EB00152A8C /* FormDataBuilder.swift */; };
 		AAA198A6216E6666000E5D55 /* FormDataError.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA198A5216E6666000E5D55 /* FormDataError.swift */; };
 		AAA198AA216E788C000E5D55 /* FormDataChunk.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA198A9216E788B000E5D55 /* FormDataChunk.swift */; };
@@ -100,6 +101,7 @@
 		7EECC2922161326E008845F4 /* DecodableContentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodableContentHandler.swift; sourceTree = "<group>"; };
 		AA045AC021675BC400BD92D4 /* ServiceTaskRetrofitting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTaskRetrofitting.swift; sourceTree = "<group>"; };
 		AA045AC22167673600BD92D4 /* ServiceTaskInterceptorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTaskInterceptorTests.swift; sourceTree = "<group>"; };
+		AA6418E32175C04E0021BC2F /* ResponseHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseHandlerTests.swift; sourceTree = "<group>"; };
 		AA8516FD216C91EB00152A8C /* FormDataBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormDataBuilder.swift; sourceTree = "<group>"; };
 		AAA198A5216E6666000E5D55 /* FormDataError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormDataError.swift; sourceTree = "<group>"; };
 		AAA198A9216E788B000E5D55 /* FormDataChunk.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormDataChunk.swift; sourceTree = "<group>"; };
@@ -182,6 +184,7 @@
 				7E314CF121625EC80007DAFE /* URLSerializationTests.swift */,
 				7EBE4123215E6F71006C882C /* ServiceTaskTests.swift */,
 				AA045AC22167673600BD92D4 /* ServiceTaskInterceptorTests.swift */,
+				AA6418E32175C04E0021BC2F /* ResponseHandlerTests.swift */,
 				7EBE4125215E6F71006C882C /* Info.plist */,
 			);
 			path = ConduletTests;
@@ -526,6 +529,7 @@
 			files = (
 				AA045AC32167673600BD92D4 /* ServiceTaskInterceptorTests.swift in Sources */,
 				AA38AB7121639AEB00EC8750 /* URLSerializationTests.swift in Sources */,
+				AA6418E42175C04E0021BC2F /* ResponseHandlerTests.swift in Sources */,
 				7EBE4124215E6F71006C882C /* ServiceTaskTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

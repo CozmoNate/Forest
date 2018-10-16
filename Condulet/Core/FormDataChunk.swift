@@ -45,29 +45,43 @@ public enum FormDataChunk {
     case source(InputStream, size: Int)
     case lineBreak
     case closure(boundary: String)
+
+    public var bytes: [UInt8]? {
+        let stringRepresentation: String
+        switch self {
+        case .separator(let boundary):
+            stringRepresentation = "--\(boundary)"
+        case .contentDisposition(let name):
+            stringRepresentation = "Content-Disposition: form-data; name=\"\(name)\""
+        case .contentType(let value):
+            stringRepresentation = "Content-Type: \(value)"
+        case .contentEncoding(let value):
+            stringRepresentation = "Content-Transfer-Encoding: \(value)"
+        case .header(let name, let value):
+            stringRepresentation = "\(name): \(value)"
+        case .parameter(let semicolon, let name, let value):
+            stringRepresentation = (semicolon ? "; " : "") + name + (value != nil ? "=\(value!)" : "")
+        case .string(let string):
+            stringRepresentation = string
+        case .source:
+            return nil
+        case .lineBreak:
+            stringRepresentation = "\r\n"
+        case .closure(let boundary):
+            stringRepresentation = "--\(boundary)--"
+        }
+        return [UInt8](stringRepresentation.utf8)
+    }
     
     public func write(to stream: OutputStream, bufferSize: Int = 1_000_000) throws {
         switch self {
-        case .separator(let boundary):
-            try stream.write("--\(boundary)")
-        case .contentDisposition(let name):
-            try stream.write("Content-Disposition: form-data; name=\"\(name)\"")
-        case .contentType(let value):
-            try stream.write("Content-Type: \(value)")
-        case .contentEncoding(let value):
-            try stream.write("Content-Transfer-Encoding: \(value)")
-        case .header(let name, let value):
-            try stream.write("\(name): \(value)")
-        case .parameter(let semicolon, let name, let value):
-            try stream.write((semicolon ? "; " : "") + name + (value != nil ? "=\(value!)" : ""))
-        case .string(let string):
-            try stream.write(string)
         case .source(let input, let size):
             try transfer(from: input, to: stream, bufferSize: size < bufferSize ? size : bufferSize)
-        case .lineBreak:
-            try stream.write("\r\n")
-        case .closure(let boundary):
-            try stream.write("--\(boundary)--")
+        default:
+            guard let bytes = bytes else {
+                throw FormDataError.unknown
+            }
+            try stream.write(bytes)
         }
     }
     
@@ -102,24 +116,11 @@ public enum FormDataChunk {
 fileprivate extension OutputStream {
 
     @discardableResult
-    func write(_ string: String) throws -> Int {
+    func write(_ bytes: [UInt8]) throws -> Int {
         guard hasSpaceAvailable else {
             throw FormDataError.noOutputSpace
         }
-        let data = [UInt8](string.utf8)
-        let result = write(data, maxLength: data.count)
-        if result < 0 {
-            throw streamError ?? FormDataError.outputOperationFailure
-        }
-        return result
-    }
-
-    @discardableResult
-    func write(_ data: Data) throws -> Int {
-        guard hasSpaceAvailable else {
-            throw FormDataError.noOutputSpace
-        }
-        let result = data.withUnsafeBytes({ write($0, maxLength: data.count) })
+        let result = write(bytes, maxLength: bytes.count)
         if result < 0 {
             throw streamError ?? FormDataError.outputOperationFailure
         }

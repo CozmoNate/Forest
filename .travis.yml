@@ -14,6 +14,8 @@ cache:
 env:
   global:
     - WORKSPACE=Condulet.xcworkspace
+    - COVERALLS_SERVICE_NAME=travis-ci
+    - COVERALLS_SERVICE_JOB_ID=$TRAVIS_JOB_ID
   matrix:
     - DESTINATION="OS=12.0,name=iPhone 8" SCHEME="Condulet" SDK="iphonesimulator10.0" RUN_TESTS="YES"
 
@@ -29,4 +31,4 @@ script:
     fi
   
 after_success:
-  - bundle exec xcov --coveralls_service_name "tavis-ci" --coveralls_service_job_id "$TRAVIS_JOB_ID"
+  - bundle exec xcov

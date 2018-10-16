@@ -92,29 +92,29 @@ extension FormDataPart {
     }
 
     /// Create text data part with specific encoding (optional) using string as data source
-    public static func text(name: String, encoding: String.Encoding = .utf8, allowLossyConversion: Bool = false, value: String) throws -> FormDataPart {
+    public static func text(name: String, encoding: String.Encoding = .utf8, charset: String? = nil, allowLossyConversion: Bool = false, value: String) throws -> FormDataPart {
         guard let encoded = value.data(using: encoding, allowLossyConversion: allowLossyConversion) else {
             throw FormDataError.invalidEncoding
         }
-        return text(name: name, encoding: encoding, stream: InputStream(data: encoded), size: encoded.count)
+        return text(name: name, encoding: encoding, charset: charset, stream: InputStream(data: encoded), size: encoded.count)
     }
     
     /// Create text data part with specific encoding (optional) using instance of Data as a data source
-    public static func text(name: String, encoding: String.Encoding? = nil, transferEncoding: Encoding? = nil, data: Data) -> FormDataPart {
-        return text(name: name, encoding: encoding, transferEncoding: transferEncoding, stream: InputStream(data: data), size: data.count)
+    public static func text(name: String, encoding: String.Encoding = .utf8, charset: String? = nil, transferEncoding: Encoding? = nil, data: Data) -> FormDataPart {
+        return text(name: name, encoding: encoding, charset: charset, transferEncoding: transferEncoding, stream: InputStream(data: data), size: data.count)
     }
 
     /// Create text data part with specific encoding (optional) using local file as a source of data
-    public static func text(name: String, encoding: String.Encoding? = nil, transferEncoding: Encoding? = nil, url: URL) throws -> FormDataPart {
+    public static func text(name: String, encoding: String.Encoding = .utf8, charset: String? = nil, transferEncoding: Encoding? = nil, url: URL) throws -> FormDataPart {
         guard let size = try getFileSize(at: url), let stream = InputStream(url: url) else {
             throw FormDataError.emptyFileOrNoAccess(url)
         }
-        return text(name: name, encoding: encoding, transferEncoding: transferEncoding, stream: stream, size: size)
+        return text(name: name, encoding: encoding, charset: charset, transferEncoding: transferEncoding, stream: stream, size: size)
     }
 
     /// Create file data part using instance of Data as a data source
-    public static func file(name: String, fileName: String, mimeType: String, transferEncoding: Encoding? = nil, data: Data) -> FormDataPart {
-        return file(name: name, fileName: fileName, mimeType: mimeType, transferEncoding: transferEncoding, stream: InputStream(data: data), size: data.count)
+    public static func file(name: String, fileName: String, mimeType: String, charset: String? = nil, transferEncoding: Encoding? = nil, data: Data) -> FormDataPart {
+        return file(name: name, fileName: fileName, mimeType: mimeType, charset: charset, transferEncoding: transferEncoding, stream: InputStream(data: data), size: data.count)
     }
 
     /// Create file data part using local file as a source of data
@@ -152,23 +152,11 @@ public extension FormDataPart {
     }
     
     /// Create file data part using InputStream as data source
-    public static func file(name: String, fileName: String, mimeType: String, transferEncoding: Encoding? = nil, stream: InputStream, size: Int = 0) -> FormDataPart {
+    public static func file(name: String, fileName: String, mimeType: String, charset: String? = nil, transferEncoding: Encoding? = nil, stream: InputStream, size: Int = 0) -> FormDataPart {
         var chunks = [FormDataChunk]()
         chunks += [.contentDisposition(name: name), .parameter(semicolon: true, name: "filename", value: "\"\(fileName)\""), .lineBreak]
-        chunks += [.contentType(value: mimeType), .lineBreak]
-        if let encoding = transferEncoding {
-            chunks += [.contentEncoding(value: encoding.value), .lineBreak]
-        }
-        chunks += [.lineBreak, .source(stream, size: size), .lineBreak]
-        return FormDataPart(chunks)
-    }
-    
-    /// Create text data part with specific encoding (optional) using InputStream as data source
-    public static func text(name: String, encoding: String.Encoding? = nil, transferEncoding: Encoding? = nil, stream: InputStream, size: Int = 0) -> FormDataPart {
-        var chunks = [FormDataChunk]()
-        chunks += [.contentDisposition(name: name), .lineBreak]
-        chunks += [.contentType(value: "text/plain")]
-        if let encoding = encoding, let charset = CFStringConvertEncodingToIANACharSetName(CFStringEncoding(encoding.rawValue)) as String? {
+        chunks += [.contentType(value: mimeType)]
+        if let charset = charset {
             chunks += [.parameter(semicolon: true, name: "charset", value: charset), .lineBreak]
         }
         else {
@@ -180,4 +168,23 @@ public extension FormDataPart {
         chunks += [.lineBreak, .source(stream, size: size), .lineBreak]
         return FormDataPart(chunks)
     }
+    
+    /// Create text data part with specific encoding (optional) using InputStream as data source
+    public static func text(name: String, encoding: String.Encoding? = nil, charset: String? = nil, transferEncoding: Encoding? = nil, stream: InputStream, size: Int = 0) -> FormDataPart {
+        var chunks = [FormDataChunk]()
+        chunks += [.contentDisposition(name: name), .lineBreak]
+        chunks += [.contentType(value: "text/plain")]
+        if let encoding = encoding, let charset = charset ?? stringEncodingToTextEncodingName(encoding) {
+            chunks += [.parameter(semicolon: true, name: "charset", value: charset), .lineBreak]
+        }
+        else {
+            chunks.append(.lineBreak)
+        }
+        if let encoding = transferEncoding {
+            chunks += [.contentEncoding(value: encoding.value), .lineBreak]
+        }
+        chunks += [.lineBreak, .source(stream, size: size), .lineBreak]
+        return FormDataPart(chunks)
+    }
+
 }

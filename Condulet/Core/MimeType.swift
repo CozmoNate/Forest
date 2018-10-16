@@ -34,6 +34,18 @@ import Foundation
 import MobileCoreServices
 
 
+public func textEncodingNameToStringEncoding(_ textEncodingName: String) -> String.Encoding? {
+    let core = CFStringConvertIANACharSetNameToEncoding(textEncodingName as CFString)
+    let encoding = String.Encoding(rawValue: CFStringConvertEncodingToNSStringEncoding(core))
+    return encoding
+}
+
+public func stringEncodingToTextEncodingName(_ encoding: String.Encoding) -> String? {
+    let code = CFStringConvertNSStringEncodingToEncoding(encoding.rawValue)
+    let charset = CFStringConvertEncodingToIANACharSetName(code) as String?
+    return charset
+}
+
 public func mimeTypeFromPathExtension(_ pathExtension: String) -> String? {
     guard let uti = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, pathExtension as CFString, kUTTagClassFilenameExtension)?.takeRetainedValue() else {
         return nil

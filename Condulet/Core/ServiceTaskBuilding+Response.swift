@@ -229,7 +229,7 @@ public extension ServiceTaskBuilding {
 
     /// Handle HTTP status response with block
     @discardableResult
-    public func response(success handler: @escaping (ServiceTaskResponse<Int>) -> Void) -> Self {
+    public func response(status handler: @escaping (ServiceTaskResponse<Int>) -> Void) -> Self {
         success { (status) in
             handler(ServiceTaskResponse.success(status))
         }
