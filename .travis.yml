@@ -31,4 +31,4 @@ script:
     fi
   
 after_success:
-  - bundle exec xcov
+  - bash <(curl -s https://codecov.io/bash)
