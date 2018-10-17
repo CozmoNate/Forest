@@ -430,6 +430,51 @@ class ServiceTaskTests: QuickSpec {
                         }
                         .perform()
                 }
+                
+                waitUntil { (done) in
+                    
+                    ServiceTaskBuilder()
+                        .endpoint("PATCH", URL(string: "test.test.com")!)
+                        .body { (message: inout Google_Protobuf_SourceContext) in
+                            message.fileName = "Test"
+                        }
+                        .proto { (message: Google_Protobuf_SourceContext, response) in
+                            if message.fileName == "Test" {
+                                done()
+                            }
+                            else {
+                                fail()
+                            }
+                        }
+                        .error { (error, response) in
+                            fail("\(error)")
+                        }
+                        .perform()
+                }
+                
+                waitUntil { (done) in
+                    
+                    var message = Google_Protobuf_SourceContext()
+                    message.fileName = "Test"
+                    
+                    ServiceTaskBuilder()
+                        .endpoint("PATCH", URL(string: "test.test.com")!)
+                        .body(proto: message)
+                        .response { (response: ServiceTaskResponse<Google_Protobuf_SourceContext>) -> Void in
+                            switch response {
+                            case .success(let message):
+                                if message.fileName == "Test" {
+                                    done()
+                                }
+                                else {
+                                    fail()
+                                }
+                            case .failure(let error):
+                                fail("\(error)")
+                            }
+                        }
+                        .perform()
+                }
             }
             
             it("can send and receive Codable objects") {
