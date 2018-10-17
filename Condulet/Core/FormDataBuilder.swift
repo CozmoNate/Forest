@@ -70,7 +70,7 @@ public struct FormDataBuilder {
         return chunks
     }
 
-    /// Calculates the resulting data size in bytes of all data parts including encoding overhead. This could be resource consuming operation
+    /// Calculates the resulting data size in bytes of all data parts including encoding overhead
     public func calculateContentSize() -> UInt64 {
         let chunks = translate()
         return FormDataBuilder.size(of: chunks)
