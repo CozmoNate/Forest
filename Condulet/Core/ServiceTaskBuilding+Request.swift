@@ -37,7 +37,7 @@ public extension ServiceTaskBuilding {
     
     /// Set URLSession instance to use when creating URLSessionTask instance
     @discardableResult
-    public mutating func session(_ session: URLSession) -> Self {
+    public func session(_ session: URLSession) -> Self {
         task.session = session
         return self
     }

@@ -52,7 +52,7 @@ public extension ServiceTaskBuilding {
         return task
     }
     
-    /// Perform upload task. This is similar to perform but uses URLSessionUploadTask which could run in background.
+    /// Use upload task to upload data directly from file
     @discardableResult public func upload() -> Task {
         task.perform(action: .upload)
         return task

@@ -276,10 +276,7 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
         case .data(let data):
             request.httpBody = data
         case .file(let url):
-            guard let stream = InputStream(url: url) else {
-                throw ServiceTaskError.invalidFile
-            }
-            request.httpBodyStream = stream
+            request.httpBody = try Data(contentsOf: url, options: .mappedIfSafe)
         }
     }
 

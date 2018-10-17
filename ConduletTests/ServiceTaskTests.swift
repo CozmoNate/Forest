@@ -20,7 +20,7 @@ class ServiceTaskTests: QuickSpec {
         let data: String
     }
     
-    func readData(from stream: InputStream, bufferSize: Int = 1_000_000) -> Data {
+    func readData(from stream: InputStream, bufferSize: Int = 1_000_000) throws -> Data {
         
         var data = Data()
         
@@ -31,7 +31,11 @@ class ServiceTaskTests: QuickSpec {
                 buffer.deallocate()
             }
             let result = stream.read(buffer, maxLength: bufferSize)
-            if result > 0 {
+            if result < 0 {
+                throw stream.streamError ?? NSError(domain: "test", code: 1, userInfo: [NSLocalizedDescriptionKey : "Stream error: \(result)"])
+                
+            }
+            else if result > 0 {
                 data.append(buffer, count: result)
             }
         }
@@ -41,6 +45,32 @@ class ServiceTaskTests: QuickSpec {
     }
     
     override func spec() {
+    
+        func testData(_ method: Mockingjay.HTTPMethod, uri: String, data: Data) -> (_ request: URLRequest) -> Bool {
+            return { (request:URLRequest) in
+                
+                if let requestMethod = request.httpMethod, requestMethod == method.description, let stream = request.httpBodyStream {
+                    
+                    let read: Data
+                    do {
+                        read = try self.readData(from: stream)
+                    }
+                    catch {
+                        fail("Read error: \(error)")
+                        return false
+                    }
+                    
+                    guard read == data else {
+                        fail("Not the same data!")
+                        return false
+                    }
+                    
+                    return Mockingjay.uri(uri)(request)
+                }
+                
+                return false
+            }
+        }
         
         describe("ServiceTask") {
 
@@ -50,13 +80,30 @@ class ServiceTaskTests: QuickSpec {
             
             it("can perform request") {
                 
-                self.stub(http(.get, uri: "test.test"), json(["test": "ok"]))
+                func text(_ text: String) -> (_ request: URLRequest) -> Response {
+                    return { (request:URLRequest) in
+                        guard let data = text.data(using: String.Encoding.ascii) else {
+                            return .failure(NSError(domain: "test", code: 2, userInfo: [NSLocalizedDescriptionKey : "Failed to encode text to data"]))
+                        }
+                        return jsonData(data, status: 200, headers: ["Content-Type": "text/plain; charset: ascii"])(request)
+                    }
+                }
+                
+                let data = "Test".data(using: .utf8)!
+                
+                self.stub(testData(.get, uri: "test.test?key=val&key2=val2", data: data), text("test 12345"))
                 
                 waitUntil { (done) in
                     
                     ServiceTaskBuilder()
                         .endpoint(.GET, "test.test")
-                        .data { (data, response) in
+                        .query([
+                            URLQueryItem(name: "key", value: "val"),
+                            URLQueryItem(name: "key2", value: "val2")
+                            ])
+                        .body(data: data)
+                        .text { (text, response) in
+                            expect(text).to(equal("test 12345"))
                             done()
                         }
                         .error { (error, response) in
@@ -71,12 +118,16 @@ class ServiceTaskTests: QuickSpec {
                 
                 let array: [Any] = [["one": "ok"], ["two": "ok"]]
                 
-                self.stub(http(.get, uri: "test.test"), json(array))
+                self.stub(testData(.get, uri: "http://test.test?resource", data: try! JSONSerialization.data(withJSONObject: array, options: [])), json(array))
                 
                 waitUntil { (done) in
                     
                     ServiceTaskBuilder()
-                        .endpoint(.GET, "test.test")
+                        .scheme("http")
+                        .host("test.test")
+                        .method(.GET)
+                        .query("resource")
+                        .body(json: array)
                         .array { (data, response) in
                             expect(data.count).to(equal(2))
                             done()
@@ -92,13 +143,15 @@ class ServiceTaskTests: QuickSpec {
             it("can fail json array response") {
                 
                 let dict: [AnyHashable: Any] = ["test": "ok"]
+                let body = "test".data(using: String.Encoding.ascii)!
                 
-                self.stub(http(.get, uri: "test.test"), json(dict))
+                self.stub(testData(.get, uri: "test.test", data: body), json(dict))
                 
                 waitUntil { (done) in
                     
                     ServiceTaskBuilder()
                         .endpoint(.GET, "test.test")
+                        .body(text: "test", encoding: .ascii)
                         .array { (data, response) in
                             fail("Request should fail!")
                         }
@@ -115,12 +168,17 @@ class ServiceTaskTests: QuickSpec {
                 
                 let dict: [AnyHashable: Any] = ["test": "ok"]
                 
-                self.stub(http(.get, uri: "test.test"), json(dict))
+                let testFileURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString).appendingPathExtension("txt")
+                let body = "Test".data(using: .utf8)!
+                try! body.write(to: testFileURL)
+                
+                self.stub(testData(.put, uri: "test.test", data: body), json(dict))
                 
                 waitUntil { (done) in
                     
                     ServiceTaskBuilder()
-                        .endpoint(.GET, "test.test")
+                        .endpoint(.PUT, "test.test")
+                        .body(url: testFileURL)
                         .dictionary { (data, response) in
                             let value = data["test"] as? String
                             expect(value).to(equal("ok"))
@@ -130,7 +188,6 @@ class ServiceTaskTests: QuickSpec {
                             fail("\(error)")
                         }
                         .perform()
-                    
                 }
             }
             
@@ -138,12 +195,13 @@ class ServiceTaskTests: QuickSpec {
                 
                 let array: [Any] = [["test": "ok"]]
                 
-                self.stub(http(.get, uri: "test.test"), json(array))
+                self.stub(http(.get, uri: "http://test.test/path/to/resource"), json(array))
                 
                 waitUntil { (done) in
                     
                     ServiceTaskBuilder()
-                        .endpoint(.GET, "test.test")
+                        .endpoint(.GET, "http://test.test")
+                        .path("/path/to/resource")
                         .dictionary { (data, response) in
                             fail("Request should fail!")
                         }
@@ -158,7 +216,10 @@ class ServiceTaskTests: QuickSpec {
             
             it("can cancel request") {
                 
-                self.stub(http(.get, uri: "test.cancel"), delay: 2, http(200))
+                let json = ["test": "ok"]
+                let body = try! JSONSerialization.data(withJSONObject: json, options: [])
+                
+                self.stub(testData(.get, uri: "test.cancel", data: body), delay: 2, http(200))
                 
                 var canceled = false
                 
@@ -166,6 +227,7 @@ class ServiceTaskTests: QuickSpec {
                     
                     let task = ServiceTaskBuilder()
                         .endpoint(.GET, "test.cancel")
+                        .body(json: json)
                         .content { (content, response) in
                             if canceled {
                                 done()
@@ -191,13 +253,20 @@ class ServiceTaskTests: QuickSpec {
             
             it("can fail to perform request") {
                 
-                self.stub(http(.get, uri: "test.test"), failure(NSError(domain: "test", code: 1, userInfo: nil)))
+                let dict = ["test": "ok"]
+                let body = try! URLEncodedSerialization.data(with: dict)
+                
+                self.stub(testData(.get, uri: "user:password@test.test", data: body), failure(NSError(domain: "test", code: 1, userInfo: nil)))
                 
                 waitUntil { (done) in
                     
                     ServiceTaskBuilder()
-                        .url("test.test")
-                        .method(.GET)
+                        .session(URLSession(configuration: URLSessionConfiguration.default))
+                        .url(URL(string: "test.test")!)
+                        .method("PATCH")
+                        .user("user")
+                        .password("password")
+                        .body(urlencoded: dict)
                         .data { (data, response) in
                             fail()
                         }
@@ -215,7 +284,7 @@ class ServiceTaskTests: QuickSpec {
                 waitUntil { (done) in
                     
                     ServiceTaskBuilder()
-                        .url("test.test")
+                        .components(URLComponents(string: "test.test")!)
                         .method(.GET)
                         .data { (data, response) in
                             fail()
@@ -237,13 +306,13 @@ class ServiceTaskTests: QuickSpec {
                 
                 let message = "Post Body"
                 
-                self.stub(http(.get, uri: "test.test"), json(["data": message]))
+                self.stub(http(.get, uri: "test.test?key=value"), json(["data": message]))
                 
                 waitUntil { (done) in
                     
                     ServiceTaskBuilder()
-                        .url("test.test")
-                        .method(.GET)
+                        .endpoint(.GET, URL(string: "test.test")!)
+                        .query(["key": "value"])
                         .json { (object, response) in
                             
                             guard let dictionary = object as? [AnyHashable: Any] else {
@@ -279,8 +348,7 @@ class ServiceTaskTests: QuickSpec {
                 waitUntil { (done) in
                     
                     ServiceTaskBuilder()
-                        .url("test.download")
-                        .method(.GET)
+                        .endpoint("GET", "test.download")
                         .file { (url, response) in
                             
                             let data = try! Data(contentsOf: url)
@@ -310,10 +378,17 @@ class ServiceTaskTests: QuickSpec {
                         
                         if let requestMethod = request.httpMethod, requestMethod == method.description, let stream = request.httpBodyStream {
 
-                            let data = self.readData(from: stream)
+                            let read: Data
+                            do {
+                                read = try self.readData(from: stream)
+                            }
+                            catch {
+                                fail("Read error: \(error)")
+                                return false
+                            }
 
                             do {
-                                let decoded = try Google_Protobuf_SourceContext(jsonUTF8Data: data)
+                                let decoded = try Google_Protobuf_SourceContext(jsonUTF8Data: read)
                                 if decoded != message {
                                     fail("messages are different!")
                                 }
@@ -336,8 +411,7 @@ class ServiceTaskTests: QuickSpec {
                 waitUntil { (done) in
                     
                     ServiceTaskBuilder()
-                        .url("test.test.com")
-                        .method(.PATCH)
+                        .endpoint("PATCH", URL(string: "test.test.com")!)
                         .body(proto: Google_Protobuf_SourceContext.self) { (message) in
                             message.fileName = "Test"
                         }
@@ -365,13 +439,19 @@ class ServiceTaskTests: QuickSpec {
                         
                         if let stream = request.httpBodyStream {
                             
-                            let data = self.readData(from: stream)
+                            let read: Data
+                            do {
+                                read = try self.readData(from: stream)
+                            }
+                            catch {
+                                return Mockingjay.Response.failure(NSError(domain: "Test", code: 1, userInfo: [NSLocalizedDescriptionKey: "Stream error: \(error)"]))
+                            }
                             
                             let response = HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: ["Content-Type": "application/json"])
-                            return Mockingjay.Response.success(response!, .content(data))
+                            return Mockingjay.Response.success(response!, .content(read))
                         }
                         
-                        return Mockingjay.Response.failure(NSError(domain: "Test", code: 1, userInfo: [NSLocalizedDescriptionKey: "No multipart stream!"]))
+                        return Mockingjay.Response.failure(NSError(domain: "Test", code: 1, userInfo: [NSLocalizedDescriptionKey: "No stream!"]))
                     }
                 }
                 
@@ -406,8 +486,15 @@ class ServiceTaskTests: QuickSpec {
                     return { (request:URLRequest) in
                         if let stream = request.httpBodyStream {
                             
-                            let data = self.readData(from: stream)
-                            let result = String(data: data, encoding: .utf8)
+                            let read: Data
+                            do {
+                                read = try self.readData(from: stream)
+                            }
+                            catch {
+                                return Mockingjay.Response.failure(NSError(domain: "Test", code: 1, userInfo: [NSLocalizedDescriptionKey: "Stream error: \(error)"]))
+                            }
+                            
+                            let result = String(data: read, encoding: .utf8)
                             
                             expect(result).to(equal(sampleData))
                             
