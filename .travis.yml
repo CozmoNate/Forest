@@ -3,18 +3,13 @@ language: swift
 
 osx_image: xcode10
 
- addons:
-  homebrew:
-    packages:
-    - xcode-coveralls
+branches:
+ only:
+ - master
 
 cache: 
   - bundler
   - cocoapods
-
-branches:
- only:
- - master
 
 env:
   global:
@@ -29,7 +24,6 @@ before_install:
   - bundle exec pod install --repo-update
 
 script:
-  - DERIVED_DATA_PATH="$(echo ~)/Library/Developer/Xcode/DerivedData"
   - if [ $RUN_TESTS == "YES" ]; then
       xcodebuild clean test -workspace "$WORKSPACE" -scheme "$SCHEME" -destination "$DESTINATION" -configuration Debug ONLY_ACTIVE_ARCH=YES ENABLE_TESTABILITY=YES | xcpretty;
     else
@@ -37,5 +31,6 @@ script:
     fi
   
 after_success:
-  #- bash <(curl -s https://codecov.io/bash)
-  - xcode-coveralls --verbose --exclude Pods ConduletTests
+  - bash <(curl -s https://codecov.io/bash)
+  - bundle exec xcov -w $WORKSPACE
+

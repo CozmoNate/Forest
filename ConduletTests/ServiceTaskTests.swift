@@ -20,17 +20,17 @@ class ServiceTaskTests: QuickSpec {
         let data: String
     }
     
-    func readData(from stream: InputStream) -> Data {
+    func readData(from stream: InputStream, bufferSize: Int = 1_000_000) -> Data {
         
         var data = Data()
         
         stream.open()
         while stream.hasBytesAvailable {
-            let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: 100000)
+            let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: bufferSize)
             defer {
                 buffer.deallocate()
             }
-            let result = stream.read(buffer, maxLength: 100000)
+            let result = stream.read(buffer, maxLength: bufferSize)
             if result > 0 {
                 data.append(buffer, count: result)
             }
@@ -400,7 +400,7 @@ class ServiceTaskTests: QuickSpec {
 
             it("can perform request with multipart form data") {
 
-                let sampleData = "--TEST\r\nContent-Disposition: form-data; name=\"Param\"\r\n\r\nValue\r\n--TEST\r\nContent-Disposition: form-data; name=\"Data\"\r\nContent-Type: data\r\n\r\nTest\r\n--TEST\r\nContent-Disposition: form-data; name=\"File\"; filename=\"filename\"\r\nContent-Type: file\r\n\r\nTest\r\n--TEST\r\nContent-Disposition: form-data; name=\"Text\"\r\nContent-Type: text/plain; charset=us-ascii\r\n\r\nText text test\r\n--TEST\r\nContent-Disposition: form-data; name=\"URL\"; filename=\"filename\"\r\nContent-Type: url\r\n\r\nTest\r\n--TEST--\r\n"
+                let sampleData = "--TEST\r\nContent-Disposition: form-data; name=\"Param\"\r\n\r\nValue\r\n--TEST\r\nContent-Disposition: form-data; name=\"Data URL\"\r\nContent-Type: text/plain\r\n\r\nTest\r\n--TEST\r\nContent-Disposition: form-data; name=\"Data Data\"\r\nContent-Type: data\r\n\r\nTest\r\n--TEST\r\nContent-Disposition: form-data; name=\"File Data\"; filename=\"filename\"\r\nContent-Type: file\r\n\r\nTest\r\n--TEST\r\nContent-Disposition: form-data; name=\"File URL\"; filename=\"filename\"\r\nContent-Type: text/plain\r\n\r\nTest\r\n--TEST\r\nContent-Disposition: form-data; name=\"Text\"\r\nContent-Type: text/plain; charset=us-ascii\r\n\r\nText text test\r\n--TEST\r\nContent-Disposition: form-data; name=\"Text Data\"\r\nContent-Type: text/plain; charset=us-ascii\r\nContent-Transfer-Encoding: binary\r\n\r\nTest text\r\n--TEST\r\nContent-Disposition: form-data; name=\"Text URL\"\r\nContent-Type: text/plain; charset=utf-8\r\n\r\nTest\r\n--TEST--\r\n"
 
                 func testMultipartData() -> (_ request: URLRequest) -> Response {
                     return { (request:URLRequest) in
@@ -423,17 +423,20 @@ class ServiceTaskTests: QuickSpec {
 
                 waitUntil { (done) in
 
-                    let testFileURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString).appendingPathExtension("test")
+                    let testFileURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString).appendingPathExtension("txt")
                     try! "Test".data(using: .utf8)!.write(to: testFileURL)
 
                     var builder = FormDataBuilder(boundary: "TEST")
                     builder.append(.property(name: "Param", value: "Value"))
-                    builder.append(.binary(name: "Data", mimeType: "data", data: "Test".data(using: .utf8)!))
-                    builder.append(.file(name: "File", fileName: "filename", mimeType: "file", data: "Test".data(using: .utf8)!))
+                    builder.append(try! .binary(name: "Data URL", url: testFileURL))
+                    builder.append(.binary(name: "Data Data", mimeType: "data", data: "Test".data(using: .utf8)!))
+                    builder.append(.file(name: "File Data", fileName: "filename", mimeType: "file", data: "Test".data(using: .utf8)!))
+                    builder.append(try! .file(name: "File URL", fileName: "filename", url: testFileURL))
                     builder.append(try! .text(name: "Text", encoding: .ascii, value: "Text text test"))
-                    builder.append(try! .file(name: "URL", fileName: "filename", mimeType: "url", url: testFileURL))
-
-                    expect(builder.calculateContentSize()).to(equal(471))
+                    builder.append(.text(name: "Text Data", encoding: .ascii, transferEncoding: .binary, data: "Test text".data(using: .ascii)!))
+                    builder.append(try! .text(name: "Text URL", url: testFileURL))
+                    
+                    expect(builder.calculateContentSize()).to(equal(840))
 
                     let formDataURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString).appendingPathExtension("formdata")
                     try! builder.encode(to: formDataURL)

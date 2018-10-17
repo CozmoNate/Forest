@@ -84,11 +84,11 @@ extension FormDataPart {
     }
 
     /// Create binary data part with MIME type using local file as a source of data
-    public static func binary(name: String, mimeType: String, transferEncoding: Encoding? = nil, url: URL) throws -> FormDataPart {
+    public static func binary(name: String, mimeType: String? = nil, transferEncoding: Encoding? = nil, url: URL) throws -> FormDataPart {
         guard let size = try getFileSize(at: url), let stream = InputStream(url: url) else {
             throw FormDataError.emptyFileOrNoAccess(url)
         }
-        return binary(name: name, mimeType: mimeType, transferEncoding: transferEncoding, stream: stream, size: size)
+        return binary(name: name, mimeType: mimeType ?? mimeTypeForFileAtURL(url), transferEncoding: transferEncoding, stream: stream, size: size)
     }
 
     /// Create text data part with specific encoding (optional) using string as data source

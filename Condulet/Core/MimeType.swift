@@ -47,10 +47,10 @@ public func stringEncodingToTextEncodingName(_ encoding: String.Encoding) -> Str
 }
 
 public func mimeTypeFromPathExtension(_ pathExtension: String) -> String? {
-    guard let uti = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, pathExtension as CFString, kUTTagClassFilenameExtension)?.takeRetainedValue() else {
+    guard let uti = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, pathExtension as NSString, nil)?.takeRetainedValue() else {
         return nil
     }
-    guard let mime = UTTypeCopyPreferredTagWithClass(uti as CFString, kUTTagClassMIMEType)?.takeRetainedValue() else {
+    guard let mime = UTTypeCopyPreferredTagWithClass(uti, kUTTagClassMIMEType)?.takeRetainedValue() else {
         return nil
     }
     return mime as String
