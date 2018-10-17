@@ -19,7 +19,7 @@ env:
   matrix:
     - DESTINATION="OS=12.0,name=iPhone 8" SCHEME="Condulet" SDK="iphonesimulator10.0" RUN_TESTS="YES"
 
-before_install:
+install:
   - bundle install
   - bundle exec pod install --repo-update
 
@@ -32,5 +32,5 @@ script:
   
 after_success:
   - bash <(curl -s https://codecov.io/bash)
-  - bundle exec xcov -w $WORKSPACE
+  - slather
 

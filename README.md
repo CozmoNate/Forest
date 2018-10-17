@@ -4,12 +4,12 @@
 
 # Condulet 
 
-[![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/kozlek/Condulet/raw/master/LICENSE)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/kozlek/Condulet/raw/master/LICENSE)
 [![Language](https://img.shields.io/badge/swift-4.2-orange.svg)](https://swift.org/blog/swift-4-2-released/)
 [![Build Status](https://travis-ci.com/kozlek/Condulet.svg?branch=master)](https://travis-ci.com/kozlek/Condulet)
 [![Coverage Status](https://codecov.io/gh/kozlek/Condulet/branch/master/graph/badge.svg)](https://codecov.io/gh/kozlek/Condulet)
 
-Condulet is flexible and extensible API client construction framework built on top of `URLSession` and `URLSessionTask`. It integrates simple parsing approach and can send and receive plenty of data types out of the box. Condulet provides most of the features needed to build robust client for your backend services. The main purpose of it — make your job done.
+Condulet is flexible and extensible REST API client construction framework built on top of `URLSession` and `URLSessionTask`. With Condulet you can send and receive plenty of data types out of the box. Because of it simple data encoding/decoding approach and extensible architecture it will be easy to add your custom network object mappers. Condulet provides most of the features needed to build robust client for your backend services. The main purpose of it — make your job done.
 
 You could ask why Condulet and not any other networking framework already available? Sure, you’ll get one best suitable for your needs and style preference. What I was looking for: 
 

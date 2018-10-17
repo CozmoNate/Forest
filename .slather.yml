@@ -1,0 +1,7 @@
+coverage_service: coveralls
+workspace: Condulet.xcworkspace
+xcodeproj: Condulet.xcodeproj
+scheme: Condulet
+ignore:
+  - Pods/*
+  - ConduletTests/*

@@ -421,27 +421,27 @@ class ServiceTaskTests: QuickSpec {
 
                 self.stub(http(.post, uri: "test.multipart"), testMultipartData())
 
+                let testFileURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString).appendingPathExtension("txt")
+                try! "Test".data(using: .utf8)!.write(to: testFileURL)
+                
+                var builder = FormDataBuilder(boundary: "TEST")
+                builder.append(.property(name: "Param", value: "Value"))
+                builder.append(try! .binary(name: "Data URL", url: testFileURL))
+                builder.append(.binary(name: "Data Data", mimeType: "data", data: "Test".data(using: .utf8)!))
+                builder.append(.file(name: "File Data", fileName: "filename", mimeType: "file", data: "Test".data(using: .utf8)!))
+                builder.append(try! .file(name: "File URL", fileName: "filename", url: testFileURL))
+                builder.append(try! .text(name: "Text", encoding: .ascii, value: "Text text test"))
+                builder.append(.text(name: "Text Data", encoding: .ascii, transferEncoding: .binary, data: "Test text".data(using: .ascii)!))
+                builder.append(try! .text(name: "Text URL", url: testFileURL))
+                
+                expect(builder.calculateContentSize()).to(equal(840))
+                
+                let formDataURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString).appendingPathExtension("formdata")
+                try! builder.encode(to: formDataURL)
+                
+                try? FileManager.default.removeItem(at: testFileURL)
+                
                 waitUntil { (done) in
-
-                    let testFileURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString).appendingPathExtension("txt")
-                    try! "Test".data(using: .utf8)!.write(to: testFileURL)
-
-                    var builder = FormDataBuilder(boundary: "TEST")
-                    builder.append(.property(name: "Param", value: "Value"))
-                    builder.append(try! .binary(name: "Data URL", url: testFileURL))
-                    builder.append(.binary(name: "Data Data", mimeType: "data", data: "Test".data(using: .utf8)!))
-                    builder.append(.file(name: "File Data", fileName: "filename", mimeType: "file", data: "Test".data(using: .utf8)!))
-                    builder.append(try! .file(name: "File URL", fileName: "filename", url: testFileURL))
-                    builder.append(try! .text(name: "Text", encoding: .ascii, value: "Text text test"))
-                    builder.append(.text(name: "Text Data", encoding: .ascii, transferEncoding: .binary, data: "Test text".data(using: .ascii)!))
-                    builder.append(try! .text(name: "Text URL", url: testFileURL))
-                    
-                    expect(builder.calculateContentSize()).to(equal(840))
-
-                    let formDataURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString).appendingPathExtension("formdata")
-                    try! builder.encode(to: formDataURL)
-
-                    try? FileManager.default.removeItem(at: testFileURL)
                     
                     ServiceTaskBuilder()
                         .endpoint(.POST, "test.multipart")
