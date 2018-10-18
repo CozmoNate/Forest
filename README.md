@@ -9,7 +9,7 @@
 [![Build Status](https://travis-ci.com/kozlek/Condulet.svg?branch=master)](https://travis-ci.com/kozlek/Condulet)
 [![Coverage Status](https://coveralls.io/repos/github/kozlek/Condulet/badge.svg?branch=master)](https://coveralls.io/github/kozlek/Condulet?branch=master)
 
-Condulet is flexible and extensible REST API client construction framework built on top of `URLSession` and `URLSessionTask`. With Condulet you can send and receive plenty of data types out of the box. Because of it simple data encoding/decoding approach and extensible architecture it will be easy to add your custom network object mappers. Condulet provides most of the features needed to build robust client for your backend services. The main purpose of it — make your job done.
+Condulet is flexible and extensible REST API client construction framework built on top of `URLSession` and `URLSessionTask`. It includes network object mappers supporting plenty of data types out of the box. Because of it simple data encoding/decoding approach and extensible architecture it will be easy to add your custom network object mappers. Condulet provides most of the features needed to build robust client for your backend services. The main purpose of it — make your job done.
 
 You could ask why Condulet and not any other networking framework already available? Sure, you’ll get one best suitable for your needs and style preference. What I was looking for: 
 
