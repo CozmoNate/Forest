@@ -111,7 +111,7 @@ public extension ServiceTaskBuilding {
         return self
     }
     
-    /// Handle data response. When task is performed via Download action, received file content will be handled as data response
+    /// Handle data response. When task is performed via Download action the file received will be loaded to memory and handled as data response
     @discardableResult
     public func data(_ handler: @escaping (Data, URLResponse) -> Void) -> Self {
         task.responseHandler = BlockResponseHandler { [queue = responseQueue] (content, response) in

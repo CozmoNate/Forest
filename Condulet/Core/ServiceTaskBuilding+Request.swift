@@ -191,7 +191,7 @@ public extension ServiceTaskBuilding {
         return self
     }
     
-    /// Append HTTP headers to request. Set 'merge' parameter to false to override existing headers.
+    /// Append HTTP headers to request. When 'merge' flag is true new headers will be merged with the existing by overriding old keys. Default 'merge' flag value is true. Set 'merge' parameter to false to replace existing headers. 
     @discardableResult
     public func headers(_ headers: [String: String], merge: Bool = true) -> Self {
         if merge {

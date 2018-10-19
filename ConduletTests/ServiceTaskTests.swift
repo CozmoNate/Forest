@@ -13,6 +13,12 @@ import SwiftProtobuf
 
 @testable import Condulet
 
+func compare(_ dict1: [String: String], _ dict2: [String: String]) -> Bool {
+    return Set<String>(dict1.keys)
+        .union(dict2.keys)
+        .reduce(true, { $0 && (dict1[$1] == dict2[$1]) })
+}
+
 class ServiceTaskTests: QuickSpec {
     
     struct Test: Codable {
@@ -78,9 +84,58 @@ class ServiceTaskTests: QuickSpec {
                 self.removeAllStubs()
             }
             
-            it("can perform request") {
+            it("can handle data response") {
                 
-                func text(_ text: String) -> (_ request: URLRequest) -> Response {
+                let original = "Test".data(using: .utf8)!
+                
+                self.stub(http(.get, uri: "test.test"), http(download: .content(original)))
+                
+                waitUntil { (done) in
+                    
+                    ServiceTaskBuilder()
+                        .url("test.test")
+                        .method(.GET)
+                        .data { (data, response) in
+                            expect(original).to(equal(data))
+                            done()
+                        }
+                        .error({ (error, response) in
+                            fail(error.localizedDescription)
+                        })
+                        .perform()
+                }
+            }
+            
+            it("can use response handler") {
+                
+                let original = "Test".data(using: .utf8)!
+                
+                self.stub(http(.get, uri: "test.test"), http(download: .content(original)))
+                
+                waitUntil { (done) in
+                    
+                    ServiceTaskBuilder()
+                        .url("test.test")
+                        .method(.GET)
+                        .response(BlockResponseHandler { (content, response) in
+                            switch content {
+                            case .data(let data):
+                                expect(original).to(equal(data))
+                            default:
+                                fail("Invalid content!")
+                            }
+                            done()
+                        })
+                        .error({ (error, response) in
+                            fail(error.localizedDescription)
+                        })
+                        .perform()
+                }
+            }
+            
+            it("can handle text response") {
+                
+                func test(_ text: String) -> (_ request: URLRequest) -> Response {
                     return { (request:URLRequest) in
                         guard let data = text.data(using: String.Encoding.ascii) else {
                             return .failure(NSError(domain: "test", code: 2, userInfo: [NSLocalizedDescriptionKey : "Failed to encode text to data"]))
@@ -91,17 +146,19 @@ class ServiceTaskTests: QuickSpec {
                 
                 let data = "Test".data(using: .utf8)!
                 
-                self.stub(testData(.get, uri: "test.test?key=val&key2=val2", data: data), text("test 12345"))
+                self.stub(testData(.get, uri: "test.test?key=val&key2=val2", data: data), test("test 12345"))
                 
                 waitUntil { (done) in
                     
-                    ServiceTaskBuilder()
+                    let task = ServiceTaskBuilder()
                         .endpoint(.GET, "test.test")
                         .query([
                             URLQueryItem(name: "key", value: "val"),
                             URLQueryItem(name: "key2", value: "val2")
                             ])
                         .body(data: data)
+                        .headers(["test" : "1", "test2": "2"])
+                        .headers(["test2" : "3"], merge: true)
                         .text { (text, response) in
                             expect(text).to(equal("test 12345"))
                             done()
@@ -110,6 +167,8 @@ class ServiceTaskTests: QuickSpec {
                             fail("\(error)")
                         }
                         .perform()
+                    
+                    expect(compare(task.headers, ["test" : "1", "test2": "3"])).to(beTrue())
                     
                 }
             }
@@ -122,12 +181,14 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil { (done) in
                     
-                    ServiceTaskBuilder()
+                    let task = ServiceTaskBuilder()
                         .scheme("http")
                         .host("test.test")
                         .method(.GET)
                         .query("resource")
                         .body(json: array)
+                        .headers(["initial": "value"])
+                        .headers(["replaced": "headers"], merge: false)
                         .array { (data, response) in
                             expect(data.count).to(equal(2))
                             done()
@@ -137,6 +198,8 @@ class ServiceTaskTests: QuickSpec {
                         }
                         .perform()
                     
+                    
+                    expect(compare(task.headers, ["replaced": "headers"])).to(beTrue())
                 }
             }
             
@@ -155,10 +218,10 @@ class ServiceTaskTests: QuickSpec {
                         .array { (data, response) in
                             fail("Request should fail!")
                         }
-                        .error { (error, response) in
+                        .error(BlockErrorHandler { (error, response) in
                             expect(error).to(matchError(ServiceTaskError.invalidResponseData))
                             done()
-                        }
+                        })
                         .perform()
                     
                 }
@@ -435,6 +498,27 @@ class ServiceTaskTests: QuickSpec {
                     
                     ServiceTaskBuilder()
                         .endpoint("PATCH", URL(string: "test.test.com")!)
+                        .body(proto: Google_Protobuf_SourceContext.self) { (message) in
+                            message.fileName = "Test"
+                        }
+                        .proto(Google_Protobuf_SourceContext.self) { (message, response) -> Void in
+                            if message.fileName == "Test" {
+                                done()
+                            }
+                            else {
+                                fail()
+                            }
+                        }
+                        .error { (error, response) in
+                            fail("\(error)")
+                        }
+                        .perform()
+                }
+                
+                waitUntil { (done) in
+                    
+                    ServiceTaskBuilder()
+                        .endpoint("PATCH", URL(string: "test.test.com")!)
                         .body { (message: inout Google_Protobuf_SourceContext) in
                             message.fileName = "Test"
                         }
@@ -476,7 +560,7 @@ class ServiceTaskTests: QuickSpec {
                         .perform()
                 }
             }
-            
+     
             it("can send and receive Codable objects") {
                 
                 func testDecodable(object: Codable) -> (_ request: URLRequest) -> Response {
@@ -518,6 +602,38 @@ class ServiceTaskTests: QuickSpec {
                             case .failure(let error):
                                 fail("\(error)")
                             }
+                        }
+                        .perform()
+                }
+                
+                waitUntil { (done) in
+                    
+                    ServiceTaskBuilder()
+                        .url("test.test")
+                        .method(.POST)
+                        .body(codable: test)
+                        .codable { (object: Test, response) in
+                            expect(object.data).to(equal("Test"))
+                            done()
+                        }
+                        .error { (error, response) in
+                            fail(error.localizedDescription)
+                        }
+                        .perform()
+                }
+                
+                waitUntil { (done) in
+                    
+                    ServiceTaskBuilder()
+                        .url("test.test")
+                        .method(.POST)
+                        .body(codable: test)
+                        .codable(Test.self) { (object, response) in
+                            expect(object.data).to(equal("Test"))
+                            done()
+                        }
+                        .error { (error, response) in
+                            fail(error.localizedDescription)
                         }
                         .perform()
                 }

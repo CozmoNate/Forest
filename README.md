@@ -9,22 +9,20 @@
 [![Build Status](https://travis-ci.com/kozlek/Condulet.svg?branch=master)](https://travis-ci.com/kozlek/Condulet)
 [![Coverage Status](https://coveralls.io/repos/github/kozlek/Condulet/badge.svg?branch=master)](https://coveralls.io/github/kozlek/Condulet?branch=master)
 
-Condulet is flexible and extensible REST API client construction framework built on top of `URLSession` and `URLSessionTask`. It includes network object mappers supporting plenty of data types out of the box. Because of it simple data encoding/decoding approach and extensible architecture it will be easy to add your custom network object mappers. Condulet provides most of the features needed to build robust client for your backend services. The main purpose of it — make your job done.
+Condulet is flexible and extensible REST API client construction framework built on top of `URLSession` and `URLSessionTask`. It already inculdes network object mappers from JSON for the most commonly used data types. Because of it simple data encoding/decoding approach and extensible architecture you can easily add your custom network object mappers. Condulet provides most of the features needed to build robust client for your backend services. The main purpose of it — make your job done.
 
-You could ask why Condulet and not any other networking framework already available? Sure, you’ll get one best suitable for your needs and style preference. What I was looking for: 
+You could ask why not to get any other proven networking framework? Sure, you’ll get one best suitable for your needs and style preference, but it's always good to have an options. Following is the list of features I wanted from higher level networking layer and imlemented in Condulet:
 
 * Promise like style request building without needing to make any enums or classes describing endponts 
 * Promise like style body configuration, simple network objects encoding  
 * Promise like style response handling and simple network objects mapping 
 * Handle response in the same place as the request and body configuration 
-* Transparent, asynchronous, and completely customizable response interception and rewind/retry. Mainly to map errors and handle expired token when making OAuth like secured requests 
+* Transparent and completely customizable response interception and rewind/retry, allowing async handling. Mainly to map errors and catch expired token in case of OAuth-like secured request 
 * Extensibility. Easily add custom response mappers and body data encoders using closures, or protocols, or subclassing whichever will be more convenient for specific need. Use this with default framework’s classes or extend them or subclass, but it should be easy. 
 * Download and keep files where I need them
 * Deserialization of JSON body. Map with codable, to array or dictionary
 * Serialization and deserialization of Protobufs messages from JSON body
 * Multipart form data support as a bonus 
-
-So, I ended up building my own solution partially by real need, partially for fun ;)
 
 ## Installation
 
