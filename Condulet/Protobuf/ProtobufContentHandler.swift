@@ -39,20 +39,12 @@ public class ProtobufContentHandler<T: Message>: DataContentHandler<T> {
     
     public override func transform(data: Data, response: URLResponse) throws -> T {
         
-        guard let httpResponse = response as? HTTPURLResponse else {
+        guard let httpResponse = response as? HTTPURLResponse,
+            httpResponse.mimeType == "application/json",
+            let metadataContentType = httpResponse.allHeaderFields["grpc-metadata-content-type"] as? String,
+            metadataContentType == "application/grpc" else {
+                
             throw ServiceTaskError.invalidResponse
-        }
-        
-        guard httpResponse.mimeType == "application/json" else {
-            throw ServiceTaskError.invalidResponseData
-        }
-        
-        guard let metadataContentType = httpResponse.allHeaderFields["grpc-metadata-content-type"] as? String else {
-            throw ServiceTaskError.invalidResponseData
-        }
-        
-        guard metadataContentType == "application/grpc" else {
-            throw ServiceTaskError.invalidResponseData
         }
         
         return try T(jsonUTF8Data: data)

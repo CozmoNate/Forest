@@ -35,6 +35,8 @@ import Foundation
 
 public enum FormDataChunk {
 
+    case source(InputStream, size: Int)
+    
     case separator(boundary: String)
     case contentDisposition(name: String)
     case contentType(value: String)
@@ -42,13 +44,16 @@ public enum FormDataChunk {
     case header(name: String, value: String)
     case parameter(semicolon: Bool, name: String, value: String?)
     case string(String)
-    case source(InputStream, size: Int)
     case lineBreak
     case closure(boundary: String)
 
-    public var bytes: [UInt8]? {
+    public func getBytes(bufferSize: Int = 1_000_000) throws -> [UInt8] {
         let stringRepresentation: String
         switch self {
+        
+        case .source:
+            throw FormDataError.unavailable
+            
         case .separator(let boundary):
             stringRepresentation = "--\(boundary)"
         case .contentDisposition(let name):
@@ -63,8 +68,6 @@ public enum FormDataChunk {
             stringRepresentation = (semicolon ? "; " : "") + name + (value != nil ? "=\(value!)" : "")
         case .string(let string):
             stringRepresentation = string
-        case .source:
-            return nil
         case .lineBreak:
             stringRepresentation = "\r\n"
         case .closure(let boundary):
@@ -75,13 +78,12 @@ public enum FormDataChunk {
     
     public func write(to stream: OutputStream, bufferSize: Int = 1_000_000) throws {
         switch self {
-        case .source(let input, let size):
-            try transfer(from: input, to: stream, bufferSize: size < bufferSize ? size : bufferSize)
+            
+        case .source(let source, let size):
+            try transfer(from: source, to: stream, bufferSize: size < bufferSize ? size : bufferSize)
+            
         default:
-            guard let bytes = bytes else {
-                throw FormDataError.unknown
-            }
-            try stream.write(bytes)
+            try stream.write(try getBytes())
         }
     }
     

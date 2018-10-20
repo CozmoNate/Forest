@@ -76,11 +76,15 @@ open class URLEncodedSerialization {
         
         components.query = query
         
-        guard let dictionary = components.queryItems?.reduce(into: [String: String](), { $0[$1.name] = $1.value ?? "" }) else {
-            throw URLEncodedSerializationError.decodingFailure
-        }
+        let dictionary = components.queryItems?
+            .compactMap({ (item) -> (key: String, value: String)? in
+                item.value == nil ? nil : (key: item.name, value: item.value!)
+            })
+            .reduce(into: [String: String](), { (result, item) in
+                result[item.key] = item.value
+            })
         
-        return dictionary
+        return dictionary ?? [:]
     }
 
 }

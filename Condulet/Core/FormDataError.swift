@@ -41,5 +41,5 @@ public enum FormDataError: Error {
     case fileIsNotWriteable(URL)
     case outputOperationFailure
     case noOutputSpace
-    case unknown
+    case unavailable
 }

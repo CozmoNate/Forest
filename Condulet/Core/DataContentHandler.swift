@@ -37,7 +37,7 @@ open class DataContentHandler<T>: ServiceTaskResponseHandling {
     
     public typealias Result = T
     
-    private var completion: ((T, URLResponse) throws -> Void)?
+    public var completion: ((T, URLResponse) throws -> Void)?
     
     /// Create an instance of a handler. NOTE: The block will be executed on a background thread
     public init(completion: ((T, URLResponse) throws -> Void)? = nil) {

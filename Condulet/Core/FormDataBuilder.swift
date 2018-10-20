@@ -117,7 +117,8 @@ public extension FormDataBuilder {
             case .source(_, let size):
                 return result + UInt64(size)
             default:
-                return result + UInt64(chunk.bytes?.count ?? 0)
+                let bytes = try? chunk.getBytes().count
+                return result + UInt64(bytes ?? 0)
             }
         })
 

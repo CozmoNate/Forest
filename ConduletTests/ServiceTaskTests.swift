@@ -691,6 +691,27 @@ class ServiceTaskTests: QuickSpec {
                 }
             }
             
+            it("can fail to receive protobuf message") {
+                
+                self.stub(http(.get, uri: "test.test.com"), json(["file_name": "Test"]))
+                
+                waitUntil { (done) in
+                    
+                    ServiceTaskBuilder()
+                        .endpoint(.GET, URL(string: "test.test.com")!)
+                        .response(proto: Google_Protobuf_SourceContext.self) { (response) -> Void in
+                            switch response {
+                            case .success:
+                                fail()
+                            case .failure(let error):
+                                done()
+                            }
+                        }
+                        .perform()
+                }
+                
+            }
+            
             it("can send and receive protobuf messages") {
                 
                 func testProto(_ method: Mockingjay.HTTPMethod, uri: String, message: Google_Protobuf_SourceContext) -> (_ request: URLRequest) -> Bool {
