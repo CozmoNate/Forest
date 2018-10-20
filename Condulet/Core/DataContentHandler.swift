@@ -51,11 +51,8 @@ open class DataContentHandler<T>: ServiceTaskResponseHandling {
         switch content {
         case .data(let body):
             data = body
-        case .file(let url):
-            defer {
-                try? FileManager.default.removeItem(at: url) // Remove temp file
-            }
-            data = try Data(contentsOf: url, options: .mappedIfSafe)
+        case .file:
+            throw ServiceTaskError.invalidContent
         }
         
         // Map response data

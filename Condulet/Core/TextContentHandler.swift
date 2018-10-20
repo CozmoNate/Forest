@@ -39,7 +39,7 @@ public class TextContentHandler: DataContentHandler<String> {
     public override func transform(data: Data, response: URLResponse) throws -> String {
         
         guard response.mimeType == "text/plain" else {
-            throw ServiceTaskError.invalidResponseData
+            throw ServiceTaskError.invalidContent
         }
         
         var encoding: String.Encoding = .utf8

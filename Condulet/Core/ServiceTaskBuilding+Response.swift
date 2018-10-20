@@ -100,18 +100,18 @@ public extension ServiceTaskBuilding {
     public func file(_ handler: @escaping (URL, URLResponse) -> Void) -> Self {
         task.responseHandler = BlockResponseHandler { [queue = responseQueue] (content, response) in
             switch content {
-            case let .file(url):
+            case .file(let url):
                 queue.addOperation {
                     handler(url, response)
                 }
             default:
-                throw ServiceTaskError.invalidResponse
+                throw ServiceTaskError.invalidContent
             }
         }
         return self
     }
     
-    /// Handle data response. When task is performed via Download action the file received will be loaded to memory and handled as data response
+    /// Handle data response
     @discardableResult
     public func data(_ handler: @escaping (Data, URLResponse) -> Void) -> Self {
         task.responseHandler = BlockResponseHandler { [queue = responseQueue] (content, response) in
@@ -120,14 +120,8 @@ public extension ServiceTaskBuilding {
                 queue.addOperation {
                     handler(data, response)
                 }
-            case .file(let url):
-                defer {
-                    try? FileManager.default.removeItem(at: url)
-                }
-                let data = try Data(contentsOf: url, options: Data.ReadingOptions.mappedIfSafe)
-                queue.addOperation {
-                    handler(data, response)
-                }
+            case .file:
+                throw ServiceTaskError.invalidContent
             }
         }
         return self
@@ -161,7 +155,7 @@ public extension ServiceTaskBuilding {
     public func array(_ handler: @escaping ([Any], URLResponse) -> Void) -> Self {
         task.responseHandler = JSONContentHandler { [queue = responseQueue] (object, response) in
             guard let array = object as? [Any] else {
-                throw ServiceTaskError.invalidResponseData
+                throw ServiceTaskError.invalidContent
             }
             queue.addOperation {
                 handler(array, response)
@@ -175,7 +169,7 @@ public extension ServiceTaskBuilding {
     public func dictionary(_ handler: @escaping ([AnyHashable: Any], URLResponse) -> Void) -> Self {
         task.responseHandler = JSONContentHandler { [queue = responseQueue] (object, response) in
             guard let dictionary = object as? [AnyHashable: Any] else {
-                throw ServiceTaskError.invalidResponseData
+                throw ServiceTaskError.invalidContent
             }
             queue.addOperation {
                 handler(dictionary, response)

@@ -39,7 +39,7 @@ public class JSONContentHandler: DataContentHandler<Any> {
     public override func transform(data: Data, response: URLResponse) throws -> Any {
         
         guard response.mimeType == "application/json" else {
-            throw ServiceTaskError.invalidResponseData
+            throw ServiceTaskError.invalidContent
         }
         
         return try JSONSerialization.jsonObject(with: data, options: [.allowFragments])

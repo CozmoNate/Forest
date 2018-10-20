@@ -277,7 +277,7 @@ class ServiceTaskTests: QuickSpec {
                             fail("Request should fail!")
                         }
                         .error(BlockErrorHandler { (error, response) in
-                            expect(error).to(matchError(ServiceTaskError.invalidResponseData))
+                            expect(error).to(matchError(ServiceTaskError.invalidContent))
                             done()
                         })
                         .perform()
@@ -346,7 +346,7 @@ class ServiceTaskTests: QuickSpec {
                             fail("Request should fail!")
                         }
                         .error { (error, response) in
-                            expect(error).to(matchError(ServiceTaskError.invalidResponseData))
+                            expect(error).to(matchError(ServiceTaskError.invalidContent))
                             done()
                         }
                         .perform()

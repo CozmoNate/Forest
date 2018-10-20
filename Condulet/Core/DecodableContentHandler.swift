@@ -41,7 +41,7 @@ public class DecodableContentHandler<T: Decodable>: DataContentHandler<T> {
     public override func transform(data: Data, response: URLResponse) throws -> T {
         
         guard response.mimeType == "application/json" else {
-            throw ServiceTaskError.invalidResponseData
+            throw ServiceTaskError.invalidContent
         }
         
         return try decoder.decode(T.self, from: data)

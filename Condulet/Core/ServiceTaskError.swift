@@ -49,16 +49,14 @@ public enum ServiceTaskError: Error {
     case notImplemented
     /// Task is already executed
     case alreadyRunning
-    /// Task received unsupported response server response
+    /// Received unsupported response
     case invalidResponse
-    /// Task received unsupported response content
-    case invalidResponseData
-    /// Task response handler have decoding issues
+    /// Received unsupported content
+    case invalidContent
+    /// Response handler failed to decode content received
     case decodingFailure
     /// Failed to encode request body
     case encodingFailure
     /// Download destination is invalid
     case invalidDestination
-    /// File URL is invalid or file is not accessible
-    case invalidFile
 }

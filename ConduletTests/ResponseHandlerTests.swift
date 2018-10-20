@@ -17,7 +17,7 @@ class ResponseHandlerTests: QuickSpec {
 
     override func spec() {
 
-        describe("ContentHandler") {
+        describe("DataContentHandler") {
             
             class TestContentHandler: DataContentHandler<Data> {
                 
@@ -36,7 +36,7 @@ class ResponseHandlerTests: QuickSpec {
                 }
             }
             
-            it("can map downloaded file to data") {
+            it("fails when no data received but a file downloaded") {
                 
                 waitUntil (timeout: 5) { (done) in
                 
@@ -46,11 +46,18 @@ class ResponseHandlerTests: QuickSpec {
                     try! body.write(to: file)
                     
                     let handler = TestContentHandler { (data, response) in
-                        expect(data).to(equal(body))
-                        done()
+                        fail()
                     }
                     
-                    try! handler.handle(content: .file(file), response: URLResponse(url: URL(string: "test.test")!, mimeType: nil, expectedContentLength: 0, textEncodingName: nil))
+                    do {
+                        try handler.handle(content: .file(file), response: URLResponse(url: URL(string: "test.test")!, mimeType: nil, expectedContentLength: 0, textEncodingName: nil))
+                    }
+                    catch ServiceTaskError.invalidContent {
+                        done()
+                    }
+                    catch {
+                        fail("\(error)")
+                    }
                 }
             }
         }

@@ -39,7 +39,7 @@ public class URLEncodedContentHandler: DataContentHandler<[String: String]> {
     public override func transform(data: Data, response: URLResponse) throws -> [String : String] {
         
         guard response.mimeType == "application/x-www-form-urlencoded" else {
-            throw ServiceTaskError.invalidResponseData
+            throw ServiceTaskError.invalidContent
         }
         
         return try URLEncodedSerialization.dictionary(with: data)
