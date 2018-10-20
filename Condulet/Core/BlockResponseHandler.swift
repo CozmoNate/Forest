@@ -1,5 +1,5 @@
 //
-//  BlockContentHandler.swift
+//  BlockResponseHandler.swift
 //  Condulet
 //
 //  Created by Natan Zalkin on 02/10/2018.
@@ -33,17 +33,16 @@ import Foundation
 
 
 /// Response handler with block
-public class BlockResponseHandler: GeneralResponseHandler {
+public class BlockResponseHandler: ServiceTaskResponseHandling {
 
-    public var handler: ((ServiceTaskContent, URLResponse) throws -> Void)?
-
-    /// Create an instance of a handler. NOTE: block will be executed on background thread.
-    public init(_ block: ((ServiceTaskContent, URLResponse) throws -> Void)? = nil) {
-        handler = block
+    private var completion: ((ServiceTaskContent, URLResponse) throws -> Void)?
+    
+    /// Create an instance of a handler. NOTE: The block will be executed on a background thread
+    public init(completion: ((ServiceTaskContent, URLResponse) throws -> Void)? = nil) {
+        self.completion = completion
     }
-
-    public override func handle(content: ServiceTaskContent, response: URLResponse) throws {
-        try super.handle(content: content, response: response)
-        try self.handler?(content, response)
+    
+    public func handle(content: ServiceTaskContent, response: URLResponse) throws {
+        try self.completion?(content, response)
     }
 }

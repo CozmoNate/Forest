@@ -35,15 +35,9 @@ import SwiftProtobuf
 
 
 /// A handler that expects and parse response with protobuf message. Completion block returns deserialized message of expected type on success
-public class ProtobufContentHandler<T: Message>: DataContentHandler {
+public class ProtobufContentHandler<T: Message>: DataContentHandler<T> {
     
-    public var completion: ((T, URLResponse) throws -> Void)?
-    
-    public init(completion: ((T, URLResponse) throws -> Void)? = nil) {
-        self.completion = completion
-    }
-    
-    public override func handle(data: Data, response: URLResponse) throws {
+    public override func transform(data: Data, response: URLResponse) throws -> T {
         
         guard let httpResponse = response as? HTTPURLResponse else {
             throw ServiceTaskError.invalidResponse
@@ -61,9 +55,7 @@ public class ProtobufContentHandler<T: Message>: DataContentHandler {
             throw ServiceTaskError.invalidResponseData
         }
         
-        let message = try T(jsonUTF8Data: data)
-        
-        try completion?(message, response)
+        return try T(jsonUTF8Data: data)
     }
     
 }

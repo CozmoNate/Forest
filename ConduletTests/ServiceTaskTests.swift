@@ -100,7 +100,24 @@ class ServiceTaskTests: QuickSpec {
                             done()
                         }
                         .error({ (error, response) in
-                            fail(error.localizedDescription)
+                            fail("\(error)")
+                        })
+                        .perform()
+                }
+                
+                waitUntil { (done) in
+                    
+                    ServiceTaskBuilder()
+                        .url("test.test")
+                        .method(.GET)
+                        .response(data: { (response) in
+                            switch response {
+                            case .success(let data):
+                                expect(original).to(equal(data))
+                                done()
+                            case .failure(let error):
+                                fail("\(error)")
+                            }
                         })
                         .perform()
                 }
@@ -127,7 +144,7 @@ class ServiceTaskTests: QuickSpec {
                             done()
                         })
                         .error({ (error, response) in
-                            fail(error.localizedDescription)
+                            fail("\(error)")
                         })
                         .perform()
                 }
@@ -171,6 +188,27 @@ class ServiceTaskTests: QuickSpec {
                     expect(compare(task.headers, ["test" : "1", "test2": "3"])).to(beTrue())
                     
                 }
+                
+                waitUntil { (done) in
+                    
+                    let task = ServiceTaskBuilder()
+                        .endpoint(.GET, "test.test")
+                        .query([
+                            URLQueryItem(name: "key", value: "val"),
+                            URLQueryItem(name: "key2", value: "val2")
+                            ])
+                        .body(data: data)
+                        .response(text: { (response) in
+                            switch response {
+                            case .success(let object):
+                                expect(object).to(equal("test 12345"))
+                                done()
+                            case .failure(let error):
+                                fail("\(error)")
+                            }
+                        })
+                        .perform()
+                }
             }
             
             it("can handle json array response") {
@@ -201,6 +239,26 @@ class ServiceTaskTests: QuickSpec {
                     
                     expect(compare(task.headers, ["replaced": "headers"])).to(beTrue())
                 }
+                
+                waitUntil { (done) in
+                    
+                    let task = ServiceTaskBuilder()
+                        .scheme("http")
+                        .host("test.test")
+                        .method(.GET)
+                        .query("resource")
+                        .body(json: array)
+                        .response(array: { (response) in
+                            switch response {
+                            case .success(let object):
+                                expect(object.count).to(equal(2))
+                                done()
+                            case .failure(let error):
+                                fail("\(error)")
+                            }
+                        })
+                        .perform()
+                }
             }
             
             it("can fail json array response") {
@@ -225,6 +283,7 @@ class ServiceTaskTests: QuickSpec {
                         .perform()
                     
                 }
+                
             }
             
             it("can handle json dictionary response") {
@@ -237,7 +296,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 self.stub(testData(.put, uri: "test.test", data: body), json(dict))
                 
-                waitUntil { (done) in
+                waitUntil(timeout: 5) { (done) in
                     
                     ServiceTaskBuilder()
                         .endpoint(.PUT, "test.test")
@@ -250,6 +309,24 @@ class ServiceTaskTests: QuickSpec {
                         .error { (error, response) in
                             fail("\(error)")
                         }
+                        .perform()
+                }
+                
+                waitUntil(timeout: 5) { (done) in
+                    
+                    ServiceTaskBuilder()
+                        .endpoint(.PUT, "test.test")
+                        .body(url: testFileURL)
+                        .response(dictionary: { (response) in
+                            switch response {
+                            case .success(let object):
+                                let value = object["test"] as? String
+                                expect(value).to(equal("ok"))
+                                done()
+                            case .failure(let error):
+                                fail("\(error)")
+                            }
+                        })
                         .perform()
                 }
             }
@@ -312,6 +389,7 @@ class ServiceTaskTests: QuickSpec {
                         fail("Task is failed to cancel!")
                     }
                 }
+                
             }
             
             it("can fail to perform request") {
@@ -340,7 +418,7 @@ class ServiceTaskTests: QuickSpec {
                 }
             }
             
-            it("can fail with status code") {
+            it("can handle status code") {
                 
                 self.stub(http(.get, uri: "test.test"), json(["test": "fail"], status: 404))
                 
@@ -349,21 +427,105 @@ class ServiceTaskTests: QuickSpec {
                     ServiceTaskBuilder()
                         .components(URLComponents(string: "test.test")!)
                         .method(.GET)
-                        .data { (data, response) in
-                            fail()
+                        .statusCode { (code) in
+                            expect(code).to(equal(404))
+                            done()
                         }
                         .error { (error, response) in
-                            switch error {
-                            case ServiceTaskError.statusCode(404):
+                            fail()
+                        }
+                        .perform()
+                }
+                
+                waitUntil { (done) in
+                    
+                    ServiceTaskBuilder()
+                        .components(URLComponents(string: "test.test")!)
+                        .method(.GET)
+                        .response(statusCode: { (response) in
+                            switch response {
+                            case .success(let code):
+                                expect(code).to(equal(404))
                                 done()
-                            default:
+                            case .failure(let error):
                                 fail()
                             }
-                        }
+                        })
                         .perform()
                 }
             }
             
+            it("can handle response content") {
+                
+                self.stub(http(.get, uri: "test.test"), json(["test": "ok"]))
+                
+                waitUntil { (done) in
+                    
+                    ServiceTaskBuilder()
+                        .components(URLComponents(string: "test.test")!)
+                        .method(.GET)
+                        .content { (content, response) in
+                            done()
+                        }
+                        .error { (error, response) in
+                            fail()
+                        }
+                        .perform()
+                }
+                
+                waitUntil { (done) in
+                    
+                    ServiceTaskBuilder()
+                        .components(URLComponents(string: "test.test")!)
+                        .method(.GET)
+                        .response(content: { (response) in
+                            switch response {
+                            case .success:
+                                done()
+                            case .failure(let error):
+                                fail()
+                            }
+                        })
+                        .perform()
+                }
+            }
+            
+            it("can handle response data") {
+                
+                let data = Data()
+                
+                self.stub(http(.get, uri: "test.test"), jsonData(data))
+                
+                waitUntil { (done) in
+                    
+                    ServiceTaskBuilder()
+                        .components(URLComponents(string: "test.test")!)
+                        .method(.GET)
+                        .data { (data, response) in
+                            done()
+                        }
+                        .error { (error, response) in
+                            fail()
+                        }
+                        .perform()
+                }
+                
+                waitUntil { (done) in
+                    
+                    ServiceTaskBuilder()
+                        .components(URLComponents(string: "test.test")!)
+                        .method(.GET)
+                        .response(data: { (response) in
+                            switch response {
+                            case .success:
+                                done()
+                            case .failure(let error):
+                                fail()
+                            }
+                        })
+                        .perform()
+                }
+            }
             
             it("can parse JSON response") {
                 
@@ -400,6 +562,34 @@ class ServiceTaskTests: QuickSpec {
                         }
                         .perform()
                 }
+                
+                waitUntil { (done) in
+                    
+                    ServiceTaskBuilder()
+                        .endpoint(.GET, URL(string: "test.test")!)
+                        .query(["key": "value"])
+                        .response(json: { (response) in
+                            switch response {
+                            case .success(let object):
+                                guard let dictionary = object as? [AnyHashable: Any] else {
+                                    fail("Invalid json data")
+                                    return
+                                }
+                                guard let data = dictionary["data"] as? String else {
+                                    fail("Invalid data format")
+                                    return
+                                }
+                                guard data == message else {
+                                    fail("Invalid data received")
+                                    return
+                                }
+                                done()
+                            case .failure(let error):
+                                fail("\(error)")
+                            }
+                        })
+                        .perform()
+                }
             }
             
             it("can download file") {
@@ -432,6 +622,73 @@ class ServiceTaskTests: QuickSpec {
                         .download()
                 }
                 
+            }
+            
+            it("can send and receive url-encoded data") {
+                
+                func testUrlEncoded(_ method: Mockingjay.HTTPMethod, uri: String, dict: [String: String]) -> (_ request: URLRequest) -> Bool {
+                    return { (request:URLRequest) in
+                        
+                        if let requestMethod = request.httpMethod, requestMethod == method.description, let stream = request.httpBodyStream {
+                            
+                            let read: Data
+                            do {
+                                read = try self.readData(from: stream)
+                            }
+                            catch {
+                                fail("Read error: \(error)")
+                                return false
+                            }
+                            
+                            do {
+                                let decoded = try URLEncodedSerialization.dictionary(with: read)
+                                if !decoded.reduce(true, { $0 && dict[$1.key] == $1.value }) {
+                                    fail("messages are different!")
+                                }
+                                return Mockingjay.uri(uri)(request)
+                            } catch {
+                                print(error)
+                            }
+                        }
+                        
+                        return false
+                    }
+                }
+                
+                let dict = ["test": "value"]
+                let encoded = try! URLEncodedSerialization.data(with: dict)
+
+                self.stub(testUrlEncoded(.options, uri: "test.url.encoded.com", dict: dict), jsonData(encoded, headers: ["Content-Type": "application/x-www-form-urlencoded"]))
+                
+                waitUntil { (done) in
+                    
+                    ServiceTaskBuilder()
+                        .endpoint(.OPTIONS, URL(string: "test.url.encoded.com")!)
+                        .body(urlencoded: dict)
+                        .urlencoded { (object, response) in
+                            done()
+                        }
+                        .error { (error, response) in
+                            fail("\(error)")
+                        }
+                        .perform()
+                }
+                
+                waitUntil { (done) in
+                    
+                    ServiceTaskBuilder()
+                        .endpoint(.OPTIONS, URL(string: "test.url.encoded.com")!)
+                        .body(urlencoded: dict)
+                        .response(urlencoded: { (response) in
+                            switch response {
+                            case .success:
+                                done()
+                            case .failure(let error):
+                                fail("\(error)")
+                            }
+                        })
+                        .perform()
+                }
             }
             
             it("can send and receive protobuf messages") {
@@ -612,12 +869,30 @@ class ServiceTaskTests: QuickSpec {
                         .url("test.test")
                         .method(.POST)
                         .body(codable: test)
+                        .response(codable: Test.self) { (response) -> Void in
+                            switch response {
+                            case .success(let object):
+                                expect(object.data).to(equal("Test"))
+                                done()
+                            case .failure(let error):
+                                fail("\(error)")
+                            }
+                        }
+                        .perform()
+                }
+                
+                waitUntil { (done) in
+                    
+                    ServiceTaskBuilder()
+                        .url("test.test")
+                        .method(.POST)
+                        .body(codable: test)
                         .codable { (object: Test, response) in
                             expect(object.data).to(equal("Test"))
                             done()
                         }
                         .error { (error, response) in
-                            fail(error.localizedDescription)
+                            fail("\(error)")
                         }
                         .perform()
                 }
@@ -633,7 +908,7 @@ class ServiceTaskTests: QuickSpec {
                             done()
                         }
                         .error { (error, response) in
-                            fail(error.localizedDescription)
+                            fail("\(error)")
                         }
                         .perform()
                 }
@@ -694,7 +969,7 @@ class ServiceTaskTests: QuickSpec {
                     ServiceTaskBuilder()
                         .endpoint(.POST, "test.multipart")
                         .body(url: formDataURL, contentType: builder.contentType)
-                        .response(status: { (response) in
+                        .response(statusCode: { (response) in
                             switch response {
                             case .success:
                                 break

@@ -20,8 +20,8 @@ You could ask why not to get any other proven networking framework? Sure, you’
 * Transparent and completely customizable response interception and rewind/retry, allowing async handling. Mainly to map errors and catch expired token in case of OAuth-like secured request 
 * Extensibility. Easily add custom response mappers and body data encoders using closures, or protocols, or subclassing whichever will be more convenient for specific need. Use this with default framework’s classes or extend them or subclass, but it should be easy. 
 * Download and keep files where I need them
-* Deserialization of JSON body. Map with codable, to array or dictionary
-* Serialization and deserialization of Protobufs messages from JSON body
+* Deserialization of JSON body. Map JSON to array, or dictionary, or by using objects conforming to `Decodable` protocol 
+* Serialization and deserialization of Protobufs messages (gRPC over HTTP)
 * Multipart form data support as a bonus 
 
 ## Installation
@@ -164,7 +164,7 @@ catch {
 }
 ```
 
-Send and receive Protobuf messages:
+Send and receive Protobuf messages (gRPC over HTTP):
 
 ```swift
 

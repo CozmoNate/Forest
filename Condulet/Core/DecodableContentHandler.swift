@@ -33,25 +33,18 @@
 import Foundation
 
 
-/// A handler that expects and parse response with object conforming Decodable protocol. Completion block returns instance of the object on success
-public class DecodableContentHandler<T: Decodable>: DataContentHandler {
+/// A handler that expects and parse response with object conforming Decodable protocol
+public class DecodableContentHandler<T: Decodable>: DataContentHandler<T> {
     
     public var decoder = JSONDecoder()
-    public var completion: ((T, URLResponse) throws -> Void)?
     
-    public init(completion: ((T, URLResponse) throws -> Void)? = nil) {
-        self.completion = completion
-    }
-    
-    public override func handle(data: Data, response: URLResponse) throws {
+    public override func transform(data: Data, response: URLResponse) throws -> T {
         
         guard response.mimeType == "application/json" else {
             throw ServiceTaskError.invalidResponseData
         }
         
-        let object = try decoder.decode(T.self, from: data)
-        
-        try completion?(object, response)
+        return try decoder.decode(T.self, from: data)
     }
     
 }

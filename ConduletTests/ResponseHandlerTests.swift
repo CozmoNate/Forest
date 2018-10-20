@@ -17,6 +17,44 @@ class ResponseHandlerTests: QuickSpec {
 
     override func spec() {
 
+        describe("ContentHandler") {
+            
+            class TestContentHandler: DataContentHandler<Data> {
+                
+                override func transform(data: Data, response: URLResponse) throws -> Data {
+                    return data
+                }
+            }
+            
+            it("fails when call to abstract implementation") {
+                
+                do {
+                    let _ = try DataContentHandler<Data>().transform(data: Data(), response: URLResponse(url: URL(string: "test.test")!, mimeType: nil, expectedContentLength: 0, textEncodingName: nil))
+                }
+                catch {
+                    expect(error).to(matchError(ServiceTaskError.notImplemented))
+                }
+            }
+            
+            it("can map downloaded file to data") {
+                
+                waitUntil (timeout: 5) { (done) in
+                
+                    let body = "Test".data(using: .ascii)!
+                    let file = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString).appendingPathExtension("txt")
+                    
+                    try! body.write(to: file)
+                    
+                    let handler = TestContentHandler { (data, response) in
+                        expect(data).to(equal(body))
+                        done()
+                    }
+                    
+                    try! handler.handle(content: .file(file), response: URLResponse(url: URL(string: "test.test")!, mimeType: nil, expectedContentLength: 0, textEncodingName: nil))
+                }
+            }
+        }
+        
         describe("URLEncodedContentHandler") {
 
             it("can handle URL-encoded content") {

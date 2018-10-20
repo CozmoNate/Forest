@@ -12,7 +12,6 @@
 		7E314CF721628FBE0007DAFE /* ServiceTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBE412F215E6F7A006C882C /* ServiceTask.swift */; };
 		7E8D98B4216736EC002D5F73 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E8D98B3216736EC002D5F73 /* MobileCoreServices.framework */; };
 		7E9818DD216D1A9400B6C78C /* FormDataPart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E9818DC216D1A9400B6C78C /* FormDataPart.swift */; };
-		7EA7250C2170AC5D008E52CA /* GeneralResponseHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EA7250B2170AC5D008E52CA /* GeneralResponseHandler.swift */; };
 		7EA7250E2170AE9B008E52CA /* DataContentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EA7250D2170AE9B008E52CA /* DataContentHandler.swift */; };
 		7EBE411F215E6F71006C882C /* Condulet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EBE4115215E6F71006C882C /* Condulet.framework */; };
 		7EBE4124215E6F71006C882C /* ServiceTaskTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBE4123215E6F71006C882C /* ServiceTaskTests.swift */; };
@@ -69,7 +68,6 @@
 		7E314CF121625EC80007DAFE /* URLSerializationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSerializationTests.swift; sourceTree = "<group>"; };
 		7E8D98B3216736EC002D5F73 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		7E9818DC216D1A9400B6C78C /* FormDataPart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormDataPart.swift; sourceTree = "<group>"; };
-		7EA7250B2170AC5D008E52CA /* GeneralResponseHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralResponseHandler.swift; sourceTree = "<group>"; };
 		7EA7250D2170AE9B008E52CA /* DataContentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataContentHandler.swift; sourceTree = "<group>"; };
 		7EBE4115215E6F71006C882C /* Condulet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Condulet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EBE4118215E6F71006C882C /* Condulet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Condulet.h; sourceTree = "<group>"; };
@@ -268,7 +266,6 @@
 			isa = PBXGroup;
 			children = (
 				7EEA111E216F03CE005E398F /* BlockErrorHandler.swift */,
-				7EA7250B2170AC5D008E52CA /* GeneralResponseHandler.swift */,
 				AAD56CAB216397A10086CC50 /* BlockResponseHandler.swift */,
 				7EA7250D2170AE9B008E52CA /* DataContentHandler.swift */,
 				7ED7A58021608F8B007657ED /* TextContentHandler.swift */,
@@ -498,7 +495,6 @@
 				7EECC27A2160AAE1008845F4 /* ServiceTaskErrorHandling.swift in Sources */,
 				7ED7A56E215FFCFA007657ED /* ProtobufContentHandler.swift in Sources */,
 				7EBE414A215F1A64006C882C /* ServiceTaskBuilding+Response.swift in Sources */,
-				7EA7250C2170AC5D008E52CA /* GeneralResponseHandler.swift in Sources */,
 				7ED7A57C21601AC1007657ED /* URLEncodedSerialization.swift in Sources */,
 				7EBE4136215E715D006C882C /* ServiceTaskBuilding+Request.swift in Sources */,
 				AA8516FE216C91EB00152A8C /* FormDataBuilder.swift in Sources */,

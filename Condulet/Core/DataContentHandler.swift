@@ -32,23 +32,41 @@
 import Foundation
 
 
-/// Handle content as a data. If the task was performed using Download action the file received will be converted and handled as Data 
-open class DataContentHandler: GeneralResponseHandler {
+/// Abstract content handler. Subclasses should provide implementation allowing to convert response data to an object of specified type
+open class DataContentHandler<T>: ServiceTaskResponseHandling {
     
-    open override func handle(content: ServiceTaskContent, response: URLResponse) throws {
-        try super.handle(content: content, response: response)
-        
-        switch content {
-        case .data(let data):
-            try handle(data: data, response: response)
-        case .file(let url):
-            try handle(data: try Data(contentsOf: url, options: .mappedIfSafe), response: response)
-        }
+    public typealias Result = T
+    
+    private var completion: ((T, URLResponse) throws -> Void)?
+    
+    /// Create an instance of a handler. NOTE: The block will be executed on a background thread
+    public init(completion: ((T, URLResponse) throws -> Void)? = nil) {
+        self.completion = completion
     }
     
-    /// Handle data response. Default implementation do nothing
-    open func handle(data: Data, response: URLResponse) throws {
-        // Abstract
+    open func handle(content: ServiceTaskContent, response: URLResponse) throws {
+        
+        // Load response data
+        let data: Data
+        switch content {
+        case .data(let body):
+            data = body
+        case .file(let url):
+            defer {
+                try? FileManager.default.removeItem(at: url) // Remove temp file
+            }
+            data = try Data(contentsOf: url, options: .mappedIfSafe)
+        }
+        
+        // Map response data
+        let result = try transform(data: data, response: response)
+        
+        try completion?(result, response)
+    }
+    
+    /// Converts response body to an object of a type
+    open func transform(data: Data, response: URLResponse) throws -> Result {
+        throw ServiceTaskError.notImplemented // Abstract implementation always fails
     }
     
 }

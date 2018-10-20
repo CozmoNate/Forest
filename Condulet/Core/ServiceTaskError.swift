@@ -45,6 +45,8 @@ public enum ServiceTaskError: Error {
     case noDataProvided
     /// No data provided for request
     case noRequestBody
+    /// No implementation is provided
+    case notImplemented
     /// Task is already executed
     case alreadyRunning
     /// Task received unsupported response server response
@@ -59,6 +61,4 @@ public enum ServiceTaskError: Error {
     case invalidDestination
     /// File URL is invalid or file is not accessible
     case invalidFile
-    /// Status code error
-    case statusCode(Int)
 }

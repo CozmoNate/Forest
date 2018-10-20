@@ -70,7 +70,7 @@ public extension ServiceTaskBuilding {
 
     /// Handle HTTP status response
     @discardableResult
-    public func success(_ handler: @escaping (Int) -> Void) -> Self {
+    public func statusCode(_ handler: @escaping (Int) -> Void) -> Self {
         task.responseHandler = BlockResponseHandler { [queue = responseQueue] (content, response) in
             
             guard let response = response as? HTTPURLResponse else {
@@ -121,8 +121,10 @@ public extension ServiceTaskBuilding {
                     handler(data, response)
                 }
             case .file(let url):
+                defer {
+                    try? FileManager.default.removeItem(at: url)
+                }
                 let data = try Data(contentsOf: url, options: Data.ReadingOptions.mappedIfSafe)
-                try? FileManager.default.removeItem(at: url)
                 queue.addOperation {
                     handler(data, response)
                 }
@@ -229,8 +231,8 @@ public extension ServiceTaskBuilding {
 
     /// Handle HTTP status response with block
     @discardableResult
-    public func response(status handler: @escaping (ServiceTaskResponse<Int>) -> Void) -> Self {
-        success { (status) in
+    public func response(statusCode handler: @escaping (ServiceTaskResponse<Int>) -> Void) -> Self {
+        statusCode { (status) in
             handler(ServiceTaskResponse.success(status))
         }
         error { (error, response) in
