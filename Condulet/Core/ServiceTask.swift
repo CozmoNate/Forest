@@ -147,11 +147,6 @@ open class ServiceTask: CustomStringConvertible, CustomDebugStringConvertible, H
         self.retrofitter = retrofitter
     }
     
-    
-    deinit {
-        print("Disposed: \(self)")
-    }
-    
     /// Perform task with action.
     public func perform(action: ServiceTaskAction) {
         
