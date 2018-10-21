@@ -39,6 +39,11 @@ Add Protobufs supporting extensions:
 pod 'Condulet/Protobuf'
 ```
 
+To use reachability service:
+
+```ruby
+pod 'Condulet/Reachability'
+```
 
 And don't forget to import the framework:
 
