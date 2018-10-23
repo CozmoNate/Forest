@@ -1,5 +1,5 @@
 //
-//  Connectivity.swift
+//  Reachability.swift
 //  Condulet
 //
 //  Created by Natan Zalkin on 21/10/2018.
@@ -38,7 +38,7 @@ import SystemConfiguration
 public class Reachability {
     
     private var reachability: SCNetworkReachability
-    private var flags: SCNetworkReachabilityFlags?
+    internal var flags: SCNetworkReachabilityFlags?
 
     public var changeHandler: ((Reachability) -> Void)?
 
@@ -75,11 +75,14 @@ public class Reachability {
         stopListening()
     }
 
-    /// Start listening for reachability changes of the specified host
+    /// Start listening for reachability changes. Change handler block will be called once upon successfull start
+    ///
+    /// - Parameter queue: The queue to dispatch change handler block
+    /// - Returns: Returns true when successfully started listening for reachability changes
     public func startListening(queue: DispatchQueue = DispatchQueue.main) -> Bool {
         
         guard !isListening else {
-            return false
+            return true
         }
 
         guard SCNetworkReachabilitySetDispatchQueue(reachability, queue) else {
@@ -99,9 +102,10 @@ public class Reachability {
             return false
         }
 
-        flags = SCNetworkReachabilityFlags()
         isListening = true
-
+        
+        flags = SCNetworkReachabilityFlags()
+        
         queue.async {
             self.changeHandler?(self)
         }
@@ -109,7 +113,7 @@ public class Reachability {
         return true
     }
 
-    /// Stop listening for for reachability changes of the specified host
+    /// Stop listening for reachability changes of the specified host
     public func stopListening() {
         
         guard isListening else {
@@ -120,6 +124,7 @@ public class Reachability {
         SCNetworkReachabilitySetDispatchQueue(reachability, nil)
 
         isListening = false
+        
         flags = nil
     }
 }
