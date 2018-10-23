@@ -83,7 +83,21 @@ class ServiceTaskTests: QuickSpec {
             afterEach {
                 self.removeAllStubs()
             }
-            
+
+            it("have proper description") {
+
+                let task = ServiceTask(url: URLComponents(string: "test")!, method: .OPTIONS)
+
+                expect(task.description).to(equal("<ServiceTask #\(task.hashValue)> [Unexecuted] OPTIONS (test)"))
+            }
+
+            it("is equatable") {
+
+                let task = ServiceTask(url: URLComponents(string: "test")!, method: .OPTIONS)
+
+                expect(task).to(equal(task))
+            }
+
             it("can handle data response") {
                 
                 let original = "Test".data(using: .utf8)!
