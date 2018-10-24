@@ -95,7 +95,6 @@ public class Reachability {
         context.info = Unmanaged.passUnretained(self).toOpaque()
 
         guard SCNetworkReachabilitySetCallback(reachability, reachabilityCallback, &context) else {
-            stopListening()
             return false
         }
 

@@ -8,6 +8,7 @@
 
 import Quick
 import Nimble
+import SystemConfiguration
 
 @testable import Condulet
 
@@ -32,6 +33,15 @@ class ReachabilityTests: QuickSpec {
                     expect(reachability?.startListening()).to(beTrue())
                     expect(reachability?.isListening).to(beTrue())
                 }
+            }
+
+            it("can update flags") {
+
+                let reachability = Reachability(host: "apple.com")
+
+                reachability?.updateFlags([.transientConnection])
+
+                expect(reachability?.flags).to(equal([.transientConnection]))
             }
         }
     }
