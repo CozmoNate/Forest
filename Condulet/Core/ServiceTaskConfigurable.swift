@@ -1,13 +1,13 @@
 //
-//  ServiceTaskBuilding.swift
+//  ServiceTaskConfigurable.swift
 //  Condulet
 //
-//  Created by Natan Zalkin on 11/10/2018.
+//  Created by Natan Zalkin on 24/10/2018.
 //  Copyright © 2018 Natan Zalkin. All rights reserved.
 //
 
 /*
- * Copyright (c) 2018 Natan Zalkin
+ * Copyright (c) 2018 Zalkin, Natan
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -33,16 +33,21 @@
 import Foundation
 
 
-/// The protocol providing helper methods to configure and perform ServiceTask or its subclass instance
-public protocol ServiceTaskBuilding {
+public protocol ServiceTaskConfigurable: AnyObject {
 
-    /// A ServiceTask type or its subclass will be produced and configured by conforming builder
-    associatedtype Task: (ServiceTaskConfigurable & ServiceTaskActionable)
-
-    /// The instance of Task produced and configured with the bulder
-    var task: Task { get set }
-
-    /// The queue will be used to dispatch response blocks
-    var responseQueue: OperationQueue { get set }
+    /// A URLSession instance used to create URLSessionTask
+    var session: URLSession? { get set }
+    /// A URLComponents instance describing service endpoint
+    var url: URLComponents { get set }
+    /// A HTTP method used for request
+    var method: HTTPMethod? { get set }
+    /// HTTP headers added to request
+    var headers: [String: String] { get set }
+    /// HTTP body data
+    var body: ServiceTaskContent? { get set }
+    /// Service response handler
+    var responseHandler: ServiceTaskResponseHandling? { get set }
+    /// Failure handler
+    var errorHandler: ServiceTaskErrorHandling? { get set }
     
 }

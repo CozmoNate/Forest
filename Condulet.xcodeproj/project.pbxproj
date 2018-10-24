@@ -46,6 +46,8 @@
 		AAA198A6216E6666000E5D55 /* FormDataError.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA198A5216E6666000E5D55 /* FormDataError.swift */; };
 		AAA198AA216E788C000E5D55 /* FormDataChunk.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA198A9216E788B000E5D55 /* FormDataChunk.swift */; };
 		AAD56CAC216397A10086CC50 /* BlockResponseHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD56CAB216397A10086CC50 /* BlockResponseHandler.swift */; };
+		AAD8BF032180853F00A54949 /* ServiceTaskConfigurable.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD8BF022180853F00A54949 /* ServiceTaskConfigurable.swift */; };
+		AAD8BF05218085A200A54949 /* ServiceTaskActionable.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD8BF04218085A200A54949 /* ServiceTaskActionable.swift */; };
 		AAF5EB19217F0B40002F9EF4 /* ServiceTaskActionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF5EB18217F0B40002F9EF4 /* ServiceTaskActionTests.swift */; };
 		EFAA4B81BB537ADE88CEDD14 /* Pods_All_Targets_Condulet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78096D16BF7DAFB2AC3FF2BD /* Pods_All_Targets_Condulet.framework */; };
 /* End PBXBuildFile section */
@@ -82,7 +84,7 @@
 		7EBE412F215E6F7A006C882C /* ServiceTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServiceTask.swift; sourceTree = "<group>"; };
 		7EBE4135215E715D006C882C /* ServiceTaskBuilding+Request.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ServiceTaskBuilding+Request.swift"; sourceTree = "<group>"; };
 		7EBE4149215F1A64006C882C /* ServiceTaskBuilding+Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ServiceTaskBuilding+Response.swift"; sourceTree = "<group>"; };
-		7ED7A565215FDE6C007657ED /* Condulet.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Condulet.podspec; sourceTree = SOURCE_ROOT; };
+		7ED7A565215FDE6C007657ED /* Condulet.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Condulet.podspec; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		7ED7A56C215FECEE007657ED /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		7ED7A56D215FFCFA007657ED /* ProtobufContentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProtobufContentHandler.swift; sourceTree = "<group>"; };
 		7ED7A57121600D1A007657ED /* JSONContentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONContentHandler.swift; sourceTree = "<group>"; };
@@ -109,6 +111,8 @@
 		AAA198A5216E6666000E5D55 /* FormDataError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormDataError.swift; sourceTree = "<group>"; };
 		AAA198A9216E788B000E5D55 /* FormDataChunk.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormDataChunk.swift; sourceTree = "<group>"; };
 		AAD56CAB216397A10086CC50 /* BlockResponseHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockResponseHandler.swift; sourceTree = "<group>"; };
+		AAD8BF022180853F00A54949 /* ServiceTaskConfigurable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTaskConfigurable.swift; sourceTree = "<group>"; };
+		AAD8BF04218085A200A54949 /* ServiceTaskActionable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTaskActionable.swift; sourceTree = "<group>"; };
 		AAF5EB18217F0B40002F9EF4 /* ServiceTaskActionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTaskActionTests.swift; sourceTree = "<group>"; };
 		AF99ECF42507D8C62FCE8973 /* Pods-All Targets-ConduletTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-All Targets-ConduletTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-All Targets-ConduletTests/Pods-All Targets-ConduletTests.debug.xcconfig"; sourceTree = "<group>"; };
 		EF88038FFB1E59F95B6E1397 /* Pods-All Targets-ConduletTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-All Targets-ConduletTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-All Targets-ConduletTests/Pods-All Targets-ConduletTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -231,6 +235,8 @@
 			children = (
 				7ED7A57321601180007657ED /* ServiceTaskResponseHandling.swift */,
 				7EECC2792160AAE1008845F4 /* ServiceTaskErrorHandling.swift */,
+				AAD8BF022180853F00A54949 /* ServiceTaskConfigurable.swift */,
+				AAD8BF04218085A200A54949 /* ServiceTaskActionable.swift */,
 				AA045AC021675BC400BD92D4 /* ServiceTaskRetrofitting.swift */,
 				7EE281F32161FE2A00019EE5 /* ServiceTaskError.swift */,
 				7EEA1113216EF849005E398F /* ServiceTaskAction.swift */,
@@ -516,7 +522,9 @@
 				7ED7A57C21601AC1007657ED /* URLEncodedSerialization.swift in Sources */,
 				7EBE4136215E715D006C882C /* ServiceTaskBuilding+Request.swift in Sources */,
 				AA8516FE216C91EB00152A8C /* FormDataBuilder.swift in Sources */,
+				AAD8BF05218085A200A54949 /* ServiceTaskActionable.swift in Sources */,
 				7EEA111D216F0321005E398F /* ServiceTaskBuilder.swift in Sources */,
+				AAD8BF032180853F00A54949 /* ServiceTaskConfigurable.swift in Sources */,
 				7EEA1110216EF519005E398F /* ServiceTaskBuilding.swift in Sources */,
 				7EECC2932161326E008845F4 /* DecodableContentHandler.swift in Sources */,
 				7EEA111F216F03CE005E398F /* BlockErrorHandler.swift in Sources */,

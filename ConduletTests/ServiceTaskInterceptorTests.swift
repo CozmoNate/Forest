@@ -26,9 +26,10 @@ class ServiceTaskInterceptorTests: QuickSpec, ServiceTaskRetrofitting {
     var shouldFailResponse = false
 
 
-    func serviceTask(_ task: ServiceTask, modify request: inout URLRequest) throws {
+    func serviceTask(_ task: ServiceTask, intercept request: inout URLRequest, action: ServiceTaskAction) throws -> Bool {
         request.url = URL(string: "test.modified")
         if shouldFailRequest { throw Errors.test }
+        return false
     }
 
     func serviceTask(_ task: ServiceTask, intercept content: ServiceTaskContent, response: URLResponse) throws -> Bool {
