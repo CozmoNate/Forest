@@ -158,6 +158,8 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskActionable, CustomSt
                 throw ServiceTaskError.alreadyRunning
             }
 
+            self.action = action
+
             var request = try makeRequest()
 
             // Intercept request
@@ -165,7 +167,7 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskActionable, CustomSt
                 return
             }
 
-            try sendRequest(&request, action)
+            try sendRequest(request)
 
         } catch {
             handleError(error)
@@ -331,9 +333,11 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskActionable, CustomSt
     }
     
     /// Makes URLSessionTask and sends request to network. Use this method to send request when the request was intercepted by retrofitter
-    public func sendRequest(_ request: inout URLRequest, _ action: ServiceTaskAction) throws {
+    public func sendRequest(_ request: URLRequest) throws {
 
-        self.action = action
+        guard let action = action else {
+            throw ServiceTaskError.noActionSpecified
+        }
 
         /// Make signature to sign URLSessionTask response block
         let signature = UUID()

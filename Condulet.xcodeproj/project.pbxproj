@@ -38,7 +38,7 @@
 		7EECC2932161326E008845F4 /* DecodableContentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EECC2922161326E008845F4 /* DecodableContentHandler.swift */; };
 		8411B2471340A40A98CF6509 /* Pods_All_Targets_ConduletTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D3BE0FE0480671010AE049E /* Pods_All_Targets_ConduletTests.framework */; };
 		AA045AC121675BC400BD92D4 /* ServiceTaskRetrofitting.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA045AC021675BC400BD92D4 /* ServiceTaskRetrofitting.swift */; };
-		AA045AC32167673600BD92D4 /* ServiceTaskInterceptorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA045AC22167673600BD92D4 /* ServiceTaskInterceptorTests.swift */; };
+		AA045AC32167673600BD92D4 /* ServiceTaskRetrofitterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA045AC22167673600BD92D4 /* ServiceTaskRetrofitterTests.swift */; };
 		AA38AB7121639AEB00EC8750 /* URLSerializationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E314CF121625EC80007DAFE /* URLSerializationTests.swift */; };
 		AA6418E42175C04E0021BC2F /* ResponseHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6418E32175C04E0021BC2F /* ResponseHandlerTests.swift */; };
 		AA641913217C764E0021BC2F /* ReachabilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA641912217C764E0021BC2F /* ReachabilityTests.swift */; };
@@ -104,7 +104,7 @@
 		7EECC28A21610809008845F4 /* ServiceTaskBuilding+Protobuf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ServiceTaskBuilding+Protobuf.swift"; sourceTree = "<group>"; };
 		7EECC2922161326E008845F4 /* DecodableContentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodableContentHandler.swift; sourceTree = "<group>"; };
 		AA045AC021675BC400BD92D4 /* ServiceTaskRetrofitting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTaskRetrofitting.swift; sourceTree = "<group>"; };
-		AA045AC22167673600BD92D4 /* ServiceTaskInterceptorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTaskInterceptorTests.swift; sourceTree = "<group>"; };
+		AA045AC22167673600BD92D4 /* ServiceTaskRetrofitterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTaskRetrofitterTests.swift; sourceTree = "<group>"; };
 		AA6418E32175C04E0021BC2F /* ResponseHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseHandlerTests.swift; sourceTree = "<group>"; };
 		AA641912217C764E0021BC2F /* ReachabilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReachabilityTests.swift; sourceTree = "<group>"; };
 		AA8516FD216C91EB00152A8C /* FormDataBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormDataBuilder.swift; sourceTree = "<group>"; };
@@ -201,7 +201,7 @@
 				7E314CF121625EC80007DAFE /* URLSerializationTests.swift */,
 				7EBE4123215E6F71006C882C /* ServiceTaskTests.swift */,
 				AAF5EB18217F0B40002F9EF4 /* ServiceTaskActionTests.swift */,
-				AA045AC22167673600BD92D4 /* ServiceTaskInterceptorTests.swift */,
+				AA045AC22167673600BD92D4 /* ServiceTaskRetrofitterTests.swift */,
 				AA6418E32175C04E0021BC2F /* ResponseHandlerTests.swift */,
 				AA641912217C764E0021BC2F /* ReachabilityTests.swift */,
 				7EBE4125215E6F71006C882C /* Info.plist */,
@@ -549,7 +549,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AA045AC32167673600BD92D4 /* ServiceTaskInterceptorTests.swift in Sources */,
+				AA045AC32167673600BD92D4 /* ServiceTaskRetrofitterTests.swift in Sources */,
 				AA38AB7121639AEB00EC8750 /* URLSerializationTests.swift in Sources */,
 				AA6418E42175C04E0021BC2F /* ResponseHandlerTests.swift in Sources */,
 				AA641913217C764E0021BC2F /* ReachabilityTests.swift in Sources */,

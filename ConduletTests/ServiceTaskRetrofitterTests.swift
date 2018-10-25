@@ -1,5 +1,5 @@
 //
-//  ServiceTaskInterceptorTests.swift
+//  ServiceTaskRetrofitterTests.swift
 //  ConduletTests
 //
 //  Created by Natan Zalkin on 05/10/2018.
@@ -13,12 +13,13 @@ import SwiftProtobuf
 
 @testable import Condulet
 
-class ServiceTaskInterceptorTests: QuickSpec, ServiceTaskRetrofitting {
+class ServiceTaskRetrofitterTests: QuickSpec, ServiceTaskRetrofitting {
 
     enum Errors: Error {
         case test
     }
 
+    var requestHandler: ((ServiceTask, inout URLRequest) throws -> Bool)?
     var responseHandler: ((ServiceTask) throws -> Bool)?
     var errorHandler: ((ServiceTask) throws -> Bool)?
 
@@ -27,9 +28,8 @@ class ServiceTaskInterceptorTests: QuickSpec, ServiceTaskRetrofitting {
 
 
     func serviceTask(_ task: ServiceTask, intercept request: inout URLRequest, action: ServiceTaskAction) throws -> Bool {
-        request.url = URL(string: "test.modified")
         if shouldFailRequest { throw Errors.test }
-        return false
+        return try requestHandler?(task, &request) ?? false
     }
 
     func serviceTask(_ task: ServiceTask, intercept content: ServiceTaskContent, response: URLResponse) throws -> Bool {
@@ -48,16 +48,23 @@ class ServiceTaskInterceptorTests: QuickSpec, ServiceTaskRetrofitting {
             afterEach {
                 self.shouldFailRequest = false
                 self.shouldFailResponse = false
+                self.requestHandler = nil
                 self.responseHandler = nil
                 self.errorHandler = nil
                 self.removeAllStubs()
             }
 
-            it("can modify request") {
+            it("can intercept request") {
 
-                self.stub(http(.get, uri: "test.modified"), json(["test": "ok"]))
+                self.stub(http(.get, uri: "test.intercept.request"), json(["test": "ok"]))
 
                 waitUntil { (done) in
+
+                    self.requestHandler = { (task, request) in
+                        request.url = URL(string: "test.intercept.request")
+                        try task.sendRequest(request)
+                        return true
+                    }
 
                     ServiceTaskBuilder(retrofitter: self)
                         .endpoint(.GET, "test.test")
@@ -74,13 +81,13 @@ class ServiceTaskInterceptorTests: QuickSpec, ServiceTaskRetrofitting {
 
             it("can fail request") {
 
-                self.stub(http(.get, uri: "test.modified"), json(["test": "ok"]))
+                self.stub(http(.get, uri: "test.fail.request"), json(["test": "ok"]))
                 self.shouldFailRequest = true
 
                 waitUntil { (done) in
 
                     ServiceTaskBuilder(retrofitter: self)
-                        .endpoint(.GET, "test.test")
+                        .endpoint(.GET, "test.fail.request")
                         .content { (content, response) in
                             fail("Request should return error!")
                         }
@@ -99,7 +106,7 @@ class ServiceTaskInterceptorTests: QuickSpec, ServiceTaskRetrofitting {
 
             it("can intercept error") {
 
-                self.stub(http(.get, uri: "test.failed"), json(["test": "ok"]))
+                // No stub will fail
 
                 waitUntil { (done) in
 
@@ -108,7 +115,7 @@ class ServiceTaskInterceptorTests: QuickSpec, ServiceTaskRetrofitting {
                     }
 
                     ServiceTaskBuilder(retrofitter: self)
-                        .endpoint(.GET, "test.test")
+                        .endpoint(.GET, "test.failed")
                         .content { (content, response) in
                             fail("Request should return error!")
                         }
@@ -127,7 +134,7 @@ class ServiceTaskInterceptorTests: QuickSpec, ServiceTaskRetrofitting {
 
             it("can intercept response") {
 
-                self.stub(http(.get, uri: "test.modified"), json(["test": "ok"]))
+                self.stub(http(.get, uri: "test.intercept.response"), json(["test": "ok"]))
 
                 waitUntil { (done) in
 
@@ -136,7 +143,7 @@ class ServiceTaskInterceptorTests: QuickSpec, ServiceTaskRetrofitting {
                     }
 
                     ServiceTaskBuilder(retrofitter: self)
-                        .endpoint(.GET, "test.test")
+                        .endpoint(.GET, "test.intercept.response")
                         .content { (content, response) in
                             fail("Request should return error!")
                         }

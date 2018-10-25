@@ -37,10 +37,12 @@ public enum ServiceTaskError: Error {
     
     /// You shoud provide endpoint information
     case invalidEndpoint
-    /// You shoud specify default session for task
+    /// You must specify default session for task
     case noSessionSpecified
-    /// You shoud specify HTTP method for action
+    /// You must specify HTTP method for action
     case noMethodSpecified
+    /// You must specify task perform action
+    case noActionSpecified
     /// Data required
     case noDataProvided
     /// No data provided for request
