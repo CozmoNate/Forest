@@ -6,6 +6,7 @@
 
 [![License](https://img.shields.io/badge/license-MIT-ff69b4.svg)](https://github.com/kozlek/Condulet/raw/master/LICENSE)
 [![Language](https://img.shields.io/badge/swift-4.2-orange.svg)](https://swift.org/blog/swift-4-2-released/)
+[![Version](https://img.shields.io/cocoapods/v/Condulet.svg)](https://cocoapods.org/pods/Condulet)
 [![Build Status](https://travis-ci.com/kozlekek/Condulet.svg?branch=master)](https://travis-ci.com/kozlekek/Condulet)
 [![Coverage Status](https://coveralls.io/repos/github/kozlekek/Condulet/badge.svg?branch=master)](https://coveralls.io/github/kozlekek/Condulet?branch=master)
 
