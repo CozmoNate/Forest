@@ -34,9 +34,17 @@ import Foundation
 
 
 /// A handler that expects and parse response with URL-encoded content
-public class URLEncodedContentHandler: DataContentHandler<[String: String]> {
-    
-    public override func transform(data: Data, response: URLResponse) throws -> [String : String] {
+public struct URLEncodedContentHandler: DataContentHandling {
+
+    public typealias Result = [String: String]
+
+    public var completion: (([String: String], URLResponse) throws -> Void)?
+
+    public init(completion block: (([String: String], URLResponse) throws -> Void)?) {
+        completion = block
+    }
+
+    public func transform(data: Data, response: URLResponse) throws -> [String : String] {
         
         guard response.mimeType == "application/x-www-form-urlencoded" else {
             throw ServiceTaskError.invalidContent

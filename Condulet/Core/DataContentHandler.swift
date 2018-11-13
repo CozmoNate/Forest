@@ -32,20 +32,24 @@
 import Foundation
 
 
-/// Abstract content handler. Subclasses should provide implementation allowing to convert response data to an object of specified type
-open class DataContentHandler<T>: ServiceTaskResponseHandling {
-    
-    public typealias Result = T
-    
-    public var completion: ((T, URLResponse) throws -> Void)?
-    
-    /// Create an instance of a handler. NOTE: The block will be executed on a background thread
-    public init(completion: ((T, URLResponse) throws -> Void)? = nil) {
-        self.completion = completion
-    }
-    
-    open func handle(content: ServiceTaskContent, response: URLResponse) throws {
-        
+/// Abstract data handler.
+/// Subclasses should provide transformation implementation allowing to convert response data to an object of specified type.
+public protocol DataContentHandling: ServiceTaskResponseHandling {
+
+    associatedtype Result
+
+    /// Response handler. NOTE: The block will be executed on a background thread.
+    var completion: ((Result, URLResponse) throws -> Void)? { get set }
+
+    /// Converts response body to an object of a type
+    func transform(data: Data, response: URLResponse) throws -> Result
+
+}
+
+public extension DataContentHandling {
+
+    public func handle(content: ServiceTaskContent, response: URLResponse) throws {
+
         // Load response data
         let data: Data
         switch content {
@@ -54,16 +58,30 @@ open class DataContentHandler<T>: ServiceTaskResponseHandling {
         case .file:
             throw ServiceTaskError.invalidContent
         }
-        
+
         // Map response data
         let result = try transform(data: data, response: response)
-        
+
         try completion?(result, response)
     }
-    
-    /// Converts response body to an object of a type
-    open func transform(data: Data, response: URLResponse) throws -> Result {
-        throw ServiceTaskError.notImplemented // Abstract implementation always fails
+
+}
+
+/// Raw data response handler
+public struct DataContentHandler: DataContentHandling {
+
+    public typealias Result = Data
+
+    public var completion: ((Data, URLResponse) throws -> Void)?
+
+    /// Create an instance of a handler
+    public init(completion block: ((Data, URLResponse) throws -> Void)? = nil) {
+        completion = block
     }
-    
+
+    /// Converts response body to an object of a type
+    public func transform(data: Data, response: URLResponse) throws -> Data {
+        return data
+    }
+
 }

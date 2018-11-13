@@ -34,9 +34,17 @@ import Foundation
 
 
 /// A handler that expects and parse response with JSON content
-public class JSONContentHandler: DataContentHandler<Any> {
+public struct JSONContentHandler: DataContentHandling {
 
-    public override func transform(data: Data, response: URLResponse) throws -> Any {
+    public typealias Result = Any
+
+    public var completion: ((Any, URLResponse) throws -> Void)?
+
+    public init(completion block: ((Any, URLResponse) throws -> Void)?) {
+        completion = block
+    }
+
+    public func transform(data: Data, response: URLResponse) throws -> Any {
         
         guard response.mimeType == "application/json" else {
             throw ServiceTaskError.invalidContent

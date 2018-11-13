@@ -34,9 +34,17 @@ import Foundation
 
 
 /// A handler that expects and parse response with plain text content
-public class TextContentHandler: DataContentHandler<String> {
+public struct TextContentHandler: DataContentHandling {
+
+    public typealias Result = String
+
+    public var completion: ((String, URLResponse) throws -> Void)?
+
+    init(completion block: ((String, URLResponse) throws -> Void)?) {
+        completion = block
+    }
     
-    public override func transform(data: Data, response: URLResponse) throws -> String {
+    public func transform(data: Data, response: URLResponse) throws -> String {
         
         guard response.mimeType == "text/plain" else {
             throw ServiceTaskError.invalidContent

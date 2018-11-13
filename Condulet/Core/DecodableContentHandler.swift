@@ -34,11 +34,18 @@ import Foundation
 
 
 /// A handler that expects and parse response with object conforming Decodable protocol
-public class DecodableContentHandler<T: Decodable>: DataContentHandler<T> {
-    
+public struct DecodableContentHandler<T: Decodable>: DataContentHandling {
+
+    public typealias Result = T
+
     public var decoder = JSONDecoder()
+    public var completion: ((T, URLResponse) throws -> Void)?
+
+    public init(completion block: ((T, URLResponse) throws -> Void)?) {
+        completion = block
+    }
     
-    public override func transform(data: Data, response: URLResponse) throws -> T {
+    public func transform(data: Data, response: URLResponse) throws -> T {
         
         guard response.mimeType == "application/json" else {
             throw ServiceTaskError.invalidContent
