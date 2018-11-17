@@ -38,4 +38,16 @@ public protocol ServiceTaskActionable: AnyObject {
     /// Perform task with action
     func perform(action: ServiceTaskAction)
 
+    /// Rewind task with latest action performed
+    @discardableResult
+    func rewind() -> Bool
+    
+    /// Cancels running task
+    @discardableResult
+    func cancel() -> Bool
+    
+    /// Cancels running download task and try to produce resume data
+    @discardableResult
+    func cancel(byProducingResumeData resumeDataHandler: @escaping (Data?) -> Void) -> Bool
+    
 }

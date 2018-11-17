@@ -37,16 +37,22 @@ public protocol ServiceTaskConfigurable: AnyObject {
 
     /// A URLSession instance used to create URLSessionTask
     var session: URLSession? { get set }
+    
     /// A URLComponents instance describing service endpoint
     var url: URLComponents { get set }
+    
     /// A HTTP method used for request
     var method: HTTPMethod? { get set }
+    
     /// HTTP headers added to request
     var headers: [String: String] { get set }
+    
     /// HTTP body data
     var body: ServiceTaskContent? { get set }
+    
     /// Service response handler
     var responseHandler: ServiceTaskResponseHandling? { get set }
+    
     /// Failure handler
     var errorHandler: ServiceTaskErrorHandling? { get set }
     

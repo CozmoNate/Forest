@@ -80,28 +80,40 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskActionable, CustomSt
     
     // MARK: - Hashable
     
-    public let hashValue: Int = UUID().hashValue // Every task is unique
+    public var hashValue: Int {
+        return identifier.hashValue
+    }
     
     // MARK: - Equatable
     
     public static func == (lhs: ServiceTask, rhs: ServiceTask) -> Bool {
-        return lhs.hashValue == rhs.hashValue
+        return lhs.identifier == rhs.identifier
     }
+    
+    // MARK: - Identifier
+    
+    public let identifier = UUID()
 
     // MARK: - ServiceTaskConfigurable
 
     /// A URLSession instance used to create URLSessionTask
     public var session: URLSession?
+    
     /// A URLComponents instance describing service endpoint
     public var url: URLComponents
+    
     /// A HTTP method used for request
     public var method: HTTPMethod?
+    
     /// HTTP headers added to request
     public var headers: [String: String]
+    
     /// HTTP body data
     public var body: ServiceTaskContent?
+    
     /// Service response handler
     public var responseHandler: ServiceTaskResponseHandling?
+    
     /// Failure handler
     public var errorHandler: ServiceTaskErrorHandling?
     
@@ -113,8 +125,10 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskActionable, CustomSt
     
     /// Last action performed
     public private(set) var action: ServiceTaskAction?
+    
     /// The underlying URLSessionTask that has been performed
     public private(set) var underlayingTask: URLSessionTask?
+    
     /// The content received with the last response
     public private(set) var content: ServiceTaskContent?
     
@@ -123,10 +137,10 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskActionable, CustomSt
         return signature != nil
     }
     
-    /// Signature is used to determine if response received from URLSessionTask still relevant and should be handled
+    /// Signature is used to determine if response received from URLSessionTask is relevant and should be handled
     private var signature: UUID?
     
-    /// Creates the instance of ServiceTask
+    /// Create an instance of ServiceTask
     public init(
         session: URLSession = URLSession.shared,
         url: URLComponents = URLComponents(),
@@ -149,7 +163,7 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskActionable, CustomSt
 
     // MARK: - Actions
 
-    /// Perform task with action.
+    /// Perform task with action
     public func perform(action: ServiceTaskAction) {
 
         do {
@@ -195,9 +209,25 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskActionable, CustomSt
     }
 
     /// Cancels running task. Captured response blocks and handlers will never be called until task will be performed again or rewound.
-    /// Optionally resume data can be produced on cancel in case of download task, otherwise completion will be called with nil data
     @discardableResult
-    public func cancel(byProducingResumeData resumeDataHandler: ((Data?) -> Void)? = nil) -> Bool {
+    public func cancel() -> Bool {
+        
+        guard isRunning else {
+            return false
+        }
+        
+        // Invalidate response of current URLSessionTask
+        signature = nil
+        
+        underlayingTask?.cancel()
+        
+        return true
+    }
+    
+    /// Cancels running download task and produce resume data.
+    /// Captured response blocks and handlers will never be called until task will be performed again or rewound.
+    @discardableResult
+    public func cancel(byProducingResumeData resumeDataHandler: @escaping (Data?) -> Void) -> Bool {
 
         guard isRunning else {
             return false
@@ -207,14 +237,12 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskActionable, CustomSt
         signature = nil
 
         // Cancel with resume data
-        if let resumeDataHandler = resumeDataHandler {
-            if let downloadTask = underlayingTask as? URLSessionDownloadTask {
-                downloadTask.cancel(byProducingResumeData: resumeDataHandler)
-                return true
-            }
-            else {
-                resumeDataHandler(nil)
-            }
+        if let downloadTask = underlayingTask as? URLSessionDownloadTask {
+            downloadTask.cancel(byProducingResumeData: resumeDataHandler)
+            return true
+        }
+        else {
+            resumeDataHandler(nil)
         }
 
         underlayingTask?.cancel()

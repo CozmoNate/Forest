@@ -406,6 +406,42 @@ class ServiceTaskTests: QuickSpec {
                 
             }
             
+            it("can cancel download request") {
+                
+                let json = ["test": "ok"]
+                let body = try! JSONSerialization.data(withJSONObject: json, options: [])
+                
+                self.stub(testData(.get, uri: "test.resumeCancel", data: body), delay: 2, http(200))
+                
+                var canceled = false
+                
+                waitUntil(timeout: 7) { (done) in
+                    
+                    let builder = ServiceTaskBuilder()
+                        .endpoint(.GET, "test.resumeCancel")
+                        .body(json: json)
+                        .content { (content, response) in
+                            fail("Response received!")
+                        }
+                        .error { (error, response) in
+                            done()
+                        }
+                        
+                    let task = builder.download()
+                    
+                    let handler = { (data: Data?) -> Void in
+                        expect(data).notTo(beNil())
+                        canceled = true
+                        builder.download(with: data)
+                    }
+                    
+                    if !task.cancel(byProducingResumeData: handler) {
+                        fail("Task is failed to cancel!")
+                    }
+                }
+                
+            }
+            
             it("can fail to perform request") {
                 
                 let dict = ["test": "ok"]

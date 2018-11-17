@@ -37,28 +37,41 @@ public enum ServiceTaskError: Error {
     
     /// You shoud provide endpoint information
     case invalidEndpoint
+    
     /// You must specify default session for task
     case noSessionSpecified
+    
     /// You must specify HTTP method for action
     case noMethodSpecified
+    
     /// You must specify task perform action
     case noActionSpecified
+    
     /// Data required
     case noDataProvided
+    
     /// No data provided for request
     case noRequestBody
+    
     /// No implementation is provided
     case notImplemented
+    
     /// Task is already executed
     case alreadyRunning
+    
     /// Received unsupported response
     case invalidResponse
+    
     /// Received unsupported content
     case invalidContent
+    
     /// Response handler failed to decode content received
     case decodingFailure
+    
     /// Failed to encode request body
     case encodingFailure
+    
     /// Download destination is invalid
     case invalidDestination
+    
 }
