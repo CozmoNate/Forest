@@ -87,6 +87,7 @@ public class Reachability {
     ///
     /// - Parameter queue: The queue to dispatch change handler block
     /// - Returns: Returns true when successfully started listening for reachability changes
+    @discardableResult
     public func startListening(queue: DispatchQueue = DispatchQueue.main) -> Bool {
         
         if isListening { return true }
