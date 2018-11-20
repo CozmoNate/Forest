@@ -1,5 +1,5 @@
 //
-//  ServiceTaskActionable.swift
+//  ServiceTaskPerformable.swift
 //  Condulet
 //
 //  Created by Natan Zalkin on 24/10/2018.
@@ -33,21 +33,9 @@
 import Foundation
 
 
-public protocol ServiceTaskActionable: AnyObject {
+public protocol ServiceTaskPerformable: AnyObject {
 
     /// Perform task with action
     func perform(action: ServiceTaskAction)
 
-    /// Rewind task with latest action performed
-    @discardableResult
-    func rewind() -> Bool
-    
-    /// Cancels running task
-    @discardableResult
-    func cancel() -> Bool
-    
-    /// Cancels running download task and try to produce resume data
-    @discardableResult
-    func cancel(byProducingResumeData resumeDataHandler: @escaping (Data?) -> Void) -> Bool
-    
 }

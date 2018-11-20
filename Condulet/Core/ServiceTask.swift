@@ -47,7 +47,7 @@ public extension Notification.Name {
 }
 
 /// URLSessionTask wrapping class allowing to build, send, cancel and rewind network requests.
-open class ServiceTask: ServiceTaskConfigurable, ServiceTaskActionable, CustomStringConvertible, CustomDebugStringConvertible, Hashable {
+open class ServiceTask: ServiceTaskConfigurable, ServiceTaskPerformable, CustomStringConvertible, CustomDebugStringConvertible, Hashable {
     
     // MARK: - CustomStringConvertible
     
@@ -208,26 +208,11 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskActionable, CustomSt
         return true
     }
 
-    /// Cancels running task. Captured response blocks and handlers will never be called until task will be performed again or rewound.
+    /// Cancels running task.
+    /// All captured response blocks and handlers will never be called until task will be performed again or rewound.
+    /// Optional resume data can be produced in case of download task, otherwise completion will be called with nil data.
     @discardableResult
-    public func cancel() -> Bool {
-        
-        guard isRunning else {
-            return false
-        }
-        
-        // Invalidate response of current URLSessionTask
-        signature = nil
-        
-        underlayingTask?.cancel()
-        
-        return true
-    }
-    
-    /// Cancels running download task and produce resume data.
-    /// Captured response blocks and handlers will never be called until task will be performed again or rewound.
-    @discardableResult
-    public func cancel(byProducingResumeData resumeDataHandler: @escaping (Data?) -> Void) -> Bool {
+    public func cancel(byProducingResumeData resumeDataHandler: ((Data?) -> Void)? = nil) -> Bool {
 
         guard isRunning else {
             return false
@@ -237,12 +222,14 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskActionable, CustomSt
         signature = nil
 
         // Cancel with resume data
-        if let downloadTask = underlayingTask as? URLSessionDownloadTask {
-            downloadTask.cancel(byProducingResumeData: resumeDataHandler)
-            return true
-        }
-        else {
-            resumeDataHandler(nil)
+        if let resumeDataHandler = resumeDataHandler {
+            if let downloadTask = underlayingTask as? URLSessionDownloadTask {
+                downloadTask.cancel(byProducingResumeData: resumeDataHandler)
+                return true
+            }
+            else {
+                resumeDataHandler(nil)
+            }
         }
 
         underlayingTask?.cancel()

@@ -37,7 +37,7 @@ import Foundation
 public protocol ServiceTaskBuilding {
 
     /// A ServiceTask type or its subclass will be produced and configured by conforming builder
-    associatedtype Task: (ServiceTaskConfigurable & ServiceTaskActionable)
+    associatedtype Task: (ServiceTaskConfigurable & ServiceTaskPerformable)
 
     /// The instance of Task produced and configured with the bulder
     var task: Task { get set }
