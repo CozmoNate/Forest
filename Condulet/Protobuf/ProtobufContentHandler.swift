@@ -39,9 +39,12 @@ public struct ProtobufContentHandler<T: Message>: DataContentHandling {
 
     public typealias Result = T
 
+    public var options = JSONDecodingOptions()
+
     public var completion: ((T, URLResponse) throws -> Void)?
 
-    public init(completion block: ((T, URLResponse) throws -> Void)?) {
+    public init(ignoreUnknownFields: Bool = true, completion block: ((T, URLResponse) throws -> Void)?) {
+        options.ignoreUnknownFields = ignoreUnknownFields
         completion = block
     }
 
@@ -53,8 +56,8 @@ public struct ProtobufContentHandler<T: Message>: DataContentHandling {
             metadataContentType == "application/grpc" else {
             throw ServiceTaskError.invalidContent
         }
-        
-        return try T(jsonUTF8Data: data)
+
+        return try T(jsonUTF8Data: data, options: options)
     }
     
 }
