@@ -37,28 +37,28 @@ public extension ServiceTaskBuilding {
     
     /// Set URLSession instance to use when creating URLSessionTask instance
     @discardableResult
-    public func session(_ session: URLSession) -> Self {
+    func session(_ session: URLSession) -> Self {
         task.session = session
         return self
     }
     
     /// Set HTTP method for request
     @discardableResult
-    public func method(_ method: HTTPMethod) -> Self {
+    func method(_ method: HTTPMethod) -> Self {
         task.method = method
         return self
     }
     
     /// Set HTTP method for request
     @discardableResult
-    public func method(_ method: String) -> Self {
+    func method(_ method: String) -> Self {
         task.method = HTTPMethod(rawValue: method)
         return self
     }
     
     /// Define service API url
     @discardableResult
-    public func url(_ string: String) -> Self {
+    func url(_ string: String) -> Self {
         if let endpoint = URLComponents(string: string) {
             task.url = endpoint
         }
@@ -67,7 +67,7 @@ public extension ServiceTaskBuilding {
     
     /// Define service API url
     @discardableResult
-    public func url(_ url: URL) -> Self {
+    func url(_ url: URL) -> Self {
         if let endpoint = URLComponents(url: url, resolvingAgainstBaseURL: false) {
             task.url = endpoint
         }
@@ -76,14 +76,14 @@ public extension ServiceTaskBuilding {
     
     /// Define url as components
     @discardableResult
-    public func components(_ components: URLComponents) -> Self {
+    func components(_ components: URLComponents) -> Self {
         task.url = components
         return self
     }
     
     /// Define service API url and method
     @discardableResult
-    public func endpoint(_ method: HTTPMethod, _ string: String) -> Self {
+    func endpoint(_ method: HTTPMethod, _ string: String) -> Self {
         if let endpoint = URLComponents(string: string) {
             task.url = endpoint
         }
@@ -93,7 +93,7 @@ public extension ServiceTaskBuilding {
     
     /// Define service API url and method
     @discardableResult
-    public func endpoint(_ method: HTTPMethod, _ url: URL) -> Self {
+    func endpoint(_ method: HTTPMethod, _ url: URL) -> Self {
         if let endpoint = URLComponents(url: url, resolvingAgainstBaseURL: false) {
             task.url = endpoint
         }
@@ -103,7 +103,7 @@ public extension ServiceTaskBuilding {
 
     /// Define service API url and method
     @discardableResult
-    public func endpoint(_ method: String, _ string: String) -> Self {
+    func endpoint(_ method: String, _ string: String) -> Self {
         if let endpoint = URLComponents(string: string) {
             task.url = endpoint
         }
@@ -113,7 +113,7 @@ public extension ServiceTaskBuilding {
 
     /// Define service API url and method
     @discardableResult
-    public func endpoint(_ method: String, _ url: URL) -> Self {
+    func endpoint(_ method: String, _ url: URL) -> Self {
         if let endpoint = URLComponents(url: url, resolvingAgainstBaseURL: false) {
             task.url = endpoint
         }
@@ -123,77 +123,77 @@ public extension ServiceTaskBuilding {
     
     /// Set endpoint sheme
     @discardableResult
-    public func scheme(_ scheme: String) -> Self {
+    func scheme(_ scheme: String) -> Self {
         task.url.scheme = scheme
         return self
     }
     
     /// Set endpoint host
     @discardableResult
-    public func host(_ host: String) -> Self {
+    func host(_ host: String) -> Self {
         task.url.host = host
         return self
     }
     
     /// Set endpoint user
     @discardableResult
-    public func user(_ user: String) -> Self {
+    func user(_ user: String) -> Self {
         task.url.user = user
         return self
     }
     
     /// Set endpoint password
     @discardableResult
-    public func password(_ password: String) -> Self {
+    func password(_ password: String) -> Self {
         task.url.password = password
         return self
     }
     
     /// Set endpoint port
     @discardableResult
-    public func port(_ port: Int) -> Self {
+    func port(_ port: Int) -> Self {
         task.url.port = port
         return self
     }
     
     /// Set endpoint relative path
     @discardableResult
-    public func path(_ path: String) -> Self {
+    func path(_ path: String) -> Self {
         task.url.path = path
         return self
     }
     
     /// Set endpoint fragment
     @discardableResult
-    public func fragment(_ fragment: String) -> Self {
+    func fragment(_ fragment: String) -> Self {
         task.url.fragment = fragment
         return self
     }
     
     /// Set endpoint query parameters
     @discardableResult
-    public func query(_ query: String) -> Self {
+    func query(_ query: String) -> Self {
         task.url.query = query
         return self
     }
     
     /// Set endpoint query parameters
     @discardableResult
-    public func query(_ query: [String: String]) -> Self {
+    func query(_ query: [String: String]) -> Self {
         task.url.queryItems = query.map { URLQueryItem(name: $0.key, value: $0.value) }
         return self
     }
     
     /// Set endpoint query parameters
     @discardableResult
-    public func query(_ query: [URLQueryItem]) -> Self {
+    func query(_ query: [URLQueryItem]) -> Self {
         task.url.queryItems = query
         return self
     }
     
     /// Append HTTP headers to request. When 'merge' flag is true new headers will be merged with the existing by overriding old keys. Default 'merge' flag value is true. Set 'merge' parameter to false to replace existing headers. 
     @discardableResult
-    public func headers(_ headers: [String: String], merge: Bool = true) -> Self {
+    func headers(_ headers: [String: String], merge: Bool = true) -> Self {
         if merge {
             // Append by overriding existing key with new one in case of collision
             task.headers.merge(headers, uniquingKeysWith: { return $1 })
@@ -206,7 +206,7 @@ public extension ServiceTaskBuilding {
 
     /// Set 'Content-Type' HTTP header value
     @discardableResult
-    public func contentType(value: String) -> Self {
+    func contentType(value: String) -> Self {
         task.headers["Content-Type"] = value
         return self
     }

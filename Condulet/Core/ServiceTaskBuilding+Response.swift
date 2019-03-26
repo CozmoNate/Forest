@@ -39,14 +39,14 @@ public extension ServiceTaskBuilding {
 
     /// Set error handler
     @discardableResult
-    public func error(_ handler: ServiceTaskErrorHandling) -> Self {
+    func error(_ handler: ServiceTaskErrorHandling) -> Self {
         task.errorHandler = handler
         return self
     }
     
     /// Handle error with block
     @discardableResult
-    public func error(_ handler: @escaping (Error, URLResponse?) -> Void) -> Self {
+    func error(_ handler: @escaping (Error, URLResponse?) -> Void) -> Self {
         task.errorHandler = BlockErrorHandler { [queue = responseQueue] (error, response) in
             queue.addOperation {
                 handler(error, response)
@@ -63,14 +63,14 @@ public extension ServiceTaskBuilding {
     
     /// Set response handler
     @discardableResult
-    public func response(_ handler: ServiceTaskResponseHandling) -> Self {
+    func response(_ handler: ServiceTaskResponseHandling) -> Self {
         task.responseHandler = handler
         return self
     }
 
     /// Handle HTTP status response
     @discardableResult
-    public func statusCode(_ handler: @escaping (Int) -> Void) -> Self {
+    func statusCode(_ handler: @escaping (Int) -> Void) -> Self {
         task.responseHandler = BlockResponseHandler { [queue = responseQueue] (content, response) in
             
             guard let response = response as? HTTPURLResponse else {
@@ -86,7 +86,7 @@ public extension ServiceTaskBuilding {
     
     /// Handle response with block
     @discardableResult
-    public func content(_ handler: @escaping (ServiceTaskContent, URLResponse) -> Void) -> Self {
+    func content(_ handler: @escaping (ServiceTaskContent, URLResponse) -> Void) -> Self {
         task.responseHandler = BlockResponseHandler { [queue = responseQueue] (content, response) in
             queue.addOperation {
                 handler(content, response)
@@ -97,7 +97,7 @@ public extension ServiceTaskBuilding {
     
     /// Handle file response for tasks performed via Download action. Returned file should be removed manually after use. When received response of other type task will fail with ServiceTaskError.invalidResponse
     @discardableResult
-    public func file(_ handler: @escaping (URL, URLResponse) -> Void) -> Self {
+    func file(_ handler: @escaping (URL, URLResponse) -> Void) -> Self {
         task.responseHandler = BlockResponseHandler { [queue = responseQueue] (content, response) in
             switch content {
             case .file(let url):
@@ -113,7 +113,7 @@ public extension ServiceTaskBuilding {
     
     /// Handle data response
     @discardableResult
-    public func data(_ handler: @escaping (Data, URLResponse) -> Void) -> Self {
+    func data(_ handler: @escaping (Data, URLResponse) -> Void) -> Self {
         task.responseHandler = BlockResponseHandler { [queue = responseQueue] (content, response) in
             switch content {
             case .data(let data):
@@ -130,7 +130,7 @@ public extension ServiceTaskBuilding {
 
     /// Handle text response. When received response of other type task will fail with ServiceTaskError.invalidResponse
     @discardableResult
-    public func text(_ handler: @escaping (String, URLResponse) -> Void) -> Self {
+    func text(_ handler: @escaping (String, URLResponse) -> Void) -> Self {
         task.responseHandler = TextContentHandler { [queue = responseQueue] (string, response) in
             queue.addOperation {
                 handler(string, response)
@@ -141,7 +141,7 @@ public extension ServiceTaskBuilding {
 
     /// Handle json response. When received response of other type task will fail with ServiceTaskError.invalidResponse
     @discardableResult
-    public func json(_ handler: @escaping (Any, URLResponse) -> Void) -> Self {
+    func json(_ handler: @escaping (Any, URLResponse) -> Void) -> Self {
         task.responseHandler = JSONContentHandler { [queue = responseQueue] (object, response) in
             queue.addOperation {
                 handler(object, response)
@@ -152,7 +152,7 @@ public extension ServiceTaskBuilding {
     
     /// Handle json dictionary response. When received response of other type task will fail with ServiceTaskError.invalidResponse
     @discardableResult
-    public func array(_ handler: @escaping ([Any], URLResponse) -> Void) -> Self {
+    func array(_ handler: @escaping ([Any], URLResponse) -> Void) -> Self {
         task.responseHandler = JSONContentHandler { [queue = responseQueue] (object, response) in
             guard let array = object as? [Any] else {
                 throw ServiceTaskError.invalidContent
@@ -166,7 +166,7 @@ public extension ServiceTaskBuilding {
     
     /// Handle json dictionary response. When received response of other type task will fail with ServiceTaskError.invalidResponse
     @discardableResult
-    public func dictionary(_ handler: @escaping ([AnyHashable: Any], URLResponse) -> Void) -> Self {
+    func dictionary(_ handler: @escaping ([AnyHashable: Any], URLResponse) -> Void) -> Self {
         task.responseHandler = JSONContentHandler { [queue = responseQueue] (object, response) in
             guard let dictionary = object as? [AnyHashable: Any] else {
                 throw ServiceTaskError.invalidContent
@@ -180,7 +180,7 @@ public extension ServiceTaskBuilding {
     
     /// Handle url-encoded response. When received response of other type task will fail with ServiceTaskError.invalidResponse
     @discardableResult
-    public func urlencoded(_ handler: @escaping ([String: String], URLResponse) -> Void) -> Self {
+    func urlencoded(_ handler: @escaping ([String: String], URLResponse) -> Void) -> Self {
         task.responseHandler = URLEncodedContentHandler { [queue = responseQueue] (dictionary, response) in
             queue.addOperation {
                 handler(dictionary, response)
@@ -191,7 +191,7 @@ public extension ServiceTaskBuilding {
     
     /// Handle json response with serialized Decodable object of infered type. When received response of other type task will fail with ServiceTaskError.invalidResponse
     @discardableResult
-    public func codable<T: Decodable>(_ handler: @escaping (T, URLResponse) -> Void) -> Self {
+    func codable<T: Decodable>(_ handler: @escaping (T, URLResponse) -> Void) -> Self {
         task.responseHandler = DecodableContentHandler { [queue = responseQueue] (object: T, response) in
             queue.addOperation {
                 handler(object, response)
@@ -202,7 +202,7 @@ public extension ServiceTaskBuilding {
 
     /// Handle json response with serialized Decodable object of infered type. When received response of other type task will fail with ServiceTaskError.invalidResponse
     @discardableResult
-    public func codable<T: Decodable>(_ type: T.Type, handler: @escaping (T, URLResponse) -> Void) -> Self {
+    func codable<T: Decodable>(_ type: T.Type, handler: @escaping (T, URLResponse) -> Void) -> Self {
         task.responseHandler = DecodableContentHandler { [queue = responseQueue] (object: T, response) in
             queue.addOperation {
                 handler(object, response)
@@ -225,7 +225,7 @@ public extension ServiceTaskBuilding {
 
     /// Handle HTTP status response with block
     @discardableResult
-    public func response(statusCode handler: @escaping (ServiceTaskResponse<Int>) -> Void) -> Self {
+    func response(statusCode handler: @escaping (ServiceTaskResponse<Int>) -> Void) -> Self {
         statusCode { (status) in
             handler(ServiceTaskResponse.success(status))
         }
@@ -237,7 +237,7 @@ public extension ServiceTaskBuilding {
     
     /// Handle response with block
     @discardableResult
-    public func response(content handler: @escaping (ServiceTaskResponse<ServiceTaskContent>) -> Void) -> Self {
+    func response(content handler: @escaping (ServiceTaskResponse<ServiceTaskContent>) -> Void) -> Self {
         content { (content, response) in
             handler(ServiceTaskResponse.success(content))
         }
@@ -249,7 +249,7 @@ public extension ServiceTaskBuilding {
     
     /// Handle file response for tasks performed via Download action. Returned file should be removed manually after use. When received response of other type task will fail with ServiceTaskError.invalidResponse
     @discardableResult
-    public func response(file handler: @escaping (ServiceTaskResponse<URL>) -> Void) -> Self {
+    func response(file handler: @escaping (ServiceTaskResponse<URL>) -> Void) -> Self {
         file { (url, response) in
             handler(ServiceTaskResponse.success(url))
         }
@@ -262,7 +262,7 @@ public extension ServiceTaskBuilding {
 
     /// Handle data response. When task is performed via Download action, received file content will be handled as data response
     @discardableResult
-    public func response(data handler: @escaping (ServiceTaskResponse<Data>) -> Void) -> Self {
+    func response(data handler: @escaping (ServiceTaskResponse<Data>) -> Void) -> Self {
         data { (data, response) in
             handler(ServiceTaskResponse.success(data))
         }
@@ -274,7 +274,7 @@ public extension ServiceTaskBuilding {
     
     /// Handle text response. When received response of other type task will fail with ServiceTaskError.invalidResponse
     @discardableResult
-    public func response(text handler: @escaping (ServiceTaskResponse<String>) -> Void) -> Self {
+    func response(text handler: @escaping (ServiceTaskResponse<String>) -> Void) -> Self {
         text { (string, response) in
             handler(ServiceTaskResponse.success(string))
         }
@@ -286,7 +286,7 @@ public extension ServiceTaskBuilding {
 
     /// Handle json response. When received response of other type task will fail with ServiceTaskError.invalidResponse
     @discardableResult
-    public func response(json handler: @escaping (ServiceTaskResponse<Any>) -> Void) -> Self {
+    func response(json handler: @escaping (ServiceTaskResponse<Any>) -> Void) -> Self {
         json { (object, response) in
             handler(ServiceTaskResponse.success(object))
         }
@@ -298,7 +298,7 @@ public extension ServiceTaskBuilding {
 
     /// Handle array json response. When received response of other type task will fail with ServiceTaskError.invalidResponse
     @discardableResult
-    public func response(array handler: @escaping (ServiceTaskResponse<[Any]>) -> Void) -> Self {
+    func response(array handler: @escaping (ServiceTaskResponse<[Any]>) -> Void) -> Self {
         array { (object, response) in
             handler(ServiceTaskResponse.success(object))
         }
@@ -310,7 +310,7 @@ public extension ServiceTaskBuilding {
     
     /// Handle dictionary json response. When received response of other type task will fail with ServiceTaskError.invalidResponse
     @discardableResult
-    public func response(dictionary handler: @escaping (ServiceTaskResponse<[AnyHashable: Any]>) -> Void) -> Self {
+    func response(dictionary handler: @escaping (ServiceTaskResponse<[AnyHashable: Any]>) -> Void) -> Self {
         dictionary { (object, response) in
             handler(ServiceTaskResponse.success(object))
         }
@@ -322,7 +322,7 @@ public extension ServiceTaskBuilding {
     
     /// Handle url-encoded response. When received response of other type task will fail with ServiceTaskError.invalidResponse
     @discardableResult
-    public func response(urlencoded handler: @escaping (ServiceTaskResponse<[String: String]>) -> Void) -> Self {
+    func response(urlencoded handler: @escaping (ServiceTaskResponse<[String: String]>) -> Void) -> Self {
         urlencoded { (dictionary, response) in
             handler(ServiceTaskResponse.success(dictionary))
         }
@@ -334,7 +334,7 @@ public extension ServiceTaskBuilding {
 
     /// Handle json response with serialized Decodable object of infered type. When received response of other type task will fail with ServiceTaskError.invalidResponse
     @discardableResult
-    public func response<T: Decodable>(codable type: T.Type, handler: @escaping (ServiceTaskResponse<T>) -> Void) -> Self {
+    func response<T: Decodable>(codable type: T.Type, handler: @escaping (ServiceTaskResponse<T>) -> Void) -> Self {
         codable { (object, response) in
             handler(ServiceTaskResponse.success(object))
         }
@@ -346,7 +346,7 @@ public extension ServiceTaskBuilding {
 
     /// Handle json response with serialized Decodable object of infered type. When received response of other type task will fail with ServiceTaskError.invalidResponse
     @discardableResult
-    public func response<T: Decodable>(codable handler: @escaping (ServiceTaskResponse<T>) -> Void) -> Self {
+    func response<T: Decodable>(codable handler: @escaping (ServiceTaskResponse<T>) -> Void) -> Self {
         codable { (object, response) in
             handler(ServiceTaskResponse.success(object))
         }

@@ -70,7 +70,7 @@ extension FormDataPart {
     }
     
     /// Create data part with string content
-    public static func property(name: String, value: String) -> FormDataPart {
+    static func property(name: String, value: String) -> FormDataPart {
         return FormDataPart([
             .contentDisposition(name: name), .lineBreak,
             .lineBreak,
@@ -79,12 +79,12 @@ extension FormDataPart {
     }
 
     /// Create binary data part with MIME type using instance of Data as data source
-    public static func binary(name: String, mimeType: String, transferEncoding: Encoding? = nil, data: Data) -> FormDataPart {
+    static func binary(name: String, mimeType: String, transferEncoding: Encoding? = nil, data: Data) -> FormDataPart {
         return binary(name: name, mimeType: mimeType, transferEncoding: transferEncoding, stream: InputStream(data: data), size: data.count)
     }
 
     /// Create binary data part with MIME type using local file as a source of data
-    public static func binary(name: String, mimeType: String? = nil, transferEncoding: Encoding? = nil, url: URL) throws -> FormDataPart {
+    static func binary(name: String, mimeType: String? = nil, transferEncoding: Encoding? = nil, url: URL) throws -> FormDataPart {
         guard let size = try getFileSize(at: url), let stream = InputStream(url: url) else {
             throw FormDataError.emptyFileOrNoAccess(url)
         }
@@ -92,7 +92,7 @@ extension FormDataPart {
     }
 
     /// Create text data part with specific encoding (optional) using string as data source
-    public static func text(name: String, encoding: String.Encoding = .utf8, charset: String? = nil, allowLossyConversion: Bool = false, value: String) throws -> FormDataPart {
+    static func text(name: String, encoding: String.Encoding = .utf8, charset: String? = nil, allowLossyConversion: Bool = false, value: String) throws -> FormDataPart {
         guard let encoded = value.data(using: encoding, allowLossyConversion: allowLossyConversion) else {
             throw FormDataError.invalidEncoding
         }
@@ -100,12 +100,12 @@ extension FormDataPart {
     }
     
     /// Create text data part with specific encoding (optional) using instance of Data as a data source
-    public static func text(name: String, encoding: String.Encoding = .utf8, charset: String? = nil, transferEncoding: Encoding? = nil, data: Data) -> FormDataPart {
+    static func text(name: String, encoding: String.Encoding = .utf8, charset: String? = nil, transferEncoding: Encoding? = nil, data: Data) -> FormDataPart {
         return text(name: name, encoding: encoding, charset: charset, transferEncoding: transferEncoding, stream: InputStream(data: data), size: data.count)
     }
 
     /// Create text data part with specific encoding (optional) using local file as a source of data
-    public static func text(name: String, encoding: String.Encoding = .utf8, charset: String? = nil, transferEncoding: Encoding? = nil, url: URL) throws -> FormDataPart {
+    static func text(name: String, encoding: String.Encoding = .utf8, charset: String? = nil, transferEncoding: Encoding? = nil, url: URL) throws -> FormDataPart {
         guard let size = try getFileSize(at: url), let stream = InputStream(url: url) else {
             throw FormDataError.emptyFileOrNoAccess(url)
         }
@@ -113,12 +113,12 @@ extension FormDataPart {
     }
 
     /// Create file data part using instance of Data as a data source
-    public static func file(name: String, fileName: String, mimeType: String, charset: String? = nil, transferEncoding: Encoding? = nil, data: Data) -> FormDataPart {
+    static func file(name: String, fileName: String, mimeType: String, charset: String? = nil, transferEncoding: Encoding? = nil, data: Data) -> FormDataPart {
         return file(name: name, fileName: fileName, mimeType: mimeType, charset: charset, transferEncoding: transferEncoding, stream: InputStream(data: data), size: data.count)
     }
 
     /// Create file data part using local file as a source of data
-    public static func file(name: String, fileName: String? = nil, mimeType: String? = nil, transferEncoding: Encoding? = nil, url: URL) throws -> FormDataPart {
+    static func file(name: String, fileName: String? = nil, mimeType: String? = nil, transferEncoding: Encoding? = nil, url: URL) throws -> FormDataPart {
         guard let size = try getFileSize(at: url), let stream = InputStream(url: url) else {
             throw FormDataError.emptyFileOrNoAccess(url)
         }
@@ -126,7 +126,7 @@ extension FormDataPart {
     }
 
     /// Encapsulate another boundary as data part
-    public static func boundary(_ boundary: FormDataBuilder) -> FormDataPart {
+    static func boundary(_ boundary: FormDataBuilder) -> FormDataPart {
         return FormDataPart(boundary.translate())
     }
 }
@@ -140,7 +140,7 @@ public extension FormDataPart {
     }
 
     /// Create binary data part with MIME type using InputStream as data source
-    public static func binary(name: String, mimeType: String, transferEncoding: Encoding? = nil, stream: InputStream, size: Int = 0) -> FormDataPart {
+    static func binary(name: String, mimeType: String, transferEncoding: Encoding? = nil, stream: InputStream, size: Int = 0) -> FormDataPart {
         var chunks = [FormDataChunk]()
         chunks += [ .contentDisposition(name: name), .lineBreak]
         chunks += [.contentType(value: mimeType), .lineBreak]
@@ -152,7 +152,7 @@ public extension FormDataPart {
     }
     
     /// Create file data part using InputStream as data source
-    public static func file(name: String, fileName: String, mimeType: String, charset: String? = nil, transferEncoding: Encoding? = nil, stream: InputStream, size: Int = 0) -> FormDataPart {
+    static func file(name: String, fileName: String, mimeType: String, charset: String? = nil, transferEncoding: Encoding? = nil, stream: InputStream, size: Int = 0) -> FormDataPart {
         var chunks = [FormDataChunk]()
         chunks += [.contentDisposition(name: name), .parameter(semicolon: true, name: "filename", value: "\"\(fileName)\""), .lineBreak]
         chunks += [.contentType(value: mimeType)]
@@ -170,7 +170,7 @@ public extension FormDataPart {
     }
     
     /// Create text data part with specific encoding (optional) using InputStream as data source
-    public static func text(name: String, encoding: String.Encoding? = nil, charset: String? = nil, transferEncoding: Encoding? = nil, stream: InputStream, size: Int = 0) -> FormDataPart {
+    static func text(name: String, encoding: String.Encoding? = nil, charset: String? = nil, transferEncoding: Encoding? = nil, stream: InputStream, size: Int = 0) -> FormDataPart {
         var chunks = [FormDataChunk]()
         chunks += [.contentDisposition(name: name), .lineBreak]
         chunks += [.contentType(value: "text/plain")]

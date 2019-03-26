@@ -35,7 +35,7 @@ import Foundation
 
 public extension Notification.Name {
 
-    public enum Condulet {
+    enum Condulet {
 
         /// Posted when a ServiceTask is performed. The notification `object` contains an instance of a ServiceTask.
         public static let TaskPerformed = Notification.Name(rawValue: "Condulet.TaskPerformed")
@@ -80,8 +80,8 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskPerformable, CustomS
     
     // MARK: - Hashable
     
-    public var hashValue: Int {
-        return identifier.hashValue
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(identifier)
     }
     
     // MARK: - Equatable
