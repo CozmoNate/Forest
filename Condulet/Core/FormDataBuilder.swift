@@ -110,7 +110,7 @@ public struct FormDataBuilder {
 public extension FormDataBuilder {
 
     /// Calculates the size in bytes of all chunks
-    public static func size(of chunks: [FormDataChunk]) -> UInt64 {
+    static func size(of chunks: [FormDataChunk]) -> UInt64 {
 
         let size = chunks.reduce(0, { (result, chunk) -> UInt64 in
             switch chunk {
@@ -131,7 +131,7 @@ public extension FormDataBuilder {
     ///   - chunks: The form data chunks representing form data
     ///   - stream: The stream that will be used to write data
     ///   - buffer: The size of the memory buffer in bytes used to transfer data from input sources to output stream
-    public static func write(chunks: [FormDataChunk], to stream: OutputStream, bufferSize: Int = 1_000_000) throws {
+    static func write(chunks: [FormDataChunk], to stream: OutputStream, bufferSize: Int = 1_000_000) throws {
 
         stream.open()
         defer {
@@ -149,7 +149,7 @@ public extension FormDataBuilder {
     ///   - chunks: The form data chunks representing form data
     ///   - buffer: The size in bytes of a memory buffer to be used to transfer data from part source to memory while encoding content. Default value is 1Mb
     /// - Returns: Returns an instance of a Data object with encoded boundary content ready to use as a body for URLRequest
-    public static func writeToMemory(chunks: [FormDataChunk], bufferSize: Int = 1_000_000) throws -> Data {
+    static func writeToMemory(chunks: [FormDataChunk], bufferSize: Int = 1_000_000) throws -> Data {
 
         let memoryStream = OutputStream.toMemory()
 
@@ -169,7 +169,7 @@ public extension FormDataBuilder {
     ///   - file: The URL to the file the boundary content will be written to.
     ///   - append: true if newly written data should be appended to any existing file contents, otherwise false.
     ///   - buffer: The size in bytes of a memory buffer to be used to transfer data from part source to file while encoding content. Default value is 1Mb
-    public static func write(chunks: [FormDataChunk], to file: URL, append: Bool = false, bufferSize: Int = 1_000_000) throws {
+    static func write(chunks: [FormDataChunk], to file: URL, append: Bool = false, bufferSize: Int = 1_000_000) throws {
 
         guard let fileStream = OutputStream(url: file, append: append) else {
             throw FormDataError.fileIsNotWriteable(file)
@@ -181,11 +181,11 @@ public extension FormDataBuilder {
 
 public extension FormDataBuilder {
 
-    public func makePartSeparator() -> [FormDataChunk] {
+    func makePartSeparator() -> [FormDataChunk] {
         return [.separator(boundary: boundary), .lineBreak]
     }
 
-    public func makeBoundaryClosure() -> [FormDataChunk] {
+    func makeBoundaryClosure() -> [FormDataChunk] {
         return [.closure(boundary: boundary), .lineBreak]
     }
 }

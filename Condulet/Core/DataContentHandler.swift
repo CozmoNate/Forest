@@ -48,7 +48,7 @@ public protocol DataContentHandling: ServiceTaskResponseHandling {
 
 public extension DataContentHandling {
 
-    public func handle(content: ServiceTaskContent, response: URLResponse) throws {
+    func handle(content: ServiceTaskContent, response: URLResponse) throws {
 
         // Load response data
         let data: Data

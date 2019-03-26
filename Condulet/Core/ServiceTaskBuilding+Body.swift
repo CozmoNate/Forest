@@ -37,7 +37,7 @@ public extension ServiceTaskBuilding {
 
     /// Set HTTP request body
     @discardableResult
-    public func body(content: ServiceTaskContent, contentType: String? = nil) -> Self {
+    func body(content: ServiceTaskContent, contentType: String? = nil) -> Self {
         if let contentType = contentType {
             self.contentType(value: contentType)
         }
@@ -47,19 +47,19 @@ public extension ServiceTaskBuilding {
 
     /// Set HTTP request body
     @discardableResult
-    public func body(data: Data, contentType: String? = nil) -> Self {
+    func body(data: Data, contentType: String? = nil) -> Self {
         return body(content: .data(data), contentType: contentType)
     }
     
     /// Set HTTP request body, load data from file
     @discardableResult
-    public func body(url: URL, contentType: String? = nil) -> Self {
+    func body(url: URL, contentType: String? = nil) -> Self {
         return body(content: .file(url), contentType: contentType ?? mimeTypeForFileAtURL(url))
     }
     
     /// Set HTTP request body
     @discardableResult
-    public func body(text: String, encoding: String.Encoding = .utf8, allowLossyConversion: Bool = false) -> Self {
+    func body(text: String, encoding: String.Encoding = .utf8, allowLossyConversion: Bool = false) -> Self {
         if let charset = CFStringConvertEncodingToIANACharSetName(CFStringEncoding(encoding.rawValue)) as String? {
             contentType(value: "text/plain; charset=\(charset)")
         }
@@ -72,7 +72,7 @@ public extension ServiceTaskBuilding {
     
     /// Set HTTP request body
     @discardableResult
-    public func body(json: [AnyHashable: Any]) -> Self {
+    func body(json: [AnyHashable: Any]) -> Self {
         contentType(value: "application/json")
         task.body = ServiceTaskContent(try? JSONSerialization.data(withJSONObject: json, options: []))
         return self
@@ -80,7 +80,7 @@ public extension ServiceTaskBuilding {
     
     /// Set HTTP request body
     @discardableResult
-    public func body(json: [Any]) -> Self {
+    func body(json: [Any]) -> Self {
         contentType(value: "application/json")
         task.body = ServiceTaskContent(try? JSONSerialization.data(withJSONObject: json, options: []))
         return self
@@ -88,7 +88,7 @@ public extension ServiceTaskBuilding {
     
     /// Set HTTP request body
     @discardableResult
-    public func body(urlencoded: [String: String]) -> Self {
+    func body(urlencoded: [String: String]) -> Self {
         contentType(value: "application/x-www-form-urlencoded")
         task.body = ServiceTaskContent(try? URLEncodedSerialization.data(with: urlencoded))
         return self
@@ -96,7 +96,7 @@ public extension ServiceTaskBuilding {
     
     /// Set HTTP request body
     @discardableResult
-    public func body<T: Encodable>(codable: T) -> Self {
+    func body<T: Encodable>(codable: T) -> Self {
         contentType(value: "application/json")
         task.body = ServiceTaskContent(try? JSONEncoder().encode(codable))
         return self

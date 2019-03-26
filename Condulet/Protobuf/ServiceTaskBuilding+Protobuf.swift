@@ -38,7 +38,7 @@ public extension ServiceTaskBuilding {
     
     /// Send body with protobuf messsage
     @discardableResult
-    public func body<T: Message>(proto message: T) -> Self {
+    func body<T: Message>(proto message: T) -> Self {
         contentType(value: "application/x-www-form-urlencoded")
         task.headers["grpc-metadata-content-type"] = "application/grpc"
         task.body = ServiceTaskContent(try? message.jsonUTF8Data())
@@ -47,7 +47,7 @@ public extension ServiceTaskBuilding {
     
     /// Send body with protobuf messsage. This method creates an instance of the type specified and passes it to configuration block
     @discardableResult
-    public func body<T: Message>(proto configure: (inout T) -> Void) -> Self {
+    func body<T: Message>(proto configure: (inout T) -> Void) -> Self {
         contentType(value: "application/x-www-form-urlencoded")
         task.headers["grpc-metadata-content-type"] = "application/grpc"
         var message = T()
@@ -58,7 +58,7 @@ public extension ServiceTaskBuilding {
 
     /// Send body with protobuf messsage. This method creates an instance of the type specified and passes it to configuration block
     @discardableResult
-    public func body<T: Message>(proto type: T.Type, configure: (inout T) -> Void) -> Self {
+    func body<T: Message>(proto type: T.Type, configure: (inout T) -> Void) -> Self {
         contentType(value: "application/x-www-form-urlencoded")
         task.headers["grpc-metadata-content-type"] = "application/grpc"
         var message = T()
@@ -69,7 +69,7 @@ public extension ServiceTaskBuilding {
 
     /// Handle protobuf message response. If received response of other type task will fail with ServiceTaskError.invalidResponse
     @discardableResult
-    public func proto<T: Message>(ignoreUnknownFields: Bool = true, _ handler: @escaping (T, URLResponse) -> Void) -> Self {
+    func proto<T: Message>(ignoreUnknownFields: Bool = true, _ handler: @escaping (T, URLResponse) -> Void) -> Self {
         task.responseHandler = ProtobufContentHandler(ignoreUnknownFields: ignoreUnknownFields) { [queue = responseQueue] (message: T, response) in
             queue.addOperation {
                 handler(message, response)
@@ -80,7 +80,7 @@ public extension ServiceTaskBuilding {
 
     /// Handle protobuf message response. If received response of other type task will fail with ServiceTaskError.invalidResponse
     @discardableResult
-    public func proto<T: Message>(ignoreUnknownFields: Bool = true, _ type: T.Type, handler: @escaping (T, URLResponse) -> Void) -> Self {
+    func proto<T: Message>(ignoreUnknownFields: Bool = true, _ type: T.Type, handler: @escaping (T, URLResponse) -> Void) -> Self {
         task.responseHandler = ProtobufContentHandler { [queue = responseQueue] (message: T, response) in
             queue.addOperation {
                 handler(message, response)
@@ -91,7 +91,7 @@ public extension ServiceTaskBuilding {
 
     /// Handle protobuf message response. If received response of other type task will fail with ServiceTaskError.invalidResponse
     @discardableResult
-    public func response<T: Message>(proto type: T.Type, ignoreUnknownFields: Bool = true, handler: @escaping (ServiceTaskResponse<T>) -> Void) -> Self {
+    func response<T: Message>(proto type: T.Type, ignoreUnknownFields: Bool = true, handler: @escaping (ServiceTaskResponse<T>) -> Void) -> Self {
         proto(ignoreUnknownFields: ignoreUnknownFields) { (message, response) in
             handler(ServiceTaskResponse.success(message))
         }
@@ -103,7 +103,7 @@ public extension ServiceTaskBuilding {
 
     /// Handle protobuf message response. If received response of other type task will fail with ServiceTaskError.invalidResponse
     @discardableResult
-    public func response<T: Message>(ignoreUnknownProtoFields: Bool = true, handler: @escaping (ServiceTaskResponse<T>) -> Void) -> Self {
+    func response<T: Message>(ignoreUnknownProtoFields: Bool = true, handler: @escaping (ServiceTaskResponse<T>) -> Void) -> Self {
         proto(ignoreUnknownFields: ignoreUnknownProtoFields) { (message, response) in
             handler(ServiceTaskResponse.success(message))
         }

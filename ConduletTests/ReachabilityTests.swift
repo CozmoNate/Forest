@@ -21,13 +21,18 @@ class ReachabilityTests: QuickSpec {
             it("can receive reachability changes") {
                 waitUntil { (done) in
 
+                    var completion: (() -> Void)? = {
+                        done()
+                    }
+                    
                     let reachability = Reachability(host: "apple.com") { (reachability) in
                         expect(reachability.isConnectionRequired).to(beFalse())
                         expect(reachability.isConnectsAutomatically).to(beFalse())
                         expect(reachability.isHostReachable).to(beTrue())
                         reachability.stopListening()
                         expect(reachability.isListening).to(beFalse())
-                        done()
+                        completion?()
+                        completion = nil // Once is enough
                     }
 
                     expect(reachability?.startListening()).to(beTrue())

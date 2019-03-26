@@ -36,7 +36,8 @@ import Foundation
 public extension ServiceTaskBuilding {
     
     /// Perform data task
-    @discardableResult public func perform() -> Task {
+    @discardableResult
+    func perform() -> Task {
         task.perform(action: .perform)
         return task
     }
@@ -44,7 +45,8 @@ public extension ServiceTaskBuilding {
     /// Perform download task. If destination name not specified, temporary filename will be generated
     ///
     /// - Parameter destination: The destination where file should be saved. When not specified, file will be downloaded and saved to temp folder and should be manually removed
-    @discardableResult public func download(to destination: URL? = nil, with resumeData: Data? = nil) -> Task {
+    @discardableResult
+    func download(to destination: URL? = nil, with resumeData: Data? = nil) -> Task {
         let url = destination ?? FileManager.default.temporaryDirectory
             .appendingPathComponent(UUID().uuidString)
             .appendingPathExtension("tmp")
@@ -53,7 +55,8 @@ public extension ServiceTaskBuilding {
     }
     
     /// Use upload task to upload data directly from file
-    @discardableResult public func upload() -> Task {
+    @discardableResult
+    func upload() -> Task {
         task.perform(action: .upload)
         return task
     }
