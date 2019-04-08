@@ -400,6 +400,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 7EBE410B215E6F71006C882C;
 			productRefGroup = 7EBE4116215E6F71006C882C /* Products */;
@@ -460,7 +461,7 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-All Targets-ConduletTests/Pods-All Targets-ConduletTests-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-All Targets-ConduletTests/Pods-All Targets-ConduletTests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Mockingjay/Mockingjay.framework",
 				"${BUILT_PRODUCTS_DIR}/Nimble/Nimble.framework",
 				"${BUILT_PRODUCTS_DIR}/Quick/Quick.framework",
@@ -479,7 +480,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-All Targets-ConduletTests/Pods-All Targets-ConduletTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-All Targets-ConduletTests/Pods-All Targets-ConduletTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F6F8410606BCAD020EE1A82C /* [CP] Check Pods Manifest.lock */ = {
@@ -751,7 +752,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = AF99ECF42507D8C62FCE8973 /* Pods-All Targets-ConduletTests.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = ConduletTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -770,7 +770,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = EF88038FFB1E59F95B6E1397 /* Pods-All Targets-ConduletTests.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = ConduletTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
