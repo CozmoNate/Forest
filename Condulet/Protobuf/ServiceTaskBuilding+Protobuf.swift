@@ -91,24 +91,24 @@ public extension ServiceTaskBuilding {
 
     /// Handle protobuf message response. If received response of other type task will fail with ServiceTaskError.invalidResponse
     @discardableResult
-    func response<T: Message>(proto type: T.Type, ignoreUnknownFields: Bool = true, handler: @escaping (ServiceTaskResponse<T>) -> Void) -> Self {
+    func response<T: Message>(proto type: T.Type, ignoreUnknownFields: Bool = true, handler: @escaping (ServiceTaskResult<T>) -> Void) -> Self {
         proto(ignoreUnknownFields: ignoreUnknownFields) { (message, response) in
-            handler(ServiceTaskResponse.success(message))
+            handler(.success(message))
         }
         error { (error, response) in
-            handler(ServiceTaskResponse.failure(error))
+            handler(.failure(error))
         }
         return self
     }
 
     /// Handle protobuf message response. If received response of other type task will fail with ServiceTaskError.invalidResponse
     @discardableResult
-    func response<T: Message>(ignoreUnknownProtoFields: Bool = true, handler: @escaping (ServiceTaskResponse<T>) -> Void) -> Self {
+    func response<T: Message>(ignoreUnknownProtoFields: Bool = true, handler: @escaping (ServiceTaskResult<T>) -> Void) -> Self {
         proto(ignoreUnknownFields: ignoreUnknownProtoFields) { (message, response) in
-            handler(ServiceTaskResponse.success(message))
+            handler(.success(message))
         }
         error { (error, response) in
-            handler(ServiceTaskResponse.failure(error))
+            handler(.failure(error))
         }
         return self
     }

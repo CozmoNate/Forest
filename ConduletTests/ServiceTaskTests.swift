@@ -836,7 +836,7 @@ class ServiceTaskTests: QuickSpec {
                     ServiceTaskBuilder()
                         .endpoint("PATCH", URL(string: "test.test.com")!)
                         .body(proto: message)
-                        .response { (response: ServiceTaskResponse<Google_Protobuf_SourceContext>) -> Void in
+                        .response { (response: ServiceTaskResult<Google_Protobuf_SourceContext>) -> Void in
                             switch response {
                             case .success(let message):
                                 if message.fileName == "Test" {
@@ -886,7 +886,7 @@ class ServiceTaskTests: QuickSpec {
                         .url("test.test")
                         .method(.POST)
                         .body(codable: test)
-                        .response { (response: ServiceTaskResponse<Test>) -> Void in
+                        .response { (response: ServiceTaskResult<Test>) -> Void in
                             switch response {
                             case .success(let object):
                                 expect(object.data).to(equal("Test"))
