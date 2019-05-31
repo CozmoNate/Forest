@@ -44,10 +44,10 @@ public struct FormDataPart {
 
 // MARK: - Part builder
 
-extension FormDataPart {
+public extension FormDataPart {
     
     /// Representation of possible values that "Content-Transfer-Encoding" form data field can get
-    public enum Encoding {
+    enum Encoding {
         
         case base64
         case quotedPrintable

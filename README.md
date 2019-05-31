@@ -140,13 +140,13 @@ Upload multipart form data encoded content:
 
 ```swift
 
-// Create new form data builder
-var formDataBuilder = FormDataBuilder()
-
 do {
 
+    // Create new form data builder
+    var formDataBuilder = FormDataBuilder()
+
     // Filename and MIME type will be obtained automatically from URL. It can be provided explicitly too
-    try formDataBuilder.append(.file(name: "image", url: *url*))
+    formDataBuilder.append(.file(name: "image", url: *url*))
     
     // Generate form data in memory. It also can be written directly to disk or stream using encode(to:) method 
     let formData = try formDataBuilder.encode()
