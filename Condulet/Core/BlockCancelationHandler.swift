@@ -1,13 +1,13 @@
 //
-//  ServiceTaskConfigurable.swift
+//  BlockCancelationHandler.swift
 //  Condulet
 //
-//  Created by Natan Zalkin on 24/10/2018.
-//  Copyright © 2018 Natan Zalkin. All rights reserved.
+//  Created by Natan Zalkin on 02/06/2019.
+//  Copyright © 2019 Natan Zalkin. All rights reserved.
 //
 
 /*
- * Copyright (c) 2018 Zalkin, Natan
+ * Copyright (c) 2019 Natan Zalkin
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -33,29 +33,17 @@
 import Foundation
 
 
-public protocol ServiceTaskConfigurable: AnyObject {
-
-    /// A URLSession instance used to create URLSessionTask
-    var session: URLSession? { get set }
+/// Cancelation handler with block
+public class BlockCancelationHandler: ServiceTaskCancelationHandling {
     
-    /// A URLComponents instance describing service endpoint
-    var url: URLComponents { get set }
+    private var completion: ((URLResponse?) -> Void)?
     
-    /// A HTTP method used for request
-    var method: HTTPMethod? { get set }
+    /// Create an instance of a handler. NOTE: The block can be executed on a background thread
+    public init(completion: ((URLResponse?) -> Void)? = nil) {
+        self.completion = completion
+    }
     
-    /// HTTP headers added to request
-    var headers: [String: String] { get set }
-    
-    /// HTTP body data
-    var body: ServiceTaskContent? { get set }
-    
-    /// Service response handler
-    var responseHandler: ServiceTaskResponseHandling? { get set }
-    
-    /// Failure handler
-    var errorHandler: ServiceTaskErrorHandling? { get set }
-    
-    /// Cancelation handler
-    var cancelationHandler: ServiceTaskCancelationHandling? { get set }
+    public func handle(response: URLResponse?) {
+        self.completion?(response)
+    }
 }

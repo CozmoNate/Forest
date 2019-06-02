@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -36,6 +36,8 @@
 		7EECC27A2160AAE1008845F4 /* ServiceTaskErrorHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EECC2792160AAE1008845F4 /* ServiceTaskErrorHandling.swift */; };
 		7EECC28B21610809008845F4 /* ServiceTaskBuilding+Protobuf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EECC28A21610809008845F4 /* ServiceTaskBuilding+Protobuf.swift */; };
 		7EECC2932161326E008845F4 /* DecodableContentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EECC2922161326E008845F4 /* DecodableContentHandler.swift */; };
+		7EF23B2822A37E86003D5398 /* BlockCancelationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF23B2722A37E86003D5398 /* BlockCancelationHandler.swift */; };
+		7EF23B2A22A37EA9003D5398 /* ServiceTaskCancelationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF23B2922A37EA9003D5398 /* ServiceTaskCancelationHandler.swift */; };
 		8411B2471340A40A98CF6509 /* Pods_All_Targets_ConduletTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D3BE0FE0480671010AE049E /* Pods_All_Targets_ConduletTests.framework */; };
 		AA045AC121675BC400BD92D4 /* ServiceTaskRetrofitting.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA045AC021675BC400BD92D4 /* ServiceTaskRetrofitting.swift */; };
 		AA045AC32167673600BD92D4 /* ServiceTaskRetrofitterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA045AC22167673600BD92D4 /* ServiceTaskRetrofitterTests.swift */; };
@@ -103,6 +105,8 @@
 		7EECC2792160AAE1008845F4 /* ServiceTaskErrorHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTaskErrorHandling.swift; sourceTree = "<group>"; };
 		7EECC28A21610809008845F4 /* ServiceTaskBuilding+Protobuf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ServiceTaskBuilding+Protobuf.swift"; sourceTree = "<group>"; };
 		7EECC2922161326E008845F4 /* DecodableContentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodableContentHandler.swift; sourceTree = "<group>"; };
+		7EF23B2722A37E86003D5398 /* BlockCancelationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockCancelationHandler.swift; sourceTree = "<group>"; };
+		7EF23B2922A37EA9003D5398 /* ServiceTaskCancelationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTaskCancelationHandler.swift; sourceTree = "<group>"; };
 		AA045AC021675BC400BD92D4 /* ServiceTaskRetrofitting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTaskRetrofitting.swift; sourceTree = "<group>"; };
 		AA045AC22167673600BD92D4 /* ServiceTaskRetrofitterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTaskRetrofitterTests.swift; sourceTree = "<group>"; };
 		AA6418E32175C04E0021BC2F /* ResponseHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseHandlerTests.swift; sourceTree = "<group>"; };
@@ -233,6 +237,7 @@
 		7EE281EB2161FAD800019EE5 /* ServiceTask */ = {
 			isa = PBXGroup;
 			children = (
+				7EF23B2922A37EA9003D5398 /* ServiceTaskCancelationHandler.swift */,
 				7ED7A57321601180007657ED /* ServiceTaskResponseHandling.swift */,
 				7EECC2792160AAE1008845F4 /* ServiceTaskErrorHandling.swift */,
 				AAD8BF022180853F00A54949 /* ServiceTaskConfigurable.swift */,
@@ -290,6 +295,7 @@
 			children = (
 				7EEA111E216F03CE005E398F /* BlockErrorHandler.swift */,
 				AAD56CAB216397A10086CC50 /* BlockResponseHandler.swift */,
+				7EF23B2722A37E86003D5398 /* BlockCancelationHandler.swift */,
 				7EA7250D2170AE9B008E52CA /* DataContentHandler.swift */,
 				7ED7A58021608F8B007657ED /* TextContentHandler.swift */,
 				7ED7A57121600D1A007657ED /* JSONContentHandler.swift */,
@@ -506,6 +512,7 @@
 				7EEA1112216EF80A005E398F /* HTTPMethod.swift in Sources */,
 				7EECC27A2160AAE1008845F4 /* ServiceTaskErrorHandling.swift in Sources */,
 				7ED7A56E215FFCFA007657ED /* ProtobufContentHandler.swift in Sources */,
+				7EF23B2A22A37EA9003D5398 /* ServiceTaskCancelationHandler.swift in Sources */,
 				7EBE414A215F1A64006C882C /* ServiceTaskBuilding+Response.swift in Sources */,
 				7EA72526217C1F2D008E52CA /* Reachability.swift in Sources */,
 				7ED7A57C21601AC1007657ED /* URLEncodedSerialization.swift in Sources */,
@@ -531,6 +538,7 @@
 				7EECC28B21610809008845F4 /* ServiceTaskBuilding+Protobuf.swift in Sources */,
 				AAA198A6216E6666000E5D55 /* FormDataError.swift in Sources */,
 				7EE281F42161FE2A00019EE5 /* ServiceTaskError.swift in Sources */,
+				7EF23B2822A37E86003D5398 /* BlockCancelationHandler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

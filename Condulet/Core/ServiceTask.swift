@@ -117,6 +117,9 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskPerformable, CustomS
     /// Failure handler
     public var errorHandler: ServiceTaskErrorHandling?
     
+    /// Cacelation handler
+    public var cancelationHandler: ServiceTaskCancelationHandling?
+    
     // MARK: - Retrofitter
     
     public var retrofitter: ServiceTaskRetrofitting?
@@ -198,10 +201,16 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskPerformable, CustomS
 
         // Invalidate response of current URLSessionTask, if one is running
         signature = nil
+        
+        if let task = underlayingTask {
+            
+            // Cancel URLSessionTask, if one is active
+            task.cancel()
 
-        // Cancel URLSessionTask, if one is active
-        underlayingTask?.cancel()
-
+            // Call cancelation handler
+            cancelationHandler?.handle(response: nil)
+        }
+        
         // Perform new URLSessionTask with actual configuration
         perform(action: action)
 
@@ -225,6 +234,7 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskPerformable, CustomS
         if let resumeDataHandler = resumeDataHandler {
             if let downloadTask = underlayingTask as? URLSessionDownloadTask {
                 downloadTask.cancel(byProducingResumeData: resumeDataHandler)
+                cancelationHandler?.handle(response: nil)
                 return true
             }
             else {
@@ -232,7 +242,10 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskPerformable, CustomS
             }
         }
 
-        underlayingTask?.cancel()
+        if let task = underlayingTask {
+            task.cancel()
+            cancelationHandler?.handle(response: nil)
+        }
 
         return true
     }
@@ -401,6 +414,11 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskPerformable, CustomS
                 return
             }
         
+            if case URLError.cancelled = error {
+                cancelationHandler?.handle(response: response)
+                return
+            }
+            
             // Run error handler
             errorHandler?.handle(error: error, response: response)
         }

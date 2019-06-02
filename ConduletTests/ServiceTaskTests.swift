@@ -19,6 +19,12 @@ func compare(_ dict1: [String: String], _ dict2: [String: String]) -> Bool {
         .reduce(true, { $0 && (dict1[$1] == dict2[$1]) })
 }
 
+public func cancel() -> (_ request: URLRequest) -> Response {
+    return { (request:URLRequest) in
+        return Response.failure(URLError(.cancelled) as NSError)
+    }
+}
+
 class ServiceTaskTests: QuickSpec {
     
     struct Test: Codable {
@@ -98,6 +104,63 @@ class ServiceTaskTests: QuickSpec {
                 expect(task).to(equal(task))
             }
 
+            it("can handle cancelation") {
+                let json = ["test": "ok"]
+                let body = try! JSONSerialization.data(withJSONObject: json, options: [])
+                
+                self.stub(testData(.get, uri: "test.cancel.handle", data: body), delay: 2, http(200))
+                
+                var canceled = false
+                
+                waitUntil(timeout: 5) { (done) in
+                    
+                    let task = ServiceTaskBuilder()
+                        .endpoint(.GET, "test.cancel")
+                        .body(json: json)
+                        .content { (content, response) in
+                            fail("Response received!")
+                        }
+                        .error { (error, response) in
+                            fail("Error received: \(error)")
+                        }
+                        .cancelation { (response) in
+                            done()
+                        }
+                        .perform()
+                    
+                    if !task.cancel() {
+                        canceled = true
+                        fail("Task is failed to cancel!")
+                    }
+                }
+            }
+            
+            it("can handle task cancelation") {
+                
+                let json = ["test": "ok"]
+                let body = try! JSONSerialization.data(withJSONObject: json, options: [])
+                
+                self.stub(testData(.get, uri: "test.cancel", data: body), cancel())
+                
+                waitUntil(timeout: 5) { (done) in
+                    
+                    let task = ServiceTaskBuilder()
+                        .endpoint(.GET, "test.cancel")
+                        .body(json: json)
+                        .content { (content, response) in
+                            fail("Response received!")
+                        }
+                        .error { (error, response) in
+                            fail("Error received: \(error)")
+                        }
+                        .cancelation { (response) in
+                            done()
+                        }
+                        .perform()
+                }
+                
+            }
+            
             it("can handle data response") {
                 
                 let original = "Test".data(using: .utf8)!

@@ -32,6 +32,28 @@
 
 import Foundation
 
+// MARK: - Cancelation
+
+public extension ServiceTaskBuilding {
+    
+    /// Set cancelation handler
+    @discardableResult
+    func cancelation(_ handler: ServiceTaskCancelationHandling) -> Self {
+        task.cancelationHandler = handler
+        return self
+    }
+    
+    /// Handle cancelation with block
+    @discardableResult
+    func cancelation(_ handler: @escaping (URLResponse?) -> Void) -> Self {
+        task.cancelationHandler = BlockCancelationHandler { [queue = responseQueue] (response) in
+            queue.addOperation {
+                handler(response)
+            }
+        }
+        return self
+    }
+}
 
 // MARK: - Error handlers
 
