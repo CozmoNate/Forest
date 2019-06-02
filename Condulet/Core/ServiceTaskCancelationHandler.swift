@@ -36,7 +36,7 @@ import Foundation
 /// A handler for ServiceTask cancelation
 public protocol ServiceTaskCancelationHandling {
     
-    /// Handle response content. NOTE: This method can be executed on a background thread
-    func handle(response: URLResponse?)
+    /// Handle cancelation. NOTE: This method can be executed on a background thread
+    func handle()
     
 }

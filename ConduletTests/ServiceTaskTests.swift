@@ -104,13 +104,11 @@ class ServiceTaskTests: QuickSpec {
                 expect(task).to(equal(task))
             }
 
-            it("can handle cancelation") {
+            it("can cancel ServiceTask") {
                 let json = ["test": "ok"]
                 let body = try! JSONSerialization.data(withJSONObject: json, options: [])
                 
                 self.stub(testData(.get, uri: "test.cancel.handle", data: body), delay: 2, http(200))
-                
-                var canceled = false
                 
                 waitUntil(timeout: 5) { (done) in
                     
@@ -123,19 +121,18 @@ class ServiceTaskTests: QuickSpec {
                         .error { (error, response) in
                             fail("Error received: \(error)")
                         }
-                        .cancelation { (response) in
+                        .cancelation {
                             done()
                         }
                         .perform()
                     
                     if !task.cancel() {
-                        canceled = true
                         fail("Task is failed to cancel!")
                     }
                 }
             }
             
-            it("can handle task cancelation") {
+            it("can handle canceled URLSessionTask") {
                 
                 let json = ["test": "ok"]
                 let body = try! JSONSerialization.data(withJSONObject: json, options: [])
@@ -153,10 +150,47 @@ class ServiceTaskTests: QuickSpec {
                         .error { (error, response) in
                             fail("Error received: \(error)")
                         }
-                        .cancelation { (response) in
+                        .cancelation {
                             done()
                         }
                         .perform()
+                }
+                
+            }
+            
+            it("can rewind request") {
+                
+                let json = ["test": "ok"]
+                let body = try! JSONSerialization.data(withJSONObject: json, options: [])
+                
+                self.stub(testData(.get, uri: "test.cancel", data: body), delay: 1, http(200))
+                
+                var canceled = false
+                
+                waitUntil(timeout: 5) { (done) in
+                    
+                    let task = ServiceTaskBuilder()
+                        .endpoint(.GET, "test.cancel")
+                        .body(json: json)
+                        .content { (content, response) in
+                            if canceled {
+                                done()
+                            }
+                            else {
+                                fail("Response received!")
+                            }
+                        }
+                        .error { (error, response) in
+                            fail("Error received: \(error)")
+                        }
+                        .cancelation {
+                            canceled = true
+                        }
+                        .perform()
+                    
+                    if !task.rewind() {
+                        fail("Task is failed to cancel!")
+                    }
                 }
                 
             }
@@ -429,44 +463,6 @@ class ServiceTaskTests: QuickSpec {
                         .perform()
                     
                 }
-            }
-            
-            it("can cancel request") {
-                
-                let json = ["test": "ok"]
-                let body = try! JSONSerialization.data(withJSONObject: json, options: [])
-                
-                self.stub(testData(.get, uri: "test.cancel", data: body), delay: 2, http(200))
-                
-                var canceled = false
-                
-                waitUntil(timeout: 5) { (done) in
-                    
-                    let task = ServiceTaskBuilder()
-                        .endpoint(.GET, "test.cancel")
-                        .body(json: json)
-                        .content { (content, response) in
-                            if canceled {
-                                done()
-                            }
-                            else {
-                                fail("Response received!")
-                            }
-                        }
-                        .error { (error, response) in
-                            fail("Error received: \(error)")
-                        }
-                        .perform()
-                    
-                    if task.cancel() {
-                        canceled = true
-                        task.rewind()
-                    }
-                    else {
-                        fail("Task is failed to cancel!")
-                    }
-                }
-                
             }
             
             it("can fail to perform request") {

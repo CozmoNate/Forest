@@ -45,10 +45,10 @@ public extension ServiceTaskBuilding {
     
     /// Handle cancelation with block
     @discardableResult
-    func cancelation(_ handler: @escaping (URLResponse?) -> Void) -> Self {
-        task.cancelationHandler = BlockCancelationHandler { [queue = responseQueue] (response) in
+    func cancelation(_ handler: @escaping () -> Void) -> Self {
+        task.cancelationHandler = BlockCancelationHandler { [queue = responseQueue] in
             queue.addOperation {
-                handler(response)
+                handler()
             }
         }
         return self

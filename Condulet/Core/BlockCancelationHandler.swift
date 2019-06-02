@@ -36,14 +36,14 @@ import Foundation
 /// Cancelation handler with block
 public class BlockCancelationHandler: ServiceTaskCancelationHandling {
     
-    private var completion: ((URLResponse?) -> Void)?
+    private var completion: (() -> Void)?
     
     /// Create an instance of a handler. NOTE: The block can be executed on a background thread
-    public init(completion: ((URLResponse?) -> Void)? = nil) {
+    public init(completion: (() -> Void)? = nil) {
         self.completion = completion
     }
     
-    public func handle(response: URLResponse?) {
-        self.completion?(response)
+    public func handle() {
+        self.completion?()
     }
 }

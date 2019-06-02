@@ -208,7 +208,7 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskPerformable, CustomS
             task.cancel()
 
             // Call cancelation handler
-            cancelationHandler?.handle(response: nil)
+            cancelationHandler?.handle()
         }
         
         // Perform new URLSessionTask with actual configuration
@@ -234,7 +234,7 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskPerformable, CustomS
         if let resumeDataHandler = resumeDataHandler {
             if let downloadTask = underlayingTask as? URLSessionDownloadTask {
                 downloadTask.cancel(byProducingResumeData: resumeDataHandler)
-                cancelationHandler?.handle(response: nil)
+                cancelationHandler?.handle()
                 return true
             }
             else {
@@ -244,7 +244,7 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskPerformable, CustomS
 
         if let task = underlayingTask {
             task.cancel()
-            cancelationHandler?.handle(response: nil)
+            cancelationHandler?.handle()
         }
 
         return true
@@ -415,7 +415,7 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskPerformable, CustomS
             }
         
             if case URLError.cancelled = error {
-                cancelationHandler?.handle(response: response)
+                cancelationHandler?.handle()
                 return
             }
             
