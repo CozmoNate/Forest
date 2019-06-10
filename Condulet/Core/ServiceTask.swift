@@ -130,7 +130,7 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskPerformable, CustomS
     public private(set) var action: ServiceTaskAction?
     
     /// The underlying URLSessionTask that has been performed
-    public private(set) var underlayingTask: URLSessionTask?
+    public private(set) var underlyingTask: URLSessionTask?
     
     /// The content received with the last response
     public private(set) var content: ServiceTaskContent?
@@ -202,7 +202,7 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskPerformable, CustomS
         // Invalidate response of current URLSessionTask, if one is running
         signature = nil
         
-        if let task = underlayingTask {
+        if let task = underlyingTask {
             
             // Cancel URLSessionTask, if one is active
             task.cancel()
@@ -232,7 +232,7 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskPerformable, CustomS
 
         // Cancel with resume data
         if let resumeDataHandler = resumeDataHandler {
-            if let downloadTask = underlayingTask as? URLSessionDownloadTask {
+            if let downloadTask = underlyingTask as? URLSessionDownloadTask {
                 downloadTask.cancel(byProducingResumeData: resumeDataHandler)
                 cancelationHandler?.handle()
                 return true
@@ -242,7 +242,7 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskPerformable, CustomS
             }
         }
 
-        if let task = underlayingTask {
+        if let task = underlyingTask {
             task.cancel()
             cancelationHandler?.handle()
         }
@@ -373,20 +373,20 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskPerformable, CustomS
         switch action {
         case .perform:
             // Data task
-            underlayingTask = try makeDataTask(for: request, with: signature)
+            underlyingTask = try makeDataTask(for: request, with: signature)
         case .download(let path, let data):
             // Download task, will download data to file
-            underlayingTask = try makeDownloadTask(for: request, with: signature, destination: path, resume: data)
+            underlyingTask = try makeDownloadTask(for: request, with: signature, destination: path, resume: data)
         case .upload:
             // Upload task
-            underlayingTask = try makeUploadTask(for: request, with: signature)
+            underlyingTask = try makeUploadTask(for: request, with: signature)
         }
 
         // Save the signature to check validity of URLSessionTask response later
         self.signature = signature
 
         // Start task
-        underlayingTask?.resume()
+        underlyingTask?.resume()
 
         DispatchQueue.main.async {
             NotificationCenter.default.post(name: Notification.Name.Condulet.TaskPerformed, object: self)
