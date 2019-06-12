@@ -246,12 +246,7 @@ class ServiceTaskTests: QuickSpec {
                         .url("test.test")
                         .method(.GET)
                         .response(BlockResponseHandler { (content, response) in
-                            switch content {
-                            case .data(let data):
-                                expect(original).to(equal(data))
-                            default:
-                                fail("Invalid content!")
-                            }
+                            expect(original).to(equal(content.data))
                             done()
                         })
                         .error({ (error, response) in
@@ -694,7 +689,42 @@ class ServiceTaskTests: QuickSpec {
                         }
                         .download()
                 }
-                
+
+            }
+
+            it("can handle file content") {
+
+                let original = Data(count: 20)
+
+                self.stub(http(.get, uri: "test.download"), http(200, download: .content(original)))
+
+                waitUntil { (done) in
+
+                    ServiceTaskBuilder()
+                        .endpoint("GET", "test.download")
+                        .content { (content, response) in
+                            guard let url = content.file else {
+                                fail("invalid content!")
+                                return
+                            }
+
+                            let data = try! Data(contentsOf: url)
+
+                            // Cleanup
+                            try! FileManager.default.removeItem(at: url)
+
+                            if data == original {
+                                done()
+                            }
+                            else {
+                                fail("Not the same data!")
+                            }
+                        }
+                        .error { (error, response) in
+                            fail("\(error)")
+                        }
+                        .download()
+                }
             }
             
             it("can send and receive url-encoded data") {

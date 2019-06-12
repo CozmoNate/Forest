@@ -54,3 +54,25 @@ public enum ServiceTaskContent {
     }
     
 }
+
+public extension ServiceTaskContent {
+
+    var data: Data? {
+        switch self {
+        case .data(let data):
+            return data
+        default:
+            return nil
+        }
+    }
+
+    var file: URL? {
+        switch self {
+        case .file(let url):
+            return url
+        default:
+            return nil
+        }
+    }
+
+}
