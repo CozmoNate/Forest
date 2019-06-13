@@ -180,7 +180,7 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskPerformable, CustomS
             var request = try makeRequest()
 
             // Intercept request
-            if try retrofitter?.shouldInterceptRequest(&request, for: self, with: action) ?? false {
+            if try retrofitter?.shouldIntercept(request: &request, for: self, with: action) ?? false {
                 return
             }
 
@@ -397,7 +397,7 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskPerformable, CustomS
     public func handleContent(_ content: ServiceTaskContent, _ response: URLResponse) throws {
 
         // Intercept data response
-        if try retrofitter?.shouldInterceptContent(content, for: self, with: response) ?? false {
+        if try retrofitter?.shouldIntercept(content: content, response: response, for: self) ?? false {
             return
         }
         
@@ -410,7 +410,7 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskPerformable, CustomS
         
         do {
             // Intercept error
-            if try retrofitter?.shouldInterceptError(error, for: self, with: response) ?? false {
+            if try retrofitter?.shouldIntercept(error: error, response: response, for: self) ?? false {
                 return
             }
         

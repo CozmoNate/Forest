@@ -27,17 +27,17 @@ class ServiceTaskRetrofitterTests: QuickSpec, ServiceTaskRetrofitting {
     var shouldFailResponse = false
 
 
-    func shouldInterceptRequest(_ request: inout URLRequest, for task: ServiceTask, with action: ServiceTaskAction) throws -> Bool {
+    func shouldIntercept(request: inout URLRequest, for task: ServiceTask, with action: ServiceTaskAction) throws -> Bool {
         if shouldFailRequest { throw Errors.test }
         return try requestHandler?(task, &request) ?? false
     }
 
-    func shouldInterceptContent(_ content: ServiceTaskContent, for task: ServiceTask, with response: URLResponse) throws -> Bool {
+    func shouldIntercept(content: ServiceTaskContent, response: URLResponse, for task: ServiceTask) throws -> Bool {
         if shouldFailResponse { throw Errors.test }
         return try responseHandler?(task) ?? false
     }
 
-    func shouldInterceptError(_ error: Error, for task: ServiceTask, with response: URLResponse?) throws -> Bool {
+    func shouldIntercept(error: Error, response: URLResponse?, for task: ServiceTask) throws -> Bool {
         return try errorHandler?(task) ?? false
     }
 
