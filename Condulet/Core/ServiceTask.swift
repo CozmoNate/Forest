@@ -74,13 +74,13 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskPerformable, CustomS
 
     // MARK: - CustomDebugStringConvertible
 
-    public var debugDescription: String {
+    open var debugDescription: String {
         return description
     }
     
     // MARK: - Hashable
     
-    public func hash(into hasher: inout Hasher) {
+    open func hash(into hasher: inout Hasher) {
         hasher.combine(identifier)
     }
     
@@ -97,51 +97,51 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskPerformable, CustomS
     // MARK: - ServiceTaskConfigurable
 
     /// A URLSession instance used to create URLSessionTask
-    public var session: URLSession?
+    open var session: URLSession?
     
     /// A URLComponents instance describing service endpoint
-    public var url: URLComponents
+    open var url: URLComponents
     
     /// A HTTP method used for request
-    public var method: HTTPMethod?
+    open var method: HTTPMethod?
     
     /// HTTP headers added to request
-    public var headers: [String: String]
+    open var headers: [String: String]
     
     /// HTTP body data
-    public var body: ServiceTaskContent?
+    open var body: ServiceTaskContent?
     
     /// Service response handler
-    public var responseHandler: ServiceTaskResponseHandling?
+    open var responseHandler: ServiceTaskResponseHandling?
     
     /// Failure handler
-    public var errorHandler: ServiceTaskErrorHandling?
+    open var errorHandler: ServiceTaskErrorHandling?
     
     /// Cacelation handler
-    public var cancelationHandler: ServiceTaskCancelationHandling?
+    open var cancelationHandler: ServiceTaskCancelationHandling?
     
     // MARK: - Retrofitter
     
-    public var retrofitter: ServiceTaskRetrofitting?
+    open var retrofitter: ServiceTaskRetrofitting?
 
     // MARK: - Lifecycle
     
     /// Last action performed
-    public private(set) var action: ServiceTaskAction?
+    open private(set) var action: ServiceTaskAction?
     
     /// The underlying URLSessionTask that has been performed
-    public private(set) var underlyingTask: URLSessionTask?
+    open private(set) var underlyingTask: URLSessionTask?
     
     /// The content received with the last response
-    public private(set) var content: ServiceTaskContent?
+    open private(set) var content: ServiceTaskContent?
     
     /// True when the task is performed but the response still not received
-    public var isRunning: Bool {
+    open var isRunning: Bool {
         return signature != nil
     }
     
     /// Signature is used to determine if response received from URLSessionTask is relevant and should be handled
-    private var signature: UUID?
+    open var signature: UUID?
     
     /// Create an instance of ServiceTask
     public init(
@@ -167,7 +167,7 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskPerformable, CustomS
     // MARK: - Actions
 
     /// Perform task with action
-    public func perform(action: ServiceTaskAction) {
+    open func perform(action: ServiceTaskAction) {
 
         do {
 
@@ -193,7 +193,7 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskPerformable, CustomS
 
     /// Rewind task with lastest action performed. This will cancel running task. If action is not specified this method will return false, running task will not be canceled and no action will be performed
     @discardableResult
-    public func rewind() -> Bool {
+    open func rewind() -> Bool {
 
         guard let action = action else {
             return false
@@ -221,7 +221,7 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskPerformable, CustomS
     /// All captured response blocks and handlers will never be called until task will be performed again or rewound.
     /// Optional resume data can be produced in case of download task, otherwise completion will be called with nil data.
     @discardableResult
-    public func cancel(byProducingResumeData resumeDataHandler: ((Data?) -> Void)? = nil) -> Bool {
+    open func cancel(byProducingResumeData resumeDataHandler: ((Data?) -> Void)? = nil) -> Bool {
 
         guard isRunning else {
             return false
@@ -361,7 +361,7 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskPerformable, CustomS
     }
     
     /// Makes URLSessionTask and sends request to network. Use this method to send request when the request was intercepted by retrofitter
-    public func sendRequest(_ request: URLRequest) throws {
+    open func sendRequest(_ request: URLRequest) throws {
 
         guard let action = action else {
             throw ServiceTaskError.noActionSpecified
@@ -394,7 +394,7 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskPerformable, CustomS
     }
 
     /// Handle response content. Use this method to pass response to content handler when response was intercepted by retrofitter
-    public func handleContent(_ content: ServiceTaskContent, _ response: URLResponse) throws {
+    open func handleContent(_ content: ServiceTaskContent, _ response: URLResponse) throws {
 
         // Intercept data response
         if try retrofitter?.shouldIntercept(content: content, response: response, for: self) ?? false {
@@ -406,7 +406,7 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskPerformable, CustomS
     }
     
     /// Handle any error. Use this method to report an error when the response was intercepted by retrofitter
-    public func handleError(_ error: Error, _ response: URLResponse? = nil) {
+    open func handleError(_ error: Error, _ response: URLResponse? = nil) {
         
         do {
             // Intercept error
@@ -435,7 +435,7 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskPerformable, CustomS
 extension ServiceTask {
 
     /// Decide how the response from URLSessionTask will be handled
-    public func dispatchResponse(_ signature: UUID, _ content: ServiceTaskContent?, _ response: URLResponse?, _ error: Error?) {
+    func dispatchResponse(_ signature: UUID, _ content: ServiceTaskContent?, _ response: URLResponse?, _ error: Error?) {
 
         // The response signature is differs from stored signature. That means the response is received from from abandoned task and should be ignored
         guard self.signature == signature else {
