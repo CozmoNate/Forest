@@ -1,14 +1,13 @@
 //
-//  ServiceTask+Perform.swift
+//  ServiceTaskPerformable+Actions.swift
 //  Condulet
 //
-//  Created by Natan Zalkin on 01/10/2018.
-//  Copyright © 2018 Natan Zalkin. All rights reserved.
+//  Created by Natan Zalkin on 17/06/2019.
+//  Copyright © 2019 Natan Zalkin. All rights reserved.
 //
 
 /*
- *
- * Copyright (c) 2018 Natan Zalkin
+ * Copyright (c) 2019 Zalkin, Natan
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,30 +28,37 @@
  * SOFTWARE.
  *
  */
+ 
 
 import Foundation
 
 
-public extension ServiceTaskBuilding {
-    
+public extension ServiceTaskPerformable {
+
     /// Perform data task
     @discardableResult
-    func perform() -> Task {
-        return task.perform()
+    func perform() -> Self {
+        perform(action: .perform)
+        return self
     }
-    
+
     /// Perform download task. If destination name not specified, temporary filename will be generated
     ///
     /// - Parameter destination: The destination where file should be saved. When not specified, file will be downloaded and saved to temp folder and should be manually removed
     @discardableResult
-    func download(to destination: URL? = nil, with resumeData: Data? = nil) -> Task {
-        return task.download(to: destination, with: resumeData)
+    func download(to destination: URL? = nil, with resumeData: Data? = nil) -> Self {
+        let url = destination ?? FileManager.default.temporaryDirectory
+            .appendingPathComponent(UUID().uuidString)
+            .appendingPathExtension("tmp")
+        perform(action: .download(destination: url, resumeData: resumeData))
+        return self
     }
-    
+
     /// Use upload task to upload data directly from file
     @discardableResult
-    func upload() -> Task {
-        return task.upload()
+    func upload() -> Self {
+        perform(action: .upload)
+        return self
     }
-    
+
 }

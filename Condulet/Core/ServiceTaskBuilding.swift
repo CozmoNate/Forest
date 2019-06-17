@@ -40,9 +40,9 @@ public protocol ServiceTaskBuilding {
     associatedtype Task: (ServiceTaskConfigurable & ServiceTaskPerformable)
 
     /// The instance of Task produced and configured with the bulder
-    var task: Task { get set }
+    var task: Task { get }
 
     /// The queue will be used to dispatch response blocks
-    var responseQueue: OperationQueue { get set }
+    var responseQueue: OperationQueue { get }
     
 }
