@@ -50,7 +50,7 @@ public protocol ServiceTaskConfigurable: AnyObject {
     /// HTTP body data
     var body: ServiceTaskContent? { get set }
     
-    /// Service response handler
+    /// Response handler
     var responseHandler: ServiceTaskResponseHandling? { get set }
     
     /// Failure handler
@@ -58,4 +58,7 @@ public protocol ServiceTaskConfigurable: AnyObject {
     
     /// Cancellation handler
     var cancellationHandler: ServiceTaskCancellationHandling? { get set }
+
+    /// Task retrofitter
+    var retrofitter: ServiceTaskRetrofitting? { get set }
 }
