@@ -118,7 +118,7 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskPerformable, CustomS
     open var errorHandler: ServiceTaskErrorHandling?
     
     /// Cacelation handler
-    open var cancelationHandler: ServiceTaskCancelationHandling?
+    open var cancellationHandler: ServiceTaskCancellationHandling?
     
     // MARK: - Retrofitter
     
@@ -207,8 +207,8 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskPerformable, CustomS
             // Cancel URLSessionTask, if one is active
             task.cancel()
 
-            // Call cancelation handler
-            cancelationHandler?.handle()
+            // Call cancellation handler
+            cancellationHandler?.handle()
         }
         
         // Perform new URLSessionTask with actual configuration
@@ -234,7 +234,7 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskPerformable, CustomS
         if let resumeDataHandler = resumeDataHandler {
             if let downloadTask = underlyingTask as? URLSessionDownloadTask {
                 downloadTask.cancel(byProducingResumeData: resumeDataHandler)
-                cancelationHandler?.handle()
+                cancellationHandler?.handle()
                 return true
             }
             else {
@@ -244,7 +244,7 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskPerformable, CustomS
 
         if let task = underlyingTask {
             task.cancel()
-            cancelationHandler?.handle()
+            cancellationHandler?.handle()
         }
 
         return true
@@ -415,7 +415,7 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskPerformable, CustomS
             }
         
             if case URLError.cancelled = error {
-                cancelationHandler?.handle()
+                cancellationHandler?.handle()
                 return
             }
             

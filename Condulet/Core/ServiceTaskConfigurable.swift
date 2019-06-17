@@ -7,7 +7,7 @@
 //
 
 /*
- * Copyright (c) 2018 Zalkin, Natan
+ * Copyright (c) 2018 Natan Zalkin
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -56,6 +56,6 @@ public protocol ServiceTaskConfigurable: AnyObject {
     /// Failure handler
     var errorHandler: ServiceTaskErrorHandling? { get set }
     
-    /// Cancelation handler
-    var cancelationHandler: ServiceTaskCancelationHandling? { get set }
+    /// Cancellation handler
+    var cancellationHandler: ServiceTaskCancellationHandling? { get set }
 }

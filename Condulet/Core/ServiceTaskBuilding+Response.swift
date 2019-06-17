@@ -32,21 +32,21 @@
 
 import Foundation
 
-// MARK: - Cancelation
+// MARK: - Cancellation
 
 public extension ServiceTaskBuilding {
     
-    /// Set cancelation handler
+    /// Set cancellation handler
     @discardableResult
-    func cancelation(_ handler: ServiceTaskCancelationHandling) -> Self {
-        task.cancelationHandler = handler
+    func cancellation(_ handler: ServiceTaskCancellationHandling) -> Self {
+        task.cancellationHandler = handler
         return self
     }
     
-    /// Handle cancelation with block
+    /// Handle cancellation with block
     @discardableResult
-    func cancelation(_ handler: @escaping () -> Void) -> Self {
-        task.cancelationHandler = BlockCancelationHandler { [queue = responseQueue] in
+    func cancellation(_ handler: @escaping () -> Void) -> Self {
+        task.cancellationHandler = BlockCancellationHandler { [queue = responseQueue] in
             queue.addOperation {
                 handler()
             }

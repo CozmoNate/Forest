@@ -1,5 +1,5 @@
 //
-//  ServiceTaskCancelationHandler.swift
+//  ServiceTaskCancellationHandler.swift
 //  Condulet
 //
 //  Created by Natan Zalkin on 02/06/2019.
@@ -33,10 +33,10 @@
 import Foundation
 
 
-/// A handler for ServiceTask cancelation
-public protocol ServiceTaskCancelationHandling {
+/// A handler for ServiceTask cancellation
+public protocol ServiceTaskCancellationHandling {
     
-    /// Handle cancelation. NOTE: This method can be executed on a background thread
+    /// Handle cancellation. NOTE: This method can be executed on a background thread
     func handle()
     
 }

@@ -1,5 +1,5 @@
 //
-//  BlockCancelationHandler.swift
+//  BlockCancellationHandler.swift
 //  Condulet
 //
 //  Created by Natan Zalkin on 02/06/2019.
@@ -33,8 +33,8 @@
 import Foundation
 
 
-/// Cancelation handler with block
-public class BlockCancelationHandler: ServiceTaskCancelationHandling {
+/// Cancellation handler with block
+public class BlockCancellationHandler: ServiceTaskCancellationHandling {
     
     private var completion: (() -> Void)?
     

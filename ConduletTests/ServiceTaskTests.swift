@@ -121,7 +121,7 @@ class ServiceTaskTests: QuickSpec {
                         .error { (error, response) in
                             fail("Error received: \(error)")
                         }
-                        .cancelation {
+                        .cancellation {
                             done()
                         }
                         .perform()
@@ -150,7 +150,7 @@ class ServiceTaskTests: QuickSpec {
                         .error { (error, response) in
                             fail("Error received: \(error)")
                         }
-                        .cancelation {
+                        .cancellation {
                             done()
                         }
                         .perform()
@@ -183,7 +183,7 @@ class ServiceTaskTests: QuickSpec {
                         .error { (error, response) in
                             fail("Error received: \(error)")
                         }
-                        .cancelation {
+                        .cancellation {
                             canceled = true
                         }
                         .perform()
