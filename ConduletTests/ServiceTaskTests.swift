@@ -882,7 +882,7 @@ class ServiceTaskTests: QuickSpec {
                         .body(proto: Google_Protobuf_SourceContext.self) { (message) in
                             message.fileName = "Test"
                         }
-                        .proto(Google_Protobuf_SourceContext.self) { (message, response) -> Void in
+                        .proto(type: Google_Protobuf_SourceContext.self) { (message, response) -> Void in
                             if message.fileName == "Test" {
                                 done()
                             }
