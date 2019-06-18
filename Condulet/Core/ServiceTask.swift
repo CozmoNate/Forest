@@ -393,6 +393,42 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskPerformable, CustomS
         }
     }
 
+    /// Decide how the response from URLSessionTask will be handled
+    open func dispatchResponse(_ signature: UUID, _ content: ServiceTaskContent?, _ response: URLResponse?, _ error: Error?) {
+
+        // The response signature is differs from stored signature. That means the response is received from from abandoned task and should be ignored
+        guard self.signature == signature else {
+            return // Response is no longer relevant
+        }
+
+        // No signature will indicate that task is completed
+        self.signature = nil
+
+        // Save response content
+        self.content = content
+
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: Notification.Name.Condulet.TaskCompleted, object: self)
+        }
+
+        do {
+
+            if let error = error {
+                throw error
+            }
+
+            guard let content = content, let response = response else {
+                throw ServiceTaskError.invalidResponse
+            }
+
+            try handleContent(content, response)
+
+        } catch {
+
+            handleError(error, response)
+        }
+    }
+
     /// Handle response content. Use this method to pass response to content handler when response was intercepted by retrofitter
     open func handleContent(_ content: ServiceTaskContent, _ response: URLResponse) throws {
 
@@ -429,45 +465,4 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskPerformable, CustomS
         }
     }
     
-}
-
-/// For internal use
-extension ServiceTask {
-
-    /// Decide how the response from URLSessionTask will be handled
-    func dispatchResponse(_ signature: UUID, _ content: ServiceTaskContent?, _ response: URLResponse?, _ error: Error?) {
-
-        // The response signature is differs from stored signature. That means the response is received from from abandoned task and should be ignored
-        guard self.signature == signature else {
-            return // Response is no longer relevant
-        }
-
-        // No signature will indicate that task is completed
-        self.signature = nil
-
-        // Save response content
-        self.content = content
-
-        DispatchQueue.main.async {
-            NotificationCenter.default.post(name: Notification.Name.Condulet.TaskCompleted, object: self)
-        }
-
-        do {
-
-            if let error = error {
-                throw error
-            }
-
-            guard let content = content, let response = response else {
-                throw ServiceTaskError.invalidResponse
-            }
-
-            try handleContent(content, response)
-
-        } catch {
-
-            handleError(error, response)
-        }
-    }
-
 }
