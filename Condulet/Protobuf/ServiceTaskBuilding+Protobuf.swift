@@ -35,7 +35,33 @@ import SwiftProtobuf
 
 
 public extension ServiceTaskBuilding {
-    
+
+    /// Send message inside URL query params
+    @discardableResult
+    func query<T: Message>(proto message: T) -> Self {
+        guard let data = try? message.jsonUTF8Data() else { return self }
+        guard let object = try? JSONSerialization.jsonObject(with: data, options: []) else { return self }
+        guard let map = object as? [AnyHashable: Any] else { return self }
+
+        func encode(_ map: [AnyHashable: Any], path: String? = nil) -> [URLQueryItem] {
+            var items = [URLQueryItem]()
+            map.forEach { key, value in
+                let path = path.flatMap { "\($0).\(key)" } ?? "\(key)"
+                if let map = value as? [AnyHashable: Any] {
+                    items.append(contentsOf: encode(map, path: path))
+                } else {
+                    items.append(URLQueryItem(name: path, value: "\(value)"))
+                }
+            }
+
+            return items
+        }
+
+        let items = encode(map)
+
+        return query(items)
+    }
+
     /// Send body with protobuf messsage
     @discardableResult
     func body<T: Message>(proto message: T) -> Self {
