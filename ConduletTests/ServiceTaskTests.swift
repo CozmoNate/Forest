@@ -165,26 +165,16 @@ class ServiceTaskTests: QuickSpec {
                 
                 self.stub(testData(.get, uri: "test.cancel", data: body), delay: 1, http(200))
                 
-                var canceled = false
-                
                 waitUntil(timeout: 5) { (done) in
                     
                     let task = ServiceTaskBuilder()
                         .endpoint(.GET, "test.cancel")
                         .body(json: json)
                         .content { (content, response) in
-                            if canceled {
-                                done()
-                            }
-                            else {
-                                fail("Response received!")
-                            }
+                            done()
                         }
                         .error { (error, response) in
                             fail("Error received: \(error)")
-                        }
-                        .cancellation {
-                            canceled = true
                         }
                         .perform()
                     

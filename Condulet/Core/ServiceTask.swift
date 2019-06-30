@@ -202,13 +202,10 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskPerformable, CustomS
         // Invalidate response of current URLSessionTask, if one is running
         signature = nil
         
-        if let task = underlyingTask {
+        if let task = underlyingTask, task.state == .running {
             
             // Cancel URLSessionTask, if one is active
             task.cancel()
-
-            // Call cancellation handler
-            cancellationHandler?.handle()
         }
         
         // Perform new URLSessionTask with actual configuration
@@ -242,10 +239,11 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskPerformable, CustomS
             }
         }
 
-        if let task = underlyingTask {
+        if let task = underlyingTask, task.state == .running {
             task.cancel()
-            cancellationHandler?.handle()
         }
+
+        cancellationHandler?.handle()
 
         return true
     }
