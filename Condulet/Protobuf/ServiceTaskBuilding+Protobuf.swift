@@ -36,7 +36,7 @@ import SwiftProtobuf
 
 public extension ServiceTaskBuilding {
 
-    /// Send message inside URL query params
+    /// Send a message inside URL query params
     @discardableResult
     func query<T: Message>(proto message: T) -> Self {
         guard let data = try? message.jsonUTF8Data() else { return self }
@@ -62,6 +62,22 @@ public extension ServiceTaskBuilding {
         return query(items)
     }
 
+    /// Send a message inside URL query params
+    @discardableResult
+    func query<T: Message>(proto configure: (inout T) -> Void) -> Self {
+        var message = T()
+        configure(&message)
+        return query(proto: message)
+    }
+
+    /// Send a message inside URL query params
+    @discardableResult
+    func query<T: Message>(proto type: T.Type, configure: (inout T) -> Void) -> Self {
+        var message = T()
+        configure(&message)
+        return query(proto: message)
+    }
+
     /// Send body with protobuf messsage
     @discardableResult
     func body<T: Message>(proto message: T) -> Self {
@@ -74,23 +90,17 @@ public extension ServiceTaskBuilding {
     /// Send body with protobuf messsage. This method creates an instance of the type specified and passes it to configuration block
     @discardableResult
     func body<T: Message>(proto configure: (inout T) -> Void) -> Self {
-        contentType(value: "application/x-www-form-urlencoded")
-        task.headers["grpc-metadata-content-type"] = "application/grpc"
         var message = T()
         configure(&message)
-        task.body = ServiceTaskContent(try? message.jsonUTF8Data())
-        return self
+        return body(proto: message)
     }
 
     /// Send body with protobuf messsage. This method creates an instance of the type specified and passes it to configuration block
     @discardableResult
     func body<T: Message>(proto type: T.Type, configure: (inout T) -> Void) -> Self {
-        contentType(value: "application/x-www-form-urlencoded")
-        task.headers["grpc-metadata-content-type"] = "application/grpc"
         var message = T()
         configure(&message)
-        task.body = ServiceTaskContent(try? message.jsonUTF8Data())
-        return self
+        return body(proto: message)
     }
 
     /// Handle protobuf message response. If received response of other type task will fail with ServiceTaskError.invalidResponse

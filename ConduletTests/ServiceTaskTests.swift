@@ -934,16 +934,42 @@ class ServiceTaskTests: QuickSpec {
 
             it("can send protobuf message inside URL") {
 
-                var message = Google_Protobuf_SourceContext()
-                message.fileName = "Test"
-
                 self.stub(uri("test.test.com?fileName=Test"), http(200))
+
+                waitUntil { (done) in
+                    var message = Google_Protobuf_SourceContext()
+                    message.fileName = "Test"
+
+                    ServiceTaskBuilder()
+                        .method(.GET)
+                        .url("test.test.com")
+                        .query(proto: message)
+                        .statusCode { code in
+                            done()
+                        }
+                        .perform()
+                }
 
                 waitUntil { (done) in
                     ServiceTaskBuilder()
                         .method(.GET)
                         .url("test.test.com")
-                        .query(proto: message)
+                        .query(proto: Google_Protobuf_SourceContext.self) {
+                            $0.fileName = "Test"
+                        }
+                        .statusCode { code in
+                            done()
+                        }
+                        .perform()
+                }
+
+                waitUntil { (done) in
+                    ServiceTaskBuilder()
+                        .method(.GET)
+                        .url("test.test.com")
+                        .query { (_ message: inout Google_Protobuf_SourceContext) in
+                            message.fileName = "Test"
+                        }
                         .statusCode { code in
                             done()
                         }
