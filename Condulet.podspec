@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'Condulet'
-  s.version          = '1.23'
+  s.version          = '1.24'
   s.summary          = 'Condulet makes it simple to send requests to web services'
   s.description      = <<-DESC
 Condulet is flexible and extensible REST API client construction framework built on top of `URLSession` and `URLSessionTask`. It already inculdes network object mappers from JSON for the most commonly used data types. Because of it simple data encoding/decoding approach and extensible architecture you can easily add your custom network object mappers. Condulet provides most of the features needed to build robust client for your backend services.

@@ -49,6 +49,10 @@ public extension ServiceTaskBuilding {
                 let path = path.flatMap { "\($0).\(key)" } ?? "\(key)"
                 if let map = value as? [AnyHashable: Any] {
                     items.append(contentsOf: encode(map, path: path))
+                } else if let values = value as? [Any] {
+                    values.enumerated().forEach {
+                        items.append(URLQueryItem(name: "\(path)", value: "\($0.element)"))
+                    }
                 } else {
                     items.append(URLQueryItem(name: path, value: "\(value)"))
                 }
