@@ -78,6 +78,7 @@
 		7E9818DC216D1A9400B6C78C /* FormDataPart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormDataPart.swift; sourceTree = "<group>"; };
 		7EA7250D2170AE9B008E52CA /* DataContentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataContentHandler.swift; sourceTree = "<group>"; };
 		7EA72525217C1F2D008E52CA /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
+		7EB7F38D22EB5D85008D69C8 /* Package.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = SOURCE_ROOT; };
 		7EBE4115215E6F71006C882C /* Condulet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Condulet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EBE4118215E6F71006C882C /* Condulet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Condulet.h; sourceTree = "<group>"; };
 		7EBE4119215E6F71006C882C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -195,6 +196,7 @@
 				7EBE4118215E6F71006C882C /* Condulet.h */,
 				7EBE4119215E6F71006C882C /* Info.plist */,
 				7ED7A565215FDE6C007657ED /* Condulet.podspec */,
+				7EB7F38D22EB5D85008D69C8 /* Package.swift */,
 				7E314CF0216255E60007DAFE /* LICENSE */,
 				7ED7A56C215FECEE007657ED /* README.md */,
 			);
@@ -389,7 +391,7 @@
 		7EBE410C215E6F71006C882C /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1000;
+				LastSwiftUpdateCheck = 1030;
 				LastUpgradeCheck = 1000;
 				ORGANIZATIONNAME = "Natan Zalkin";
 				TargetAttributes = {
@@ -705,7 +707,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Condulet/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -733,7 +735,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Condulet/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
