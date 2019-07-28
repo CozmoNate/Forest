@@ -15,23 +15,31 @@ DEPENDENCIES:
   - Mockingjay
   - Nimble
   - Quick
-  - SwiftProtobuf
+  - SwiftProtobuf (from `https://github.com/kzlekk/swift-protobuf.git`)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Mockingjay
     - Nimble
     - Quick
-    - SwiftProtobuf
     - URITemplate
+
+EXTERNAL SOURCES:
+  SwiftProtobuf:
+    :git: https://github.com/kzlekk/swift-protobuf.git
+
+CHECKOUT OPTIONS:
+  SwiftProtobuf:
+    :commit: 88b8d592d38e9468f819faafb2c4d07f372dee5d
+    :git: https://github.com/kzlekk/swift-protobuf.git
 
 SPEC CHECKSUMS:
   Mockingjay: 11a621880d2887f1775bdcf824341eb68f218450
   Nimble: 622629381bda1dd5678162f21f1368cec7cbba60
   Quick: 4be43f6634acfa727dd106bdf3929ce125ffa79d
-  SwiftProtobuf: e905ca1366405696411aaf174411c4b19c0ef73d
+  SwiftProtobuf: a61bf8740e8bfe1ccdc3633c6f29f1a6a3451f84
   URITemplate: ace0c4c46dcf8afe6e89b4060621852886b15c3b
 
-PODFILE CHECKSUM: 9fdedb6e6da9e488ebaaba76bda064e93cb323e2
+PODFILE CHECKSUM: bc91401540c34a984d7d0c20adda0eb3584f1231
 
 COCOAPODS: 1.7.5

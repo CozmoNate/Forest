@@ -39,13 +39,18 @@ public struct ProtobufContentHandler<T: Message>: DataContentHandling {
 
     public typealias Result = T
 
-    public var options = JSONDecodingOptions()
+    public let options: JSONDecodingOptions
 
     public var completion: ((T, URLResponse) throws -> Void)?
 
-    public init(ignoreUnknownFields: Bool = true, completion block: ((T, URLResponse) throws -> Void)?) {
-        options.ignoreUnknownFields = ignoreUnknownFields
-        completion = block
+    public init(options: JSONDecodingOptions? = nil, completion: ((T, URLResponse) throws -> Void)?) {
+        self.options = options ?? {
+            var options = JSONDecodingOptions()
+            options.ignoreUnknownFields = true
+            options.ignoreUnknownEnumValues = true
+            return options
+        }()
+        self.completion = completion
     }
 
     public func transform(data: Data, response: URLResponse) throws -> T {

@@ -7,7 +7,7 @@ project 'Condulet'
 abstract_target "All Targets" do
     target "Condulet" do
         platform :ios, '10.0'
-        pod 'SwiftProtobuf'
+        pod 'SwiftProtobuf', :git => 'https://github.com/kzlekk/swift-protobuf.git'
     end
     target "ConduletTests" do
         platform :ios, '10.0'
