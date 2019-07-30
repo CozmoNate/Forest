@@ -109,7 +109,7 @@ public extension ServiceTaskBuilding {
 
     /// Handle protobuf message response. If received response of other type task will fail with ServiceTaskError.invalidResponse
     @discardableResult
-    func proto<T: Message>(decodingOptions: JSONDecodingOptions = .default, handler: @escaping (T, URLResponse) -> Void) -> Self {
+    func proto<T: Message>(decodingOptions: JSONDecodingOptions = JSONDecodingOptions(), handler: @escaping (T, URLResponse) -> Void) -> Self {
         task.responseHandler = ProtobufContentHandler(decodingOptions: decodingOptions) { [queue = responseQueue] (message: T, response) in
             queue.addOperation {
                 handler(message, response)
@@ -120,7 +120,7 @@ public extension ServiceTaskBuilding {
 
     /// Handle protobuf message response. If received response of other type task will fail with ServiceTaskError.invalidResponse
     @discardableResult
-    func proto<T: Message>(type: T.Type, decodingOptions: JSONDecodingOptions = .default, handler: @escaping (T, URLResponse) -> Void) -> Self {
+    func proto<T: Message>(type: T.Type, decodingOptions: JSONDecodingOptions = JSONDecodingOptions(), handler: @escaping (T, URLResponse) -> Void) -> Self {
         task.responseHandler = ProtobufContentHandler(decodingOptions: decodingOptions) { [queue = responseQueue] (message: T, response) in
             queue.addOperation {
                 handler(message, response)
@@ -131,7 +131,7 @@ public extension ServiceTaskBuilding {
 
     /// Handle protobuf message response. If received response of other type task will fail with ServiceTaskError.invalidResponse
     @discardableResult
-    func response<T: Message>(proto type: T.Type, decodingOptions: JSONDecodingOptions = .default, handler: @escaping (ServiceTaskResult<T>) -> Void) -> Self {
+    func response<T: Message>(proto type: T.Type, decodingOptions: JSONDecodingOptions = JSONDecodingOptions(), handler: @escaping (ServiceTaskResult<T>) -> Void) -> Self {
         proto(decodingOptions: decodingOptions) { (message, response) in
             handler(.success(message))
         }
@@ -143,7 +143,7 @@ public extension ServiceTaskBuilding {
 
     /// Handle protobuf message response. If received response of other type task will fail with ServiceTaskError.invalidResponse
     @discardableResult
-    func response<T: Message>(decodingOptions: JSONDecodingOptions = .default, handler: @escaping (ServiceTaskResult<T>) -> Void) -> Self {
+    func response<T: Message>(decodingOptions: JSONDecodingOptions = JSONDecodingOptions(), handler: @escaping (ServiceTaskResult<T>) -> Void) -> Self {
         proto(decodingOptions: decodingOptions) { (message, response) in
             handler(.success(message))
         }

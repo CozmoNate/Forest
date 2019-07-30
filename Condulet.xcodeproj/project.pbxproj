@@ -42,7 +42,6 @@
 		AA045AC121675BC400BD92D4 /* ServiceTaskRetrofitting.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA045AC021675BC400BD92D4 /* ServiceTaskRetrofitting.swift */; };
 		AA045AC32167673600BD92D4 /* ServiceTaskRetrofitterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA045AC22167673600BD92D4 /* ServiceTaskRetrofitterTests.swift */; };
 		AA38AB7121639AEB00EC8750 /* URLSerializationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E314CF121625EC80007DAFE /* URLSerializationTests.swift */; };
-		AA5DD68A22F0A91C000F4ABE /* JSONDecodingOptions+Default.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5DD68922F0A91C000F4ABE /* JSONDecodingOptions+Default.swift */; };
 		AA6418E42175C04E0021BC2F /* ResponseHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6418E32175C04E0021BC2F /* ResponseHandlerTests.swift */; };
 		AA641913217C764E0021BC2F /* ReachabilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA641912217C764E0021BC2F /* ReachabilityTests.swift */; };
 		AA8516FE216C91EB00152A8C /* FormDataBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8516FD216C91EB00152A8C /* FormDataBuilder.swift */; };
@@ -112,7 +111,6 @@
 		7EF23B2922A37EA9003D5398 /* ServiceTaskCancelationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTaskCancelationHandler.swift; sourceTree = "<group>"; };
 		AA045AC021675BC400BD92D4 /* ServiceTaskRetrofitting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTaskRetrofitting.swift; sourceTree = "<group>"; };
 		AA045AC22167673600BD92D4 /* ServiceTaskRetrofitterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTaskRetrofitterTests.swift; sourceTree = "<group>"; };
-		AA5DD68922F0A91C000F4ABE /* JSONDecodingOptions+Default.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JSONDecodingOptions+Default.swift"; sourceTree = "<group>"; };
 		AA6418E32175C04E0021BC2F /* ResponseHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseHandlerTests.swift; sourceTree = "<group>"; };
 		AA641912217C764E0021BC2F /* ReachabilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReachabilityTests.swift; sourceTree = "<group>"; };
 		AA8516FD216C91EB00152A8C /* FormDataBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormDataBuilder.swift; sourceTree = "<group>"; };
@@ -234,7 +232,6 @@
 		7ED7A568215FDF2F007657ED /* Protobuf */ = {
 			isa = PBXGroup;
 			children = (
-				AA5DD68822F0A908000F4ABE /* Extensions */,
 				7EE281F02161FB2600019EE5 /* Handlers */,
 				7EE281F22161FB4600019EE5 /* ServiceTaskBuilding */,
 			);
@@ -311,14 +308,6 @@
 				7EECC2922161326E008845F4 /* DecodableContentHandler.swift */,
 			);
 			name = Handlers;
-			sourceTree = "<group>";
-		};
-		AA5DD68822F0A908000F4ABE /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-				AA5DD68922F0A91C000F4ABE /* JSONDecodingOptions+Default.swift */,
-			);
-			name = Extensions;
 			sourceTree = "<group>";
 		};
 		DE17114DBC74199C9DD768F5 /* Pods */ = {
@@ -542,7 +531,6 @@
 				7EEA111F216F03CE005E398F /* BlockErrorHandler.swift in Sources */,
 				7ED7A58121608F8B007657ED /* TextContentHandler.swift in Sources */,
 				7EE281EA2161E60D00019EE5 /* ServiceTaskBuilding+Actions.swift in Sources */,
-				AA5DD68A22F0A91C000F4ABE /* JSONDecodingOptions+Default.swift in Sources */,
 				7E06C83421672593008E4AC6 /* MimeType.swift in Sources */,
 				7EEA1116216EF865005E398F /* ServiceTaskContent.swift in Sources */,
 				AAD56CAC216397A10086CC50 /* BlockResponseHandler.swift in Sources */,
