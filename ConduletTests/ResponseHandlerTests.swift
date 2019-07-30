@@ -117,7 +117,7 @@ class ResponseHandlerTests: QuickSpec {
                     "Content-Type": "application/json",
                     "grpc-metadata-content-type": "application/grpc"
                     ])!
-                let handler = ProtobufContentHandler { (object, response) in
+                let handler = ProtobufContentHandler(decodingOptions: .default) { (object, response) in
                     expect(object).to(equal(message))
                 }
                 try! handler.handle(content: ServiceTaskContent.data(data), response: response)
@@ -128,7 +128,7 @@ class ResponseHandlerTests: QuickSpec {
                     "Content-Type": "application/json",
                     "grpc-metadata-content-type": "unknown"
                     ])!
-                let handler = ProtobufContentHandler<Google_Protobuf_StringValue>(completion: nil)
+                let handler = ProtobufContentHandler<Google_Protobuf_StringValue>(decodingOptions: .default, completion: nil)
                 do {
                     try handler.handle(content: ServiceTaskContent.data(Data()), response: response)
                 }
