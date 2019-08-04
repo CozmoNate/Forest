@@ -13,7 +13,7 @@ abstract_target "All Targets" do
         platform :ios, '10.0'
         pod 'Quick'
         pod 'Nimble'
-        pod 'Mockingjay'
+        pod 'Mockingjay', :git => 'https://github.com/kylef/Mockingjay.git'
     end
 end
 
