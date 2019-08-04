@@ -7,7 +7,7 @@
 [![License](https://img.shields.io/badge/license-MIT-ff69b4.svg)](https://github.com/kzlekk/Condulet/raw/master/LICENSE)
 [![Language](https://img.shields.io/badge/swift-5.0-orange.svg)](https://swift.org/blog/swift-5-released/)
 [![Version](https://img.shields.io/cocoapods/v/Condulet.svg)](https://cocoapods.org/pods/Condulet)
-[![Build Status](https://travis-ci.com/kozlekek/Condulet.svg?branch=master)](https://travis-ci.com/kzlekk/Condulet)
+[![Build Status](https://travis-ci.com/kzlekk/Condulet.svg?branch=master)](https://travis-ci.com/kzlekk/Condulet)
 [![Coverage Status](https://coveralls.io/repos/github/kzlekk/Condulet/badge.svg?branch=master)](https://coveralls.io/github/kzlekk/Condulet?branch=master)
 
 Condulet is flexible and extensible REST API client construction framework built on top of `URLSession` and `URLSessionTask`. It already inculdes network object mappers from JSON to the most commonly used data types. Because of it simple data encoding/decoding approach and extensible architecture you can easily add your custom network object mappers. Condulet provides all of the features needed to build robust client for your backend services. 
