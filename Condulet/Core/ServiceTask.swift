@@ -47,7 +47,7 @@ public extension Notification.Name {
 }
 
 /// URLSessionTask wrapping class allowing to build, send, cancel and rewind network requests.
-open class ServiceTask: ServiceTaskConfigurable, ServiceTaskPerformable, CustomStringConvertible, CustomDebugStringConvertible, Hashable {
+open class ServiceTask: ServiceTaskBuilding, CustomStringConvertible, CustomDebugStringConvertible, Hashable {
     
     // MARK: - CustomStringConvertible
     
@@ -120,6 +120,9 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskPerformable, CustomS
     /// Cacelation handler
     open var cancellationHandler: ServiceTaskCancellationHandling?
     
+    /// The queue that will be used to schedule response handler closures
+    open var responseQueue: OperationQueue
+    
     // MARK: - Retrofitter
     
     open var retrofitter: ServiceTaskRetrofitting?
@@ -152,6 +155,7 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskPerformable, CustomS
         body: ServiceTaskContent? = nil,
         responseHandler: ServiceTaskResponseHandling? = nil,
         errorHandler: ServiceTaskErrorHandling? = nil,
+        responseQueue: OperationQueue = OperationQueue.main,
         retrofitter: ServiceTaskRetrofitting? = nil) {
         
         self.session = session
@@ -161,6 +165,7 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskPerformable, CustomS
         self.body = body
         self.responseHandler = responseHandler
         self.errorHandler = errorHandler
+        self.responseQueue = responseQueue
         self.retrofitter = retrofitter
     }
 
@@ -213,12 +218,25 @@ open class ServiceTask: ServiceTaskConfigurable, ServiceTaskPerformable, CustomS
 
         return true
     }
-
+    
     /// Cancels running task.
+    /// All captured response blocks and handlers will never be called until task will be performed again or rewound.
+    public func cancel() -> Bool {
+        return cancelByProducingResumeData(nil)
+    }
+    
+    /// Cancels running task. Cancelling the task will invoke to CancellationHandler.
+    /// All captured response blocks and handlers will never be called until task will be performed again or rewound.
+    /// Resume data can be produced in case of download task, otherwise completion will be called with nil data.
+    public func cancel(byProducingResumeData resumeDataHandler: @escaping (Data?) -> Void) -> Bool {
+        return cancelByProducingResumeData(resumeDataHandler)
+    }
+
+    /// Cancels running task. Cancelling the task will invoke to CancellationHandler.
     /// All captured response blocks and handlers will never be called until task will be performed again or rewound.
     /// Optional resume data can be produced in case of download task, otherwise completion will be called with nil data.
     @discardableResult
-    open func cancel(byProducingResumeData resumeDataHandler: ((Data?) -> Void)? = nil) -> Bool {
+    private func cancelByProducingResumeData(_ resumeDataHandler: ((Data?) -> Void)?) -> Bool {
 
         guard isRunning else {
             return false

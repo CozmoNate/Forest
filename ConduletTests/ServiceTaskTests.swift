@@ -112,7 +112,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil(timeout: 5) { (done) in
                     
-                    let task = ServiceTaskBuilder()
+                    let task = ServiceTask()
                         .endpoint(.GET, "test.cancel")
                         .body(json: json)
                         .content { (content, response) in
@@ -141,7 +141,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil(timeout: 5) { (done) in
                     
-                    let task = ServiceTaskBuilder()
+                    let task = ServiceTask()
                         .endpoint(.GET, "test.cancel")
                         .body(json: json)
                         .content { (content, response) in
@@ -167,7 +167,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil(timeout: 5) { (done) in
                     
-                    let task = ServiceTaskBuilder()
+                    let task = ServiceTask()
                         .endpoint(.GET, "test.cancel")
                         .body(json: json)
                         .content { (content, response) in
@@ -185,19 +185,22 @@ class ServiceTaskTests: QuickSpec {
                 
             }
             
-            it("can handle data response") {
+            it("can handle data response (+ memory check)") {
                 
                 let original = "Test".data(using: .utf8)!
                 
                 self.stub(http(.get, uri: "test.test"), http(download: .content(original)))
                 
+                weak var task: ServiceTask?
+                
                 waitUntil { (done) in
                     
-                    ServiceTaskBuilder()
+                    task = ServiceTask()
                         .url("test.test")
                         .method(.GET)
                         .data { (data, response) in
                             expect(original).to(equal(data))
+                            expect(task).to(beNil())
                             done()
                         }
                         .error({ (error, response) in
@@ -208,7 +211,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil { (done) in
                     
-                    ServiceTaskBuilder()
+                    ServiceTask()
                         .url("test.test")
                         .method(.GET)
                         .response(data: { (response) in
@@ -232,7 +235,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil { (done) in
                     
-                    ServiceTaskBuilder()
+                    ServiceTask()
                         .url("test.test")
                         .method(.GET)
                         .response(BlockResponseHandler { (content, response) in
@@ -263,7 +266,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil { (done) in
                     
-                    let task = ServiceTaskBuilder()
+                    let task = ServiceTask()
                         .endpoint(.GET, "test.test")
                         .query([
                             URLQueryItem(name: "key", value: "val"),
@@ -287,7 +290,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil { (done) in
                     
-                    let task = ServiceTaskBuilder()
+                    let task = ServiceTask()
                         .endpoint(.GET, "test.test")
                         .query([
                             URLQueryItem(name: "key", value: "val"),
@@ -315,7 +318,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil { (done) in
                     
-                    let task = ServiceTaskBuilder()
+                    let task = ServiceTask()
                         .scheme("http")
                         .host("test.test")
                         .method(.GET)
@@ -338,7 +341,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil { (done) in
                     
-                    let task = ServiceTaskBuilder()
+                    let task = ServiceTask()
                         .scheme("http")
                         .host("test.test")
                         .method(.GET)
@@ -366,7 +369,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil { (done) in
                     
-                    ServiceTaskBuilder()
+                    ServiceTask()
                         .endpoint(.GET, "test.test")
                         .body(text: "test", encoding: .ascii)
                         .array { (data, response) in
@@ -394,7 +397,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil(timeout: 5) { (done) in
                     
-                    ServiceTaskBuilder()
+                    ServiceTask()
                         .endpoint(.PUT, "test.test")
                         .body(url: testFileURL)
                         .dictionary { (data, response) in
@@ -410,7 +413,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil(timeout: 5) { (done) in
                     
-                    ServiceTaskBuilder()
+                    ServiceTask()
                         .endpoint(.PUT, "test.test")
                         .body(url: testFileURL)
                         .response(dictionary: { (response) in
@@ -435,7 +438,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil { (done) in
                     
-                    ServiceTaskBuilder()
+                    ServiceTask()
                         .endpoint(.GET, "http://test.test")
                         .path("/path/to/resource")
                         .dictionary { (data, response) in
@@ -459,7 +462,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil { (done) in
                     
-                    ServiceTaskBuilder()
+                    ServiceTask()
                         .session(URLSession(configuration: URLSessionConfiguration.default))
                         .url(URL(string: "test.test")!)
                         .method("PATCH")
@@ -482,7 +485,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil { (done) in
                     
-                    ServiceTaskBuilder()
+                    ServiceTask()
                         .components(URLComponents(string: "test.test")!)
                         .method(.GET)
                         .statusCode { (code) in
@@ -497,7 +500,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil { (done) in
                     
-                    ServiceTaskBuilder()
+                    ServiceTask()
                         .components(URLComponents(string: "test.test")!)
                         .method(.GET)
                         .response(statusCode: { (response) in
@@ -519,7 +522,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil { (done) in
                     
-                    ServiceTaskBuilder()
+                    ServiceTask()
                         .components(URLComponents(string: "test.test")!)
                         .method(.GET)
                         .content { (content, response) in
@@ -533,7 +536,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil { (done) in
                     
-                    ServiceTaskBuilder()
+                    ServiceTask()
                         .components(URLComponents(string: "test.test")!)
                         .method(.GET)
                         .response(content: { (response) in
@@ -556,7 +559,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil { (done) in
                     
-                    ServiceTaskBuilder()
+                    ServiceTask()
                         .components(URLComponents(string: "test.test")!)
                         .method(.GET)
                         .data { (data, response) in
@@ -570,7 +573,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil { (done) in
                     
-                    ServiceTaskBuilder()
+                    ServiceTask()
                         .components(URLComponents(string: "test.test")!)
                         .method(.GET)
                         .response(data: { (response) in
@@ -593,7 +596,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil { (done) in
                     
-                    ServiceTaskBuilder()
+                    ServiceTask()
                         .endpoint(.GET, URL(string: "test.test")!)
                         .query(["key": "value"])
                         .json { (object, response) in
@@ -623,7 +626,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil { (done) in
                     
-                    ServiceTaskBuilder()
+                    ServiceTask()
                         .endpoint(.GET, URL(string: "test.test")!)
                         .query(["key": "value"])
                         .response(json: { (response) in
@@ -658,7 +661,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil { (done) in
                     
-                    ServiceTaskBuilder()
+                    ServiceTask()
                         .endpoint("GET", "test.download")
                         .file { (url, response) in
                             
@@ -690,7 +693,7 @@ class ServiceTaskTests: QuickSpec {
 
                 waitUntil { (done) in
 
-                    ServiceTaskBuilder()
+                    ServiceTask()
                         .endpoint("GET", "test.download")
                         .content { (content, response) in
                             guard let url = content.file else {
@@ -755,7 +758,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil { (done) in
                     
-                    ServiceTaskBuilder()
+                    ServiceTask()
                         .endpoint(.OPTIONS, URL(string: "test.url.encoded.com")!)
                         .body(urlencoded: dict)
                         .urlencoded { (object, response) in
@@ -769,7 +772,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil { (done) in
                     
-                    ServiceTaskBuilder()
+                    ServiceTask()
                         .endpoint(.OPTIONS, URL(string: "test.url.encoded.com")!)
                         .body(urlencoded: dict)
                         .response(urlencoded: { (response) in
@@ -790,7 +793,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil { (done) in
                     
-                    ServiceTaskBuilder()
+                    ServiceTask()
                         .endpoint(.GET, URL(string: "test.test.com")!)
                         .response(proto: Google_Protobuf_SourceContext.self) { (response) -> Void in
                             switch response {
@@ -844,7 +847,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil { (done) in
                     
-                    ServiceTaskBuilder()
+                    ServiceTask()
                         .endpoint("PATCH", URL(string: "test.test.com")!)
                         .body(proto: Google_Protobuf_SourceContext.self) { (message) in
                             message.fileName = "Test"
@@ -867,7 +870,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil { (done) in
                     
-                    ServiceTaskBuilder()
+                    ServiceTask()
                         .endpoint("PATCH", URL(string: "test.test.com")!)
                         .body(proto: Google_Protobuf_SourceContext.self) { (message) in
                             message.fileName = "Test"
@@ -888,7 +891,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil { (done) in
                     
-                    ServiceTaskBuilder()
+                    ServiceTask()
                         .endpoint("PATCH", URL(string: "test.test.com")!)
                         .body { (message: inout Google_Protobuf_SourceContext) in
                             message.fileName = "Test"
@@ -912,7 +915,7 @@ class ServiceTaskTests: QuickSpec {
                     var message = Google_Protobuf_SourceContext()
                     message.fileName = "Test"
                     
-                    ServiceTaskBuilder()
+                    ServiceTask()
                         .endpoint("PATCH", URL(string: "test.test.com")!)
                         .body(proto: message)
                         .response { (response: ServiceTaskResult<Google_Protobuf_SourceContext>) -> Void in
@@ -940,7 +943,7 @@ class ServiceTaskTests: QuickSpec {
                     var message = Google_Protobuf_SourceContext()
                     message.fileName = "Test"
 
-                    ServiceTaskBuilder()
+                    ServiceTask()
                         .method(.GET)
                         .url("test.test.com")
                         .query(proto: message)
@@ -951,7 +954,7 @@ class ServiceTaskTests: QuickSpec {
                 }
 
                 waitUntil { (done) in
-                    ServiceTaskBuilder()
+                    ServiceTask()
                         .method(.GET)
                         .url("test.test.com")
                         .query(proto: Google_Protobuf_SourceContext.self) {
@@ -964,7 +967,7 @@ class ServiceTaskTests: QuickSpec {
                 }
 
                 waitUntil { (done) in
-                    ServiceTaskBuilder()
+                    ServiceTask()
                         .method(.GET)
                         .url("test.test.com")
                         .query { (_ message: inout Google_Protobuf_SourceContext) in
@@ -1006,7 +1009,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil { (done) in
                     
-                    ServiceTaskBuilder()
+                    ServiceTask()
                         .url("test.test")
                         .method(.POST)
                         .body(codable: test)
@@ -1024,7 +1027,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil { (done) in
                     
-                    ServiceTaskBuilder()
+                    ServiceTask()
                         .url("test.test")
                         .method(.POST)
                         .body(codable: test)
@@ -1042,7 +1045,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil { (done) in
                     
-                    ServiceTaskBuilder()
+                    ServiceTask()
                         .url("test.test")
                         .method(.POST)
                         .body(codable: test)
@@ -1058,7 +1061,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil { (done) in
                     
-                    ServiceTaskBuilder()
+                    ServiceTask()
                         .url("test.test")
                         .method(.POST)
                         .body(codable: test)
@@ -1125,7 +1128,7 @@ class ServiceTaskTests: QuickSpec {
                 
                 waitUntil { (done) in
                     
-                    ServiceTaskBuilder()
+                    ServiceTask()
                         .endpoint(.POST, "test.multipart")
                         .body(url: formDataURL, contentType: builder.contentType)
                         .response(statusCode: { (response) in

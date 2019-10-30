@@ -41,7 +41,7 @@ public extension ServiceTaskBuilding {
         if let contentType = contentType {
             self.contentType(value: contentType)
         }
-        task.body = content
+        body = content
         return self
     }
 
@@ -66,7 +66,7 @@ public extension ServiceTaskBuilding {
         else {
             contentType(value: "text/plain")
         }
-        task.body = ServiceTaskContent(text.data(using: encoding, allowLossyConversion: allowLossyConversion))
+        body = ServiceTaskContent(text.data(using: encoding, allowLossyConversion: allowLossyConversion))
         return self
     }
     
@@ -74,7 +74,7 @@ public extension ServiceTaskBuilding {
     @discardableResult
     func body(json: [AnyHashable: Any]) -> Self {
         contentType(value: "application/json")
-        task.body = ServiceTaskContent(try? JSONSerialization.data(withJSONObject: json, options: []))
+        body = ServiceTaskContent(try? JSONSerialization.data(withJSONObject: json, options: []))
         return self
     }
     
@@ -82,7 +82,7 @@ public extension ServiceTaskBuilding {
     @discardableResult
     func body(json: [Any]) -> Self {
         contentType(value: "application/json")
-        task.body = ServiceTaskContent(try? JSONSerialization.data(withJSONObject: json, options: []))
+        body = ServiceTaskContent(try? JSONSerialization.data(withJSONObject: json, options: []))
         return self
     }
     
@@ -90,7 +90,7 @@ public extension ServiceTaskBuilding {
     @discardableResult
     func body(urlencoded: [String: String]) -> Self {
         contentType(value: "application/x-www-form-urlencoded")
-        task.body = ServiceTaskContent(try? URLEncodedSerialization.data(with: urlencoded))
+        body = ServiceTaskContent(try? URLEncodedSerialization.data(with: urlencoded))
         return self
     }
     
@@ -98,7 +98,7 @@ public extension ServiceTaskBuilding {
     @discardableResult
     func body<T: Encodable>(codable: T) -> Self {
         contentType(value: "application/json")
-        task.body = ServiceTaskContent(try? JSONEncoder().encode(codable))
+        body = ServiceTaskContent(try? JSONEncoder().encode(codable))
         return self
     }
     
