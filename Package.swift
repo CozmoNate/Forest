@@ -5,7 +5,10 @@ import PackageDescription
 
 let package = Package(
     name: "Condulet",
-    platforms: [ .iOS(.v10) ],
+    platforms: [
+        .macOS(.v10_13),
+        .iOS(.v10)
+    ],
     products: [
         .library(name: "ConduletCore", targets: ["ConduletCore"]),
         .library(name: "ConduletReachability", targets: ["ConduletReachability"]),

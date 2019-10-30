@@ -6,11 +6,11 @@ project 'Condulet'
 
 abstract_target "All Targets" do
     target "Condulet" do
-        platform :ios, '10.0'
+        platform :ios, '11.0'
         pod 'SwiftProtobuf'
     end
     target "ConduletTests" do
-        platform :ios, '10.0'
+        platform :ios, '11.0'
         pod 'Quick'
         pod 'Nimble'
         pod 'Mockingjay', :git => 'https://github.com/kylef/Mockingjay.git'
@@ -20,7 +20,7 @@ end
 post_install do |installer|
     installer.pods_project.targets.each do |target|
       target.build_configurations.each do |config|
-        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '10.0'
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '11.0'
       end
     end
 end

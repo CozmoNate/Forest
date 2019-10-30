@@ -59,6 +59,9 @@ public protocol ServiceTaskConfigurable: AnyObject {
     /// Cancellation handler
     var cancellationHandler: ServiceTaskCancellationHandling? { get set }
 
+    /// The queue that will be used to schedule response handler closures
+    var responseQueue: OperationQueue { get set }
+
     /// Task retrofitter
     var retrofitter: ServiceTaskRetrofitting? { get set }
 }

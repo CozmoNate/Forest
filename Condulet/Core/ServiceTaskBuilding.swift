@@ -34,15 +34,6 @@ import Foundation
 
 
 /// The protocol providing helper methods to configure and perform ServiceTask or its subclass instance
-public protocol ServiceTaskBuilding {
+public protocol ServiceTaskBuilding: ServiceTaskConfigurable & ServiceTaskPerformable {
 
-    /// A ServiceTask type or its subclass will be produced and configured by conforming builder
-    associatedtype Task: (ServiceTaskConfigurable & ServiceTaskPerformable)
-
-    /// The instance of Task produced and configured with the bulder
-    var task: Task { get }
-
-    /// The queue will be used to dispatch response blocks
-    var responseQueue: OperationQueue { get }
-    
 }
