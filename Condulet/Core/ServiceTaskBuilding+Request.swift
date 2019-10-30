@@ -38,21 +38,21 @@ public extension ServiceTaskBuilding {
     /// Set URLSession instance to use when creating URLSessionTask instance
     @discardableResult
     func session(_ session: URLSession) -> Self {
-        task.session = session
+        self.session = session
         return self
     }
     
     /// Set HTTP method for request
     @discardableResult
     func method(_ method: HTTPMethod) -> Self {
-        task.method = method
+        self.method = method
         return self
     }
     
     /// Set HTTP method for request
     @discardableResult
     func method(_ method: String) -> Self {
-        task.method = HTTPMethod(rawValue: method)
+        self.method = HTTPMethod(rawValue: method)
         return self
     }
     
@@ -60,7 +60,7 @@ public extension ServiceTaskBuilding {
     @discardableResult
     func url(_ string: String) -> Self {
         if let endpoint = URLComponents(string: string) {
-            task.url = endpoint
+            url = endpoint
         }
         return self
     }
@@ -69,7 +69,7 @@ public extension ServiceTaskBuilding {
     @discardableResult
     func url(_ url: URL) -> Self {
         if let endpoint = URLComponents(url: url, resolvingAgainstBaseURL: false) {
-            task.url = endpoint
+            self.url = endpoint
         }
         return self
     }
@@ -77,7 +77,7 @@ public extension ServiceTaskBuilding {
     /// Define url as components
     @discardableResult
     func components(_ components: URLComponents) -> Self {
-        task.url = components
+        url = components
         return self
     }
     
@@ -85,9 +85,9 @@ public extension ServiceTaskBuilding {
     @discardableResult
     func endpoint(_ method: HTTPMethod, _ string: String) -> Self {
         if let endpoint = URLComponents(string: string) {
-            task.url = endpoint
+            url = endpoint
         }
-        task.method = method
+        self.method = method
         return self
     }
     
@@ -95,9 +95,9 @@ public extension ServiceTaskBuilding {
     @discardableResult
     func endpoint(_ method: HTTPMethod, _ url: URL) -> Self {
         if let endpoint = URLComponents(url: url, resolvingAgainstBaseURL: false) {
-            task.url = endpoint
+            self.url = endpoint
         }
-        task.method = method
+        self.method = method
         return self
     }
 
@@ -105,9 +105,9 @@ public extension ServiceTaskBuilding {
     @discardableResult
     func endpoint(_ method: String, _ string: String) -> Self {
         if let endpoint = URLComponents(string: string) {
-            task.url = endpoint
+            self.url = endpoint
         }
-        task.method = HTTPMethod(rawValue: method)
+        self.method = HTTPMethod(rawValue: method)
         return self
     }
 
@@ -115,79 +115,79 @@ public extension ServiceTaskBuilding {
     @discardableResult
     func endpoint(_ method: String, _ url: URL) -> Self {
         if let endpoint = URLComponents(url: url, resolvingAgainstBaseURL: false) {
-            task.url = endpoint
+            self.url = endpoint
         }
-        task.method = HTTPMethod(rawValue: method)
+        self.method = HTTPMethod(rawValue: method)
         return self
     }
     
     /// Set endpoint sheme
     @discardableResult
     func scheme(_ scheme: String) -> Self {
-        task.url.scheme = scheme
+        url.scheme = scheme
         return self
     }
     
     /// Set endpoint host
     @discardableResult
     func host(_ host: String) -> Self {
-        task.url.host = host
+        url.host = host
         return self
     }
     
     /// Set endpoint user
     @discardableResult
     func user(_ user: String) -> Self {
-        task.url.user = user
+        url.user = user
         return self
     }
     
     /// Set endpoint password
     @discardableResult
     func password(_ password: String) -> Self {
-        task.url.password = password
+        url.password = password
         return self
     }
     
     /// Set endpoint port
     @discardableResult
     func port(_ port: Int) -> Self {
-        task.url.port = port
+        url.port = port
         return self
     }
     
     /// Set endpoint relative path
     @discardableResult
     func path(_ path: String) -> Self {
-        task.url.path = path
+        url.path = path
         return self
     }
     
     /// Set endpoint fragment
     @discardableResult
     func fragment(_ fragment: String) -> Self {
-        task.url.fragment = fragment
+        url.fragment = fragment
         return self
     }
     
     /// Set endpoint query parameters
     @discardableResult
     func query(_ query: String) -> Self {
-        task.url.query = query
+        url.query = query
         return self
     }
     
     /// Set endpoint query parameters
     @discardableResult
     func query(_ query: [String: String]) -> Self {
-        task.url.queryItems = query.map { URLQueryItem(name: $0.key, value: $0.value) }
+        url.queryItems = query.map { URLQueryItem(name: $0.key, value: $0.value) }
         return self
     }
     
     /// Set endpoint query parameters
     @discardableResult
     func query(_ query: [URLQueryItem]) -> Self {
-        task.url.queryItems = query
+        url.queryItems = query
         return self
     }
     
@@ -196,10 +196,10 @@ public extension ServiceTaskBuilding {
     func headers(_ headers: [String: String], merge: Bool = true) -> Self {
         if merge {
             // Append by overriding existing key with new one in case of collision
-            task.headers.merge(headers, uniquingKeysWith: { return $1 })
+            self.headers.merge(headers, uniquingKeysWith: { return $1 })
         }
         else {
-            task.headers = headers
+            self.headers = headers
         }
         return self
     }
@@ -207,7 +207,7 @@ public extension ServiceTaskBuilding {
     /// Set 'Content-Type' HTTP header value
     @discardableResult
     func contentType(value: String) -> Self {
-        task.headers["Content-Type"] = value
+        headers["Content-Type"] = value
         return self
     }
 

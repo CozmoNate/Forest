@@ -3,14 +3,13 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		7E06C83421672593008E4AC6 /* MimeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E06C83321672593008E4AC6 /* MimeType.swift */; };
 		7E0C19E92166C67D00494FCF /* ServiceTaskBuilding+Body.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E0C19E82166C67D00494FCF /* ServiceTaskBuilding+Body.swift */; };
 		7E314CF721628FBE0007DAFE /* ServiceTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBE412F215E6F7A006C882C /* ServiceTask.swift */; };
-		7E8D98B4216736EC002D5F73 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E8D98B3216736EC002D5F73 /* MobileCoreServices.framework */; };
 		7E9818DD216D1A9400B6C78C /* FormDataPart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E9818DC216D1A9400B6C78C /* FormDataPart.swift */; };
 		7EA7250E2170AE9B008E52CA /* DataContentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EA7250D2170AE9B008E52CA /* DataContentHandler.swift */; };
 		7EA72526217C1F2D008E52CA /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EA72525217C1F2D008E52CA /* Reachability.swift */; };
@@ -25,13 +24,11 @@
 		7ED7A57A2160185D007657ED /* URLEncodedContentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7A5792160185D007657ED /* URLEncodedContentHandler.swift */; };
 		7ED7A57C21601AC1007657ED /* URLEncodedSerialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7A57B21601AC1007657ED /* URLEncodedSerialization.swift */; };
 		7ED7A58121608F8B007657ED /* TextContentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ED7A58021608F8B007657ED /* TextContentHandler.swift */; };
-		7EE281EA2161E60D00019EE5 /* ServiceTaskBuilding+Actions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE281E92161E60D00019EE5 /* ServiceTaskBuilding+Actions.swift */; };
 		7EE281F42161FE2A00019EE5 /* ServiceTaskError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE281F32161FE2A00019EE5 /* ServiceTaskError.swift */; };
 		7EEA1110216EF519005E398F /* ServiceTaskBuilding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EEA110F216EF519005E398F /* ServiceTaskBuilding.swift */; };
 		7EEA1112216EF80A005E398F /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EEA1111216EF80A005E398F /* HTTPMethod.swift */; };
 		7EEA1114216EF849005E398F /* ServiceTaskAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EEA1113216EF849005E398F /* ServiceTaskAction.swift */; };
 		7EEA1116216EF865005E398F /* ServiceTaskContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EEA1115216EF865005E398F /* ServiceTaskContent.swift */; };
-		7EEA111D216F0321005E398F /* ServiceTaskBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EEA111C216F0321005E398F /* ServiceTaskBuilder.swift */; };
 		7EEA111F216F03CE005E398F /* BlockErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EEA111E216F03CE005E398F /* BlockErrorHandler.swift */; };
 		7EECC27A2160AAE1008845F4 /* ServiceTaskErrorHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EECC2792160AAE1008845F4 /* ServiceTaskErrorHandling.swift */; };
 		7EECC28B21610809008845F4 /* ServiceTaskBuilding+Protobuf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EECC28A21610809008845F4 /* ServiceTaskBuilding+Protobuf.swift */; };
@@ -44,6 +41,7 @@
 		AA38AB7121639AEB00EC8750 /* URLSerializationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E314CF121625EC80007DAFE /* URLSerializationTests.swift */; };
 		AA6418E42175C04E0021BC2F /* ResponseHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6418E32175C04E0021BC2F /* ResponseHandlerTests.swift */; };
 		AA641913217C764E0021BC2F /* ReachabilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA641912217C764E0021BC2F /* ReachabilityTests.swift */; };
+		AA8415452369B213000D2925 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E8D98B3216736EC002D5F73 /* MobileCoreServices.framework */; platformFilter = ios; };
 		AA8516FE216C91EB00152A8C /* FormDataBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8516FD216C91EB00152A8C /* FormDataBuilder.swift */; };
 		AAA198A6216E6666000E5D55 /* FormDataError.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA198A5216E6666000E5D55 /* FormDataError.swift */; };
 		AAA198AA216E788C000E5D55 /* FormDataChunk.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA198A9216E788B000E5D55 /* FormDataChunk.swift */; };
@@ -96,13 +94,11 @@
 		7ED7A5792160185D007657ED /* URLEncodedContentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLEncodedContentHandler.swift; sourceTree = "<group>"; };
 		7ED7A57B21601AC1007657ED /* URLEncodedSerialization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLEncodedSerialization.swift; sourceTree = "<group>"; };
 		7ED7A58021608F8B007657ED /* TextContentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextContentHandler.swift; sourceTree = "<group>"; };
-		7EE281E92161E60D00019EE5 /* ServiceTaskBuilding+Actions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ServiceTaskBuilding+Actions.swift"; sourceTree = "<group>"; };
 		7EE281F32161FE2A00019EE5 /* ServiceTaskError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTaskError.swift; sourceTree = "<group>"; };
 		7EEA110F216EF519005E398F /* ServiceTaskBuilding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTaskBuilding.swift; sourceTree = "<group>"; };
 		7EEA1111216EF80A005E398F /* HTTPMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
 		7EEA1113216EF849005E398F /* ServiceTaskAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTaskAction.swift; sourceTree = "<group>"; };
 		7EEA1115216EF865005E398F /* ServiceTaskContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTaskContent.swift; sourceTree = "<group>"; };
-		7EEA111C216F0321005E398F /* ServiceTaskBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTaskBuilder.swift; sourceTree = "<group>"; };
 		7EEA111E216F03CE005E398F /* BlockErrorHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockErrorHandler.swift; sourceTree = "<group>"; };
 		7EECC2792160AAE1008845F4 /* ServiceTaskErrorHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTaskErrorHandling.swift; sourceTree = "<group>"; };
 		7EECC28A21610809008845F4 /* ServiceTaskBuilding+Protobuf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ServiceTaskBuilding+Protobuf.swift"; sourceTree = "<group>"; };
@@ -113,6 +109,8 @@
 		AA045AC22167673600BD92D4 /* ServiceTaskRetrofitterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTaskRetrofitterTests.swift; sourceTree = "<group>"; };
 		AA6418E32175C04E0021BC2F /* ResponseHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseHandlerTests.swift; sourceTree = "<group>"; };
 		AA641912217C764E0021BC2F /* ReachabilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReachabilityTests.swift; sourceTree = "<group>"; };
+		AA8415402369ADF0000D2925 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/CoreServices.framework; sourceTree = DEVELOPER_DIR; };
+		AA8415422369AF99000D2925 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/SystemConfiguration.framework; sourceTree = DEVELOPER_DIR; };
 		AA8516FD216C91EB00152A8C /* FormDataBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormDataBuilder.swift; sourceTree = "<group>"; };
 		AAA198A5216E6666000E5D55 /* FormDataError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormDataError.swift; sourceTree = "<group>"; };
 		AAA198A9216E788B000E5D55 /* FormDataChunk.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormDataChunk.swift; sourceTree = "<group>"; };
@@ -131,8 +129,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7E8D98B4216736EC002D5F73 /* MobileCoreServices.framework in Frameworks */,
 				EFAA4B81BB537ADE88CEDD14 /* Pods_All_Targets_Condulet.framework in Frameworks */,
+				AA8415452369B213000D2925 /* MobileCoreServices.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -276,11 +274,9 @@
 			isa = PBXGroup;
 			children = (
 				7EEA110F216EF519005E398F /* ServiceTaskBuilding.swift */,
-				7EE281E92161E60D00019EE5 /* ServiceTaskBuilding+Actions.swift */,
 				7EBE4135215E715D006C882C /* ServiceTaskBuilding+Request.swift */,
 				7E0C19E82166C67D00494FCF /* ServiceTaskBuilding+Body.swift */,
 				7EBE4149215F1A64006C882C /* ServiceTaskBuilding+Response.swift */,
-				7EEA111C216F0321005E398F /* ServiceTaskBuilder.swift */,
 			);
 			name = ServiceTaskBuilding;
 			sourceTree = "<group>";
@@ -324,6 +320,8 @@
 		ECC77A42B8995F7F68D1ECD1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				AA8415422369AF99000D2925 /* SystemConfiguration.framework */,
+				AA8415402369ADF0000D2925 /* CoreServices.framework */,
 				7E8D98B3216736EC002D5F73 /* MobileCoreServices.framework */,
 				7E06C83721672998008E4AC6 /* CoreServices.framework */,
 				78096D16BF7DAFB2AC3FF2BD /* Pods_All_Targets_Condulet.framework */,
@@ -361,6 +359,8 @@
 			dependencies = (
 			);
 			name = Condulet;
+			packageProductDependencies = (
+			);
 			productName = Condulet;
 			productReference = 7EBE4115215E6F71006C882C /* Condulet.framework */;
 			productType = "com.apple.product-type.framework";
@@ -414,6 +414,8 @@
 				Base,
 			);
 			mainGroup = 7EBE410B215E6F71006C882C;
+			packageReferences = (
+			);
 			productRefGroup = 7EBE4116215E6F71006C882C /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -524,13 +526,11 @@
 				7EBE4136215E715D006C882C /* ServiceTaskBuilding+Request.swift in Sources */,
 				AA8516FE216C91EB00152A8C /* FormDataBuilder.swift in Sources */,
 				AAD8BF05218085A200A54949 /* ServiceTaskPerformable.swift in Sources */,
-				7EEA111D216F0321005E398F /* ServiceTaskBuilder.swift in Sources */,
 				AAD8BF032180853F00A54949 /* ServiceTaskConfigurable.swift in Sources */,
 				7EEA1110216EF519005E398F /* ServiceTaskBuilding.swift in Sources */,
 				7EECC2932161326E008845F4 /* DecodableContentHandler.swift in Sources */,
 				7EEA111F216F03CE005E398F /* BlockErrorHandler.swift in Sources */,
 				7ED7A58121608F8B007657ED /* TextContentHandler.swift in Sources */,
-				7EE281EA2161E60D00019EE5 /* ServiceTaskBuilding+Actions.swift in Sources */,
 				7E06C83421672593008E4AC6 /* MimeType.swift in Sources */,
 				7EEA1116216EF865005E398F /* ServiceTaskContent.swift in Sources */,
 				AAD56CAC216397A10086CC50 /* BlockResponseHandler.swift in Sources */,
@@ -624,7 +624,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -682,7 +682,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -707,12 +707,12 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Condulet/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.26.1;
 				PRODUCT_BUNDLE_IDENTIFIER = org.kozlek.Condulet;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -735,12 +735,12 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Condulet/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.26.1;
 				PRODUCT_BUNDLE_IDENTIFIER = org.kozlek.Condulet;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;

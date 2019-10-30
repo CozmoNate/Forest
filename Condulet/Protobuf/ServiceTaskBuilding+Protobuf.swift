@@ -86,8 +86,8 @@ public extension ServiceTaskBuilding {
     @discardableResult
     func body<T: Message>(proto message: T) -> Self {
         contentType(value: "application/x-www-form-urlencoded")
-        task.headers["grpc-metadata-content-type"] = "application/grpc"
-        task.body = ServiceTaskContent(try? message.jsonUTF8Data())
+        headers["grpc-metadata-content-type"] = "application/grpc"
+        body = ServiceTaskContent(try? message.jsonUTF8Data())
         return self
     }
     
@@ -110,7 +110,7 @@ public extension ServiceTaskBuilding {
     /// Handle protobuf message response. If received response of other type task will fail with ServiceTaskError.invalidResponse
     @discardableResult
     func proto<T: Message>(decodingOptions: JSONDecodingOptions = JSONDecodingOptions(), handler: @escaping (T, URLResponse) -> Void) -> Self {
-        task.responseHandler = ProtobufContentHandler(decodingOptions: decodingOptions) { [queue = responseQueue] (message: T, response) in
+        responseHandler = ProtobufContentHandler(decodingOptions: decodingOptions) { [queue = responseQueue] (message: T, response) in
             queue.addOperation {
                 handler(message, response)
             }
@@ -121,7 +121,7 @@ public extension ServiceTaskBuilding {
     /// Handle protobuf message response. If received response of other type task will fail with ServiceTaskError.invalidResponse
     @discardableResult
     func proto<T: Message>(type: T.Type, decodingOptions: JSONDecodingOptions = JSONDecodingOptions(), handler: @escaping (T, URLResponse) -> Void) -> Self {
-        task.responseHandler = ProtobufContentHandler(decodingOptions: decodingOptions) { [queue = responseQueue] (message: T, response) in
+        responseHandler = ProtobufContentHandler(decodingOptions: decodingOptions) { [queue = responseQueue] (message: T, response) in
             queue.addOperation {
                 handler(message, response)
             }

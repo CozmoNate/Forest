@@ -61,12 +61,12 @@ Just put the files from `Core` and `Protobuf` directories somethere in your proj
 ## Usage
 
 
-The core class which handles network task is `ServiceTask`. `ServiceTaskBuilder` provides factory methods helping to create and configure instance of `ServiceTask`. If you need more control over the process of making request and handling the response, you can use delegation and implement  `ServiceTaskRetrofitting` protocol and modify task behavior via retrofitter. Also you can subclass `ServiceTask`, it is built for that.  
+The core class which handles network task is `ServiceTask`. `ServiceTask` includes factory methods helping to configure request and response params and handlers. If you need more control over the process of making request and handling the response, you can use delegation and implement  `ServiceTaskRetrofitting` protocol and modify task behavior via retrofitter. Also you can subclass `ServiceTask`, it is built for that.  
 
 ### Make a GET request expecting json response
 
 ```swift
-ServiceTaskBuilder()
+ServiceTask()
     .url("https://host.com/path/to/endpoint")
     .method(.GET)
     .query(["param": value])
@@ -95,7 +95,7 @@ struct NameResponse: Decodable {
     let isValid: Bool
 }
 
-ServiceTaskBuilder()
+ServiceTask()
     // Set base url and HTTP method
     .endpoint(.POST, "https://host.com")
     // Add path to resource
@@ -118,7 +118,7 @@ Just download some file:
 
 ```swift
 
-ServiceTaskBuilder()
+ServiceTask()
     .headers(["Authorization": "Bearer \(token)"])
     .method(.PUT)
     .url("https://host.com/file/12345")
@@ -151,7 +151,7 @@ do {
     // Generate form data in memory. It also can be written directly to disk or stream using encode(to:) method 
     let formData = try formDataBuilder.encode()
     
-    ServiceTaskBuilder()
+    ServiceTask()
             .endpoint(.POST, "https://host.com/upload")
             .body(data: formData, contentType: formDataBuilder.contentType)
             .response(content: { (response) in
@@ -174,7 +174,7 @@ Send and receive Protobuf messages (gRPC over HTTP):
 
 ```swift
 
-ServiceTaskBuilder()
+ServiceTask()
     .endpoint(.POST, "https://host.com")
     // Create and configure request message in place
     .body { (message: inout Google_Protobuf_StringValue) in
@@ -190,7 +190,7 @@ ServiceTaskBuilder()
     .perform()
 
 // Or another version of the code above with explicitly provided types
-ServiceTaskBuilder()
+ServiceTask()
     .endpoint(.POST, "https://host.com")
     // Create and configure request message in place
     .body(proto: Google_Protobuf_SourceContext.self) { (message) in

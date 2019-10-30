@@ -37,5 +37,17 @@ public protocol ServiceTaskPerformable: AnyObject {
 
     /// Perform task with action
     func perform(action: ServiceTaskAction)
+    
+    /// Rewind task with lastest action performed. This will cancel running task. If action is not specified this method will return false, running task will not be canceled and no action will be performed
+    @discardableResult func rewind() -> Bool
+    
+    /// Cancels running task.
+    /// All captured response blocks and handlers will never be called until task will be performed again or rewound.
+    @discardableResult func cancel() -> Bool
 
+    /// Cancels running task.
+    /// All captured response blocks and handlers will never be called until task will be performed again or rewound.
+    /// Optional resume data can be produced in case of download task, otherwise completion will be called with nil data.
+    @discardableResult func cancel(byProducingResumeData resumeDataHandler: @escaping (Data?) -> Void) -> Bool
+        
 }

@@ -43,7 +43,7 @@ class ServiceTaskRetrofitterTests: QuickSpec, ServiceTaskRetrofitting {
 
     override func spec() {
 
-        describe("ServiceTaskInterception") {
+        describe("ServiceTaskRetrofitter") {
 
             afterEach {
                 self.shouldFailRequest = false
@@ -66,7 +66,7 @@ class ServiceTaskRetrofitterTests: QuickSpec, ServiceTaskRetrofitting {
                         return true
                     }
 
-                    ServiceTaskBuilder(retrofitter: self)
+                    ServiceTask(retrofitter: self)
                         .endpoint(.GET, "test.test")
                         .content { (content, response) in
                             done()
@@ -86,7 +86,7 @@ class ServiceTaskRetrofitterTests: QuickSpec, ServiceTaskRetrofitting {
 
                 waitUntil { (done) in
 
-                    ServiceTaskBuilder(retrofitter: self)
+                    ServiceTask(retrofitter: self)
                         .endpoint(.GET, "test.fail.request")
                         .content { (content, response) in
                             fail("Request should return error!")
@@ -114,7 +114,7 @@ class ServiceTaskRetrofitterTests: QuickSpec, ServiceTaskRetrofitting {
                         throw Errors.test
                     }
 
-                    ServiceTaskBuilder(retrofitter: self)
+                    ServiceTask(retrofitter: self)
                         .endpoint(.GET, "test.failed")
                         .content { (content, response) in
                             fail("Request should return error!")
@@ -142,7 +142,7 @@ class ServiceTaskRetrofitterTests: QuickSpec, ServiceTaskRetrofitting {
                         throw Errors.test
                     }
 
-                    ServiceTaskBuilder(retrofitter: self)
+                    ServiceTask(retrofitter: self)
                         .endpoint(.GET, "test.intercept.response")
                         .content { (content, response) in
                             fail("Request should return error!")
