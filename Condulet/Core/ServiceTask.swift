@@ -222,7 +222,7 @@ open class ServiceTask: ServiceTaskBuilding, CustomStringConvertible, CustomDebu
     /// Cancels running task.
     /// All captured response blocks and handlers will never be called until task will be performed again or rewound.
     @discardableResult
-    public func cancel() -> Bool {
+    open func cancel() -> Bool {
         return cancelByProducingResumeData(nil)
     }
     
@@ -230,7 +230,7 @@ open class ServiceTask: ServiceTaskBuilding, CustomStringConvertible, CustomDebu
     /// All captured response blocks and handlers will never be called until task will be performed again or rewound.
     /// Resume data can be produced in case of download task, otherwise completion will be called with nil data.
     @discardableResult
-    public func cancel(byProducingResumeData resumeDataHandler: @escaping (Data?) -> Void) -> Bool {
+    open func cancel(byProducingResumeData resumeDataHandler: @escaping (Data?) -> Void) -> Bool {
         return cancelByProducingResumeData(resumeDataHandler)
     }
 
