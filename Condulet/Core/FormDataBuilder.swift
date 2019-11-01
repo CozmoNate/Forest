@@ -40,7 +40,7 @@ public struct FormDataBuilder {
     public let boundary: String
 
     /// The value to be used for HTTP request "Content-Type" header field
-    public lazy var contentType = "multipart/form-data; boundary=\(boundary)"
+    public let contentType: String
 
     /// The content body parts
     public var parts: [FormDataPart]
@@ -48,6 +48,7 @@ public struct FormDataBuilder {
     public init(boundary: String = UUID().uuidString, parts: [FormDataPart] = []) {
         self.boundary = boundary
         self.parts = parts
+        contentType = "multipart/form-data; boundary=\(boundary)"
     }
 
     /// Append form data part
