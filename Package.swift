@@ -6,7 +6,8 @@ import PackageDescription
 let package = Package(
     name: "Condulet",
     platforms: [
-        .iOS(.v11)
+        .iOS(.v11),
+        .macOS(.v10_13)
     ],
     products: [
         .library(name: "ConduletCore", targets: ["ConduletCore"]),
@@ -14,7 +15,7 @@ let package = Package(
         .library(name: "ConduletProto", targets: ["ConduletProto"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/apple/swift-protobuf.git", from: "1.6.0"),
+        .package(url: "https://github.com/apple/swift-protobuf.git", from: "1.7.0"),
     ],
     targets: [
         .target(name: "ConduletCore", dependencies: [], path: "Condulet/Core"),

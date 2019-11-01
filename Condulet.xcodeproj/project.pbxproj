@@ -3,10 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2FF604E3236C0D55008BA3A0 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA8415402369ADF0000D2925 /* CoreServices.framework */; };
 		7E06C83421672593008E4AC6 /* MimeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E06C83321672593008E4AC6 /* MimeType.swift */; };
 		7E0C19E92166C67D00494FCF /* ServiceTaskBuilding+Body.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E0C19E82166C67D00494FCF /* ServiceTaskBuilding+Body.swift */; };
 		7E314CF721628FBE0007DAFE /* ServiceTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBE412F215E6F7A006C882C /* ServiceTask.swift */; };
@@ -41,7 +42,6 @@
 		AA38AB7121639AEB00EC8750 /* URLSerializationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E314CF121625EC80007DAFE /* URLSerializationTests.swift */; };
 		AA6418E42175C04E0021BC2F /* ResponseHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6418E32175C04E0021BC2F /* ResponseHandlerTests.swift */; };
 		AA641913217C764E0021BC2F /* ReachabilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA641912217C764E0021BC2F /* ReachabilityTests.swift */; };
-		AA8415452369B213000D2925 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E8D98B3216736EC002D5F73 /* MobileCoreServices.framework */; platformFilter = ios; };
 		AA8516FE216C91EB00152A8C /* FormDataBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8516FD216C91EB00152A8C /* FormDataBuilder.swift */; };
 		AAA198A6216E6666000E5D55 /* FormDataError.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA198A5216E6666000E5D55 /* FormDataError.swift */; };
 		AAA198AA216E788C000E5D55 /* FormDataChunk.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA198A9216E788B000E5D55 /* FormDataChunk.swift */; };
@@ -130,7 +130,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EFAA4B81BB537ADE88CEDD14 /* Pods_All_Targets_Condulet.framework in Frameworks */,
-				AA8415452369B213000D2925 /* MobileCoreServices.framework in Frameworks */,
+				2FF604E3236C0D55008BA3A0 /* CoreServices.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -625,6 +625,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -683,6 +684,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -712,7 +714,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.26.3;
+				MARKETING_VERSION = 1.26.4;
 				PRODUCT_BUNDLE_IDENTIFIER = org.kozlek.Condulet;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -740,7 +742,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.26.3;
+				MARKETING_VERSION = 1.26.4;
 				PRODUCT_BUNDLE_IDENTIFIER = org.kozlek.Condulet;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -753,6 +755,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = AF99ECF42507D8C62FCE8973 /* Pods-All Targets-ConduletTests.debug.xcconfig */;
 			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				GCC_OPTIMIZATION_LEVEL = s;
 				INFOPLIST_FILE = ConduletTests/Info.plist;
@@ -772,6 +775,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = EF88038FFB1E59F95B6E1397 /* Pods-All Targets-ConduletTests.release.xcconfig */;
 			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = ConduletTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
