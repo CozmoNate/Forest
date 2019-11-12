@@ -47,7 +47,7 @@ public extension Notification.Name {
 }
 
 /// URLSessionTask wrapping class allowing to build, send, cancel and rewind network requests.
-open class ServiceTask: ServiceTaskBuilding, CustomStringConvertible, CustomDebugStringConvertible, Hashable {
+open class ServiceTask: ServiceTaskConfigurable, ServiceTaskPerformable, CustomStringConvertible, CustomDebugStringConvertible, Hashable {
     
     // MARK: - CustomStringConvertible
     

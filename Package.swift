@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "Condulet",
     platforms: [
-        .iOS(.v11),
+        .iOS(.v10),
         .macOS(.v10_13)
     ],
     products: [

@@ -35,3 +35,6 @@ import Foundation
 
 /// The protocol providing helper methods to configure and perform ServiceTask or its subclass instance
 public protocol ServiceTaskBuilding: ServiceTaskConfigurable & ServiceTaskPerformable {}
+
+
+extension ServiceTask: ServiceTaskBuilding {}
