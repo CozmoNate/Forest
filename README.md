@@ -14,11 +14,8 @@ Condulet is flexible and extensible REST API client construction framework built
 
 You could ask why not to get any other proven networking framework? Sure, you’ll get one best suitable for your needs and style preference, but it's always good to have an options. Following is the list of features I wanted from higher level networking layer and imlemented in Condulet:
 
-* Promise like style request building without needing to make any enums or classes describing endponts 
-* Promise like style body configuration, simple network objects encoding  
-* Promise like style response handling and simple network objects mapping 
-* Handle response in the same place as the request and body configuration 
-* Transparent and completely customizable response interception and rewind/retry, allowing async handling. Mainly to map errors and catch expired token in case of OAuth-like secured request 
+* Declarative request and response configuration
+* Transparent and completely customizable response interception and rewind/retry, allowing async handling. Mainly to map errors and catch expired tokens in case of OAuth-like secured request 
 * Extensibility. Easily add custom response mappers and body data encoders using closures, or protocols, or subclassing whichever will be more convenient for specific need. Use this with default framework’s classes or extend them or subclass, but it should be easy. 
 * Download and keep files where I need them
 * Deserialization of JSON body. Map JSON to array, or dictionary, or by using objects conforming to `Decodable` protocol 
