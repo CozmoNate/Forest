@@ -15,7 +15,7 @@ let package = Package(
         .library(name: "ConduletProto", targets: ["ConduletProto"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/apple/swift-protobuf.git", from: "1.7.0"),
+        .package(url: "https://github.com/apple/swift-protobuf.git", from: "1.8.0"),
     ],
     targets: [
         .target(name: "ConduletCore", dependencies: [], path: "Condulet/Core"),

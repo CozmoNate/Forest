@@ -6,9 +6,9 @@ PODS:
     - URITemplate (~> 3.0)
   - Mockingjay/XCTest (3.0.0-alpha.1):
     - Mockingjay/Core
-  - Nimble (8.0.4)
+  - Nimble (8.0.7)
   - Quick (2.2.0)
-  - SwiftProtobuf (1.7.0)
+  - SwiftProtobuf (1.8.0)
   - URITemplate (3.0.0)
 
 DEPENDENCIES:
@@ -35,9 +35,9 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   Mockingjay: 97656c6f59879923976a0a52ef09da45756cca82
-  Nimble: 18d5360282923225d62b09d781f63abc1a0111fc
+  Nimble: a73af6ecd4c9106f434f3d55fc54570be3739e0b
   Quick: 7fb19e13be07b5dfb3b90d4f9824c855a11af40e
-  SwiftProtobuf: 4fd9645e69b72cbae6ec8da5be0cdd20ca6565dd
+  SwiftProtobuf: 2cbd9409689b7df170d82a92a33443c8e3e14a70
   URITemplate: 58e0d47f967006c5d59888af5356c4a8ed3b197d
 
 PODFILE CHECKSUM: 124fe9c4f5f786a078b6772d0ed021b682bac238

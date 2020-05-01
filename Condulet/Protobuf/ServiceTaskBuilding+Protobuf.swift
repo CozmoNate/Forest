@@ -85,7 +85,7 @@ public extension ServiceTaskBuilding {
     /// Send body with protobuf messsage
     @discardableResult
     func body<T: Message>(proto message: T) -> Self {
-        contentType(value: "application/x-www-form-urlencoded")
+        contentType(value: "application/json")
         headers["grpc-metadata-content-type"] = "application/grpc"
         body = ServiceTaskContent(try? message.jsonUTF8Data())
         return self
