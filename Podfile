@@ -2,14 +2,14 @@ source 'https://github.com/CocoaPods/Specs.git'
 
 use_frameworks!
 
-project 'Condulet'
+project 'Forest'
 
 abstract_target "All Targets" do
-    target "Condulet" do
+    target "Forest" do
         platform :ios, '10.3'
         pod 'SwiftProtobuf'
     end
-    target "ConduletTests" do
+    target "ForestTests" do
         platform :ios, '10.3'
         pod 'Quick'
         pod 'Nimble'

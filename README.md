@@ -1,18 +1,18 @@
 <p align="center">
-<img src="https://raw.githubusercontent.com/kzlekk/Condulet/master/logo.png">
+<img src="https://raw.githubusercontent.com/kzlekk/Forest/master/logo.png">
 </p>
 
-# Condulet 
+# Forest Client
 
-[![License](https://img.shields.io/badge/license-MIT-ff69b4.svg)](https://github.com/kzlekk/Condulet/raw/master/LICENSE)
+[![License](https://img.shields.io/badge/license-MIT-ff69b4.svg)](https://github.com/kzlekk/Forest/raw/master/LICENSE)
 [![Language](https://img.shields.io/badge/swift-5.0-orange.svg)](https://swift.org/blog/swift-5-released/)
-[![Version](https://img.shields.io/cocoapods/v/Condulet.svg)](https://cocoapods.org/pods/Condulet)
-[![Build Status](https://travis-ci.com/kzlekk/Condulet.svg?branch=master)](https://travis-ci.com/kzlekk/Condulet)
-[![Coverage Status](https://coveralls.io/repos/github/kzlekk/Condulet/badge.svg?branch=master)](https://coveralls.io/github/kzlekk/Condulet?branch=master)
+[![Version](https://img.shields.io/cocoapods/v/Forest.svg)](https://cocoapods.org/pods/Forest)
+[![Build Status](https://travis-ci.com/kzlekk/Forest.svg?branch=master)](https://travis-ci.com/kzlekk/Forest)
+[![Coverage Status](https://coveralls.io/repos/github/kzlekk/Forest/badge.svg?branch=master)](https://coveralls.io/github/kzlekk/Forest?branch=master)
 
-Condulet is flexible and extensible REST API client construction framework built on top of `URLSession` and `URLSessionTask`. It already inculdes network object mappers from JSON to the most commonly used data types. Because of it simple data encoding/decoding approach and extensible architecture you can easily add your custom network object mappers. Condulet provides all of the features needed to build robust client for your backend services. 
+Forest client is a flexible and extensible RESTful API client framework built on top of `URLSession` and `URLSessionTask`. It already includes network object mappers from JSON to the most commonly used data types. Because of its simple data encoding/decoding approach and extensible architecture you can easily add your custom network object mappers. Forest provides all of the features needed to build robust client for your backend services. 
 
-You could ask why not to get any other proven networking framework? Sure, you’ll get one best suitable for your needs and style preference, but it's always good to have an options. Following is the list of features I wanted from higher level networking layer and imlemented in Condulet:
+You could ask why not to get any other proven networking framework? Sure, you’ll get one best suitable for your needs and style preference, but it's always good to have an options. Following is the list of features I wanted from higher level networking layer and implemented in Forest client:
 
 * Declarative request and response configuration
 * Transparent and completely customizable response interception and rewind/retry, allowing async handling. Mainly to map errors and catch expired tokens in case of OAuth-like secured request 
@@ -27,26 +27,26 @@ You could ask why not to get any other proven networking framework? Sure, you’
 ### CocoaPods
 
 ```ruby
-pod 'Condulet'
+pod 'Forest'
 ```
 
 
 Add Protobufs supporting extensions:
 
 ```ruby
-pod 'Condulet/Protobuf'
+pod 'Forest/Protobuf'
 ```
 
 To use reachability service:
 
 ```ruby
-pod 'Condulet/Reachability'
+pod 'Forest/Reachability'
 ```
 
 And don't forget to import the framework:
 
 ```swift
-import Condulet
+import Forest
 ```
 
 ### Manually
@@ -72,7 +72,7 @@ ServiceTask()
         print("JSON response received: \(object)")
     }
     .error { (error, response) in
-        print("Error occured: \(error)")
+        print("Error occurred: \(error)")
     }
     .perform()
 ```
@@ -213,4 +213,4 @@ Natan Zalkin natan.zalkin@me.com
 ## License
 
 
-Condulet is available under the MIT license. See the LICENSE file for more info.
+Forest is available under the MIT license. See the LICENSE file for more info.

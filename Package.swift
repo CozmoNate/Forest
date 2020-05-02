@@ -4,23 +4,23 @@
 import PackageDescription
 
 let package = Package(
-    name: "Condulet",
+    name: "Forest",
     platforms: [
         .iOS(.v10),
         .macOS(.v10_13)
     ],
     products: [
-        .library(name: "ConduletCore", targets: ["ConduletCore"]),
-        .library(name: "ConduletReachability", targets: ["ConduletReachability"]),
-        .library(name: "ConduletProto", targets: ["ConduletProto"]),
+        .library(name: "ForestCore", targets: ["ForestCore"]),
+        .library(name: "ForestReachability", targets: ["ForestReachability"]),
+        .library(name: "ForestProto", targets: ["ForestProto"]),
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-protobuf.git", from: "1.8.0"),
     ],
     targets: [
-        .target(name: "ConduletCore", dependencies: [], path: "Condulet/Core"),
-        .target(name: "ConduletReachability", dependencies: ["ConduletCore"], path: "Condulet/Reachability"),
-        .target(name: "ConduletProto", dependencies: ["ConduletCore", "SwiftProtobuf"], path: "Condulet/Protobuf"),
+        .target(name: "ForestCore", dependencies: [], path: "Forest/Core"),
+        .target(name: "ForestReachability", dependencies: ["ForestCore"], path: "Forest/Reachability"),
+        .target(name: "ForestProto", dependencies: ["ForestCore", "SwiftProtobuf"], path: "Forest/Protobuf"),
     ],
     swiftLanguageVersions: [.v5]
 )

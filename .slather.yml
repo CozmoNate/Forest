@@ -1,7 +1,7 @@
 coverage_service: coveralls
-workspace: Condulet.xcworkspace
-xcodeproj: Condulet.xcodeproj
-scheme: Condulet
+workspace: Forest.xcworkspace
+xcodeproj: Forest.xcodeproj
+scheme: Forest
 ignore:
   - Pods/*
-  - ConduletTests/*
+  - ForestTests/*
