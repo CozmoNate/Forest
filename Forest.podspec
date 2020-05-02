@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'Forest'
-  s.version          = '1.26.6'
+  s.version          = '1.27.0'
   s.summary          = 'Forest client makes it simple to send requests to web services'
   s.description      = <<-DESC
 Forest client is a flexible and extensible RESTful API client framework built on top of `URLSession` and `URLSessionTask`. It includes network object mappers from JSON for the most commonly used data types. Because of its simple data encoding/decoding approach and extensible architecture you can easily add your custom network object mappers. Forest provides most of the features needed to build robust client for your backend services.
